@@ -30,7 +30,7 @@ Two big headed characters face off on a single screen. Each player has one job: 
 ![Concept mockup of a 1v1 Head Soccer match on a single screen](images/reference-concept.png)
 
 - **Primary reference:** Head Soccer (D&D Dream, mobile). Taking: single screen 1v1, big head characters, lively arcade ball physics, matches under two minutes, one chargeable special shot. Not taking: the dozens of unlockable characters, the in app purchases, the online play, and the celebrity roster.
-- **Video:** roughly 30 seconds of Head Soccer mobile gameplay, https://www.youtube.com/results?search_query=head+soccer+gameplay
+- **Video:** gameplay, https://www.youtube.com/watch?v=-y9mt8FlIkM
 
 The look I am after is the concept mockup above: two characters, two goals, one ball, and a scoreboard, all on one screen.
 
@@ -202,3 +202,10 @@ graph TD
 - A world cup, tournament, or story mode with multiple stages
 - 3D graphics or any scrolling or ball following camera
 - A save system beyond `PlayerPrefs` for settings and best result
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---|---|---|
