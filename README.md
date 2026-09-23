@@ -1,21 +1,28 @@
 # Head Soccer
 
-A 1v1 arcade Head Soccer game built in Unity 6 (URP, 2D). Two big headed characters on a single screen, arcade ball physics, quick matches, and a mobile (Android) build. This repository currently holds the Game Design Document, submitted for approval before implementation.
+A 1v1 arcade Head Soccer game built in Unity 6 (URP, 2D). Two big-headed characters on a single screen, arcade ball physics, one-minute matches, and a Super shot that can be used once per player.
 
-## Concept
+## Open in Unity
 
-![Concept mockup of a 1v1 Head Soccer match](Docs/images/reference-concept.png)
+1. Unity Hub → **Add** → `HeadSoccer` (Unity **6000.3.20f1**).
+2. Open `Assets/Scenes/Match.unity`.
+3. Press **Play**, then **PLAY vs CPU** or **PLAY 2 PLAYERS**.
 
-## Screens
+### Controls
 
-![Wireframe of the main screens](Docs/images/screens-wireframe.png)
+| Action | Player 1 | Player 2 |
+|---|---|---|
+| Move | A / D | Left / Right arrows |
+| Jump | W | Up arrow |
+| Kick | Space | Right Ctrl |
+| Super (once, when the ! appears) | Tab + Shift | Up + Down together |
 
 ## Design document
 
-The full GDD is in [`Docs/GDD.md`](Docs/GDD.md). It covers the high concept, core loop, controls, screens, art and audio plan, technical design, and scope.
+The GDD is in [`Docs/GDD.md`](Docs/GDD.md).
 
-## Planned build
+## Planned / current build
 
-- Engine: Unity 6 (6000.3.22f1), URP, 2D
-- Platforms: Android (touch) and Windows standalone for development
+- Engine: Unity 6 (6000.3.20f1), URP, 2D
+- Platforms: Windows standalone for development; Android APK when Android Build Support is installed
 - Orientation: Landscape, 1280 x 720 reference
