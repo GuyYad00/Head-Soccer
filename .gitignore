@@ -39,3 +39,7 @@ sysinfo.txt
 # OS
 .DS_Store
 Thumbs.db
+
+# Accidental extra Unity projects created inside this folder
+/My project/
+/My project (1)/

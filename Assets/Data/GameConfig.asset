@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd879bb22e2eff74f9fcd3c81a5ff3cf, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: Assembly-CSharp::HeadSoccer.GameConfig
+  moveSpeed: 6
+  jumpVelocity: 12
+  gravityScale: 3
+  kickImpulse: 14
+  kickRange: 1.2
+  kickUpwardBias: 0.55
+  kickCooldown: 0.25
+  ballBounciness: 0.7
+  ballMaxSpeed: 22
+  ballMinSpeed: 1.5
+  ballGravityScale: 2.2
+  matchLength: 60
+  goalTarget: 99
+  goalFreezeTime: 1.5
+  kickoffCountFrom: 3
+  superChargeTime: 1.2
+  specialImpulseMultiplier: 2.2
+  specialSlowMotionTime: 0.35
+  coyoteTime: 0.08
+  jumpBufferTime: 0.12
+  matchOverInputLockout: 0.5
