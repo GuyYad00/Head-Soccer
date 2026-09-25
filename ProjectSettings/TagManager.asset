@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Ball
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Ground
+  - Wall
+  - Ball
+  - Player
+  - Goal
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 1100001
+    locked: 0
+  - name: Pitch
+    uniqueID: 1100002
+    locked: 0
+  - name: Goals
+    uniqueID: 1100003
+    locked: 0
+  - name: Ball
+    uniqueID: 1100004
+    locked: 0
+  - name: Players
+    uniqueID: 1100005
+    locked: 0
+  - name: FX
+    uniqueID: 1100006
+    locked: 0
+  - name: UI
+    uniqueID: 1100007
+    locked: 0
