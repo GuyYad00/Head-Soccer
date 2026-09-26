@@ -41,7 +41,22 @@ The roster is our own art, drawn for this project and inspired by the makers of 
 | **Kim** | Japan | Fast and focused, samurai balance | Bows |
 | **Mikel** | Nigeria | Strong and full of energy | Backflip |
 
-You pick yours on the character select screen before kickoff, where each player loops his celebration live. The CPU plays the next one in the list.
+You pick yours on the character select screen before kickoff. The CPU plays the next one in the list.
+
+## Select character window
+
+![Choose your player: Yossi kisses the badge, David makes a heart, Kim bows, Mikel backflips](Docs/images/character-select.png)
+
+This is the screen before kickoff. The portrait in the middle is alive: the player stands for a moment, hops into his own goal celebration, holds it, and drops back to idle, then does it again.
+
+| | Celebration |
+|---|---|
+| **Yossi** | Kneels and kisses the badge on his shirt |
+| **David** | Beats a heart with his hands |
+| **Kim** | Bows |
+| **Mikel** | Backflip |
+
+Arrows on the card change the character, the bars show speed, jump and power, and **KICK OFF!** starts the match. The celebration plays on this screen only. Once the match starts, the players go back to their idle and kick drawings.
 
 ## The stadium
 
