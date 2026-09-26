@@ -8,8 +8,6 @@ Final project for the Unity course. The approved design document is in [`Docs/GD
 
 We chose Head Soccer because we love football. It is the game we play and the game we watch, so this was not a theme we picked to fill a project. The passion was already there, and that is why getting the details right mattered so much to us. We know, from being players ourselves, how much a small thing decides whether a match feels real.
 
-If we were the customers, and this was a game we sat down to play, these are the things we would want in it. A kick that is never the same twice. A shot on the run that hits harder than one from a standing foot. Advertising boards along the pitch, because a real ground has them. A lineup where each player celebrates in his own way. A goal you can attack and still defend. We built those out of that love for the game, because we would want them ourselves.
-
 ## Screenshots
 
 | Main menu | Character select |
