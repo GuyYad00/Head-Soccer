@@ -6,6 +6,8 @@ namespace HeadSoccer
     /// The character drawing. Flips with the player's facing, squashes on a kick and
     /// stretches in the air, and can swap its sprite for the chosen character.
     /// If the character has a kick pose drawing, it is shown for the kick window.
+    /// Every sprite is scaled to the same world height, so drawings of different
+    /// pixel sizes line up with the collider.
     /// </summary>
     public class PlayerVisual : MonoBehaviour
     {
@@ -17,7 +19,7 @@ namespace HeadSoccer
 
         private Sprite idleSprite;
         private Sprite kickSprite;
-        private Vector3 baseScale;
+        private float worldHeight;
         private float kickPoseUntil;
 
         public void PlayKickPose()
@@ -31,14 +33,6 @@ namespace HeadSoccer
             if (spriteRenderer == null) return;
             spriteFacesRight = facesRight;
 
-            if (idle != null && spriteRenderer.sprite != null && spriteRenderer.sprite != idle)
-            {
-                float currentHeight = spriteRenderer.sprite.bounds.size.y * Mathf.Abs(transform.localScale.y);
-                float scale = currentHeight / Mathf.Max(0.001f, idle.bounds.size.y);
-                transform.localScale = new Vector3(scale, scale, 1f);
-                baseScale = transform.localScale;
-            }
-
             if (idle != null)
             {
                 idleSprite = idle;
@@ -50,14 +44,22 @@ namespace HeadSoccer
 
         private void Awake()
         {
-            baseScale = transform.localScale;
-            if (spriteRenderer != null && idleSprite == null)
-                idleSprite = spriteRenderer.sprite;
+            if (spriteRenderer == null) return;
+            idleSprite = spriteRenderer.sprite;
+            // The builder sized the idle drawing; remember that height for every sprite.
+            if (idleSprite != null)
+                worldHeight = idleSprite.bounds.size.y * Mathf.Abs(transform.localScale.y);
+        }
+
+        private float ScaleFor(Sprite sprite)
+        {
+            if (sprite == null || sprite.bounds.size.y < 0.001f) return Mathf.Abs(transform.localScale.y);
+            return worldHeight / sprite.bounds.size.y;
         }
 
         private void LateUpdate()
         {
-            if (player == null) return;
+            if (player == null || spriteRenderer == null) return;
 
             float dir = player.FacingDirection;
             if (Mathf.Abs(player.HorizontalInput) > 0.15f)
@@ -67,17 +69,16 @@ namespace HeadSoccer
             float face = spriteFacesRight == wantRight ? 1f : -1f;
 
             bool kicking = Time.time < kickPoseUntil;
-            float squash = kicking ? 1.08f : 1f;
-            float stretch = kicking ? 0.94f : (player.IsGrounded ? 1f : 1.06f);
+            Sprite wanted = kicking && kickSprite != null ? kickSprite : idleSprite;
+            if (wanted != null && spriteRenderer.sprite != wanted) spriteRenderer.sprite = wanted;
 
-            transform.localScale = new Vector3(
-                Mathf.Abs(baseScale.x) * face * squash,
-                Mathf.Abs(baseScale.y) * stretch,
-                1f);
+            // Squash on a kick, stretch in the air; skipped when a real kick drawing is shown.
+            bool poseDrawn = kicking && kickSprite != null;
+            float squash = kicking && !poseDrawn ? 1.08f : 1f;
+            float stretch = kicking && !poseDrawn ? 0.94f : (player.IsGrounded ? 1f : 1.06f);
 
-            if (spriteRenderer == null || kickSprite == null) return;
-            Sprite wanted = kicking ? kickSprite : idleSprite;
-            if (spriteRenderer.sprite != wanted) spriteRenderer.sprite = wanted;
+            float scale = ScaleFor(spriteRenderer.sprite);
+            transform.localScale = new Vector3(scale * face * squash, scale * stretch, 1f);
         }
     }
 }

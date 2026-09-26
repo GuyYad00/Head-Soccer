@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using TMPro;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEditor.Events;
 using UnityEditor.SceneManagement;
 using UnityEditor.U2D;
@@ -37,6 +38,7 @@ namespace HeadSoccer.EditorTools
         private const string BallMaterialPath = DataFolder + "/BallMaterial.physicsMaterial2D";
         private const string FontAssetPath = FontFolder + "/Oswald-Bold SDF.asset";
         private const string AtlasPath = SpriteFolder + "/HeadSoccer.spriteatlasv2";
+        private const string IconPath = "Assets/Branding/icon.png";
         private const string MatchScenePath = SceneFolder + "/Match.unity";
         private const string MenuScenePath = SceneFolder + "/Menu.unity";
 
@@ -80,6 +82,7 @@ namespace HeadSoccer.EditorTools
             ImportGameSprites();
             GenerateArt();
             CreateSpriteAtlas();
+            ApplyAppIcon();
             CreateFontAsset();
             GameConfig config = CreateOrLoadConfig();
             CreateBallMaterial(config);
@@ -161,6 +164,30 @@ namespace HeadSoccer.EditorTools
 
                 importer.SaveAndReimport();
             }
+        }
+
+        /// <summary>Uses Assets/Branding/icon.png as the app icon on every platform.</summary>
+        private static void ApplyAppIcon()
+        {
+            if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), IconPath))) return;
+
+            if (AssetImporter.GetAtPath(IconPath) is TextureImporter importer)
+            {
+                importer.textureType = TextureImporterType.Default;
+                importer.alphaIsTransparency = true;
+                importer.mipmapEnabled = false;
+                importer.maxTextureSize = 1024;
+                importer.SaveAndReimport();
+            }
+
+            var icon = AssetDatabase.LoadAssetAtPath<Texture2D>(IconPath);
+            if (icon == null) return;
+
+            // The "Unknown" target is the default icon, inherited by Android and Windows.
+            int slots = PlayerSettings.GetIconSizes(NamedBuildTarget.Unknown, IconKind.Any).Length;
+            var icons = new Texture2D[Mathf.Max(1, slots)];
+            for (int i = 0; i < icons.Length; i++) icons[i] = icon;
+            PlayerSettings.SetIcons(NamedBuildTarget.Unknown, icons, IconKind.Any);
         }
 
         /// <summary>
@@ -617,9 +644,11 @@ namespace HeadSoccer.EditorTools
             Sprite character = side == Side.Left ? playerRedSprite : playerBlueSprite;
             if (character != null)
             {
+                // Character PNGs are trimmed to their content, so this is the real body height,
+                // matched to the capsule + head colliders (-1.0 .. 1.1).
                 GameObject visual = CreateFittedSprite("Visual", root.transform, character,
-                    root.transform.position, 2.55f, "Players");
-                visual.transform.localPosition = new Vector3(0f, 0.2f, 0f);
+                    root.transform.position, 2.15f, "Players");
+                visual.transform.localPosition = new Vector3(0f, 0.05f, 0f);
                 var pose = visual.AddComponent<PlayerVisual>();
                 Set(pose, "player", controller);
                 Set(pose, "spriteRenderer", visual.GetComponent<SpriteRenderer>());
