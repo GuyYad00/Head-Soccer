@@ -90,18 +90,26 @@ namespace HeadSoccer
                 image.sprite = idle;
                 yield return Breathe(idleHold);
 
-                // A small hop separates idle from the celebration and hides the sprite swap.
-                yield return Hop(0.28f, hopHeight, swapTo: celebration);
-
-                switch (style)
+                if (style == CelebrationStyle.Flip)
                 {
-                    case CelebrationStyle.KissBadge: yield return KissBadge(); break;
-                    case CelebrationStyle.Heart: yield return Heartbeat(); break;
-                    case CelebrationStyle.Bow: yield return Bow(); break;
-                    case CelebrationStyle.Flip: yield return Flip(); break;
+                    // The flip is its own take-off and landing.
+                    yield return Flip();
+                }
+                else
+                {
+                    // A small hop separates idle from the celebration and hides the sprite swap.
+                    yield return Hop(0.28f, hopHeight, swapTo: celebration);
+
+                    switch (style)
+                    {
+                        case CelebrationStyle.KissBadge: yield return KissBadge(); break;
+                        case CelebrationStyle.Heart: yield return Heartbeat(); break;
+                        case CelebrationStyle.Bow: yield return Bow(); break;
+                    }
+
+                    yield return Hop(0.24f, hopHeight * 0.6f, swapTo: idle);
                 }
 
-                yield return Hop(0.24f, hopHeight * 0.6f, swapTo: idle);
                 ResetPose();
             }
         }
@@ -163,41 +171,96 @@ namespace HeadSoccer
             rect.localScale = baseScale;
         }
 
-        /// <summary>Bows: leans forward from the feet twice, holding each bow for a beat.</summary>
+        /// <summary>
+        /// Bows toward the viewer, not sideways. The bow frame faces the camera with the
+        /// head down, so the motion is foreshortening: the body shortens from the feet
+        /// and widens a little as it leans at us, twice, holding each bow for a beat.
+        /// </summary>
         private IEnumerator Bow()
         {
-            const float duration = 1.8f;
-            float height = rect.rect.height;
+            const float duration = 2.0f;
+            float height = rect.rect.height * baseScale.y;
             for (float t = 0f; t < duration; t += Time.unscaledDeltaTime)
             {
                 float u = t / duration;
-                // Two bows: down, hold, up, and again.
+                // Two bows: lean in, hold, straighten, and again.
                 float wave = Mathf.Clamp01(Mathf.Sin(u * Mathf.PI * 2f) * 1.4f);
-                float angle = -22f * Mathf.SmoothStep(0f, 1f, wave);
-                rect.localRotation = Quaternion.Euler(0f, 0f, angle);
-                // Rotate around the feet rather than the centre: shift so the bottom stays put.
-                float rad = angle * Mathf.Deg2Rad;
-                rect.anchoredPosition = basePosition + new Vector2(-Mathf.Sin(rad), Mathf.Cos(rad) - 1f) * (height * 0.5f);
+                float lean = Mathf.SmoothStep(0f, 1f, wave);
+                float sy = 1f - 0.16f * lean;
+                float sx = 1f + 0.05f * lean;
+                rect.localScale = new Vector3(baseScale.x * sx, baseScale.y * sy, baseScale.z);
+                // Scale happens around the centre; drop the sprite so the feet stay planted.
+                rect.anchoredPosition = basePosition + new Vector2(0f, -(1f - sy) * height * 0.5f);
                 yield return null;
             }
             ResetPose();
         }
 
-        /// <summary>Backflip: one full turn in the air on a high arc, landing back on the feet.</summary>
+        /// <summary>
+        /// Backflip. The celebration frame is drawn upside down, exactly the mid-air
+        /// moment, so it appears when the body is inverted at the top of the arc and the
+        /// rotation runs half a turn before and half a turn after it. A crouch on the way
+        /// in and a landing squash sell the effort.
+        /// </summary>
         private IEnumerator Flip()
         {
-            const float duration = 0.95f;
-            for (float t = 0f; t < duration; t += Time.unscaledDeltaTime)
+            float height = rect.rect.height * baseScale.y;
+
+            // Crouch, still in the idle drawing.
+            yield return Squash(0.18f, 0.86f, height);
+
+            const float airTime = 0.9f;
+            image.sprite = celebration;
+            rect.localScale = baseScale;
+            for (float t = 0f; t < airTime; t += Time.unscaledDeltaTime)
             {
-                float u = t / duration;
-                float y = 4f * hopHeight * 2.2f * u * (1f - u);
+                float u = t / airTime;
+                float y = 4f * hopHeight * 2.4f * u * (1f - u);
                 rect.anchoredPosition = basePosition + new Vector2(0f, y);
-                // The frame is drawn upside down (mid-flip), so start half a turn in.
-                rect.localRotation = Quaternion.Euler(0f, 0f, 180f + Mathf.SmoothStep(0f, 1f, u) * 360f);
+                // Backflip for a character facing right: head goes back over the left.
+                // 0 degrees is the frame as drawn (inverted), reached at the top of the arc.
+                float turn = Mathf.Lerp(-180f, 180f, u);
+                rect.localRotation = Quaternion.Euler(0f, 0f, turn);
                 yield return null;
             }
-            rect.localRotation = Quaternion.Euler(0f, 0f, 180f);
+
+            // Land on the feet in the idle drawing, absorb, and stand up.
+            image.sprite = idle;
+            rect.localRotation = Quaternion.identity;
             rect.anchoredPosition = basePosition;
+            yield return Squash(0.12f, 0.8f, height);
+            yield return Unsquash(0.16f, 0.8f, height);
+        }
+
+        /// <summary>Scales the body down from the feet over the given time.</summary>
+        private IEnumerator Squash(float seconds, float targetY, float height)
+        {
+            for (float t = 0f; t < seconds; t += Time.unscaledDeltaTime)
+            {
+                float sy = Mathf.Lerp(1f, targetY, Mathf.SmoothStep(0f, 1f, t / seconds));
+                ApplySquash(sy, height);
+                yield return null;
+            }
+            ApplySquash(targetY, height);
+        }
+
+        /// <summary>Returns the body from a squash to its normal height.</summary>
+        private IEnumerator Unsquash(float seconds, float fromY, float height)
+        {
+            for (float t = 0f; t < seconds; t += Time.unscaledDeltaTime)
+            {
+                float sy = Mathf.Lerp(fromY, 1f, Mathf.SmoothStep(0f, 1f, t / seconds));
+                ApplySquash(sy, height);
+                yield return null;
+            }
+            ResetPose();
+        }
+
+        private void ApplySquash(float sy, float height)
+        {
+            float sx = 1f + (1f - sy) * 0.6f;
+            rect.localScale = new Vector3(baseScale.x * sx, baseScale.y * sy, baseScale.z);
+            rect.anchoredPosition = basePosition + new Vector2(0f, -(1f - sy) * height * 0.5f);
         }
     }
 }
