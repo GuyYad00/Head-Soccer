@@ -63,6 +63,18 @@ Arrows on the card change the character, the bars show speed, jump and power, an
 
 Below the crowd runs an advertising board, the way every real ground has one. Football has always carried messages beyond the game itself, and we wanted the pitch to reflect that world rather than a sterile one. So the board shows real things: the shawarma place, the university this project was made for, the food app, the card company and the game everyone is waiting for.
 
+## Creation time
+
+![The match on one screen, the four players on the other](Docs/images/creation-time.png)
+
+Most of the game was settled at the desk, the match on one screen and the four players on the other, and then by playing each other. A few things only showed up once we were actually building and playing:
+
+- **The kick angle.** Every kick left the foot the same way, so rallies went flat and you could see the next ball coming. The angle is now random, from 0 to 45 degrees: a flat drive one time, a lob the next.
+- **A running kick.** In real football a shot from a standing foot and a shot on the run are not the same thing, and in our first build they were. A player at full speed toward the goal now hits up to 50% harder. Standing still stays at the base power.
+- **The crossbar.** We tried the goals at several heights. Too tall, and the ball sailed in over the players with no way to reach it. Too short, and the players stood taller than the goal. The crossbar now sits at one and a half times the height of their heads.
+
+The full log, and the decisions we add as we keep playing, is in [`Docs/design-decisions.md`](Docs/design-decisions.md).
+
 ## Run it
 
 **Windows / editor**
@@ -108,10 +120,6 @@ Head-Soccer-main/Assets
 │   └── Effects/    EffectsPool, CameraShake, SuperReadySign, AdBoard
 └── UI/         RoundedPanel (9-sliced panel sprite)
 ```
-
-## Design decisions
-
-The write-up of why the kick, the boards, the celebrations and the goal height ended up the way they did is in [`Docs/design-decisions.md`](Docs/design-decisions.md). We add to it as we keep playing.
 
 ## Credits
 
