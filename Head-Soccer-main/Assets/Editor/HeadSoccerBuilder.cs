@@ -48,10 +48,17 @@ namespace HeadSoccer.EditorTools
         private const float CeilingY = 5.0f;
         private const float WallInnerX = 8.9f;
         private const float GoalLineX = 7.7f;
-        private const float GoalMouthTopY = -1.2f;
         private const float BallRadius = 0.28f;
         private const float PlayerRootY = -2.4f;
         private const float PlayerSpawnX = 4f;
+        private const float PlayerHeight = 2.15f;
+        // The player drawing is centred 0.05 above its root, so the top of the head is here.
+        private const float PlayerHeadTopY = PlayerRootY + 0.05f + PlayerHeight * 0.5f;
+        // GDD: the goal is twice as tall as the players' heads, so headers still need a jump.
+        private const float GoalMouthTopY = GroundTopY + (PlayerHeadTopY - GroundTopY) * 2f;
+        // The advertising board runs along the front of the stands, just above the grass.
+        private const float AdBoardY = -0.95f;
+        private const float AdBoardHeight = 0.55f;
 
         // --- palette ---------------------------------------------------------------
         private static readonly Color PanelDark = new Color(0.07f, 0.09f, 0.14f, 0.92f);
@@ -72,6 +79,7 @@ namespace HeadSoccer.EditorTools
         private static Sprite ballSprite;
         private static Sprite goalSprite;
         private static Sprite stadiumSprite;
+        private static Sprite adBoardSprite;
         private static TMP_FontAsset font;
 
         [MenuItem("Head Soccer/Build Everything", priority = 0)]
@@ -123,6 +131,7 @@ namespace HeadSoccer.EditorTools
             ballSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/ball.png");
             goalSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/goal.png");
             stadiumSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/stadium.png");
+            adBoardSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/adboard.png");
             font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontAssetPath);
 
             if (playerRedSprite == null || ballSprite == null || goalSprite == null || stadiumSprite == null)
@@ -138,10 +147,12 @@ namespace HeadSoccer.EditorTools
                 ($"{SpriteFolder}/ball.png", 256), ($"{SpriteFolder}/goal.png", 1024),
                 ($"{SpriteFolder}/stadium.png", 2048), ($"{UIFolder}/RoundedPanel.png", 128)
             };
+            files.Add(($"{SpriteFolder}/adboard.png", 1024));
             foreach (CharacterArt character in Characters)
             {
                 files.Add(($"{CharactersFolder}/{character.file}.png", 1024));
                 files.Add(($"{CharactersFolder}/{character.file}_kick.png", 1024));
+                files.Add(($"{CharactersFolder}/{character.file}_celebrate.png", 1024));
             }
 
             foreach ((string path, int maxSize) in files)
@@ -338,21 +349,23 @@ namespace HeadSoccer.EditorTools
         private struct CharacterArt
         {
             public string file, name, hint;
+            public CelebrationStyle celebration;
             public float speed, jump, power;
 
-            public CharacterArt(string file, string name, string hint, float speed, float jump, float power)
+            public CharacterArt(string file, string name, string hint, CelebrationStyle celebration,
+                                float speed, float jump, float power)
             {
-                this.file = file; this.name = name; this.hint = hint;
+                this.file = file; this.name = name; this.hint = hint; this.celebration = celebration;
                 this.speed = speed; this.jump = jump; this.power = power;
             }
         }
 
         private static readonly CharacterArt[] Characters =
         {
-            new CharacterArt("yossi", "Yossi", "Tough and confident, never gives up", 1.0f, 1.05f, 1.1f),
-            new CharacterArt("david", "David", "Classy and precise, plays with style", 1.05f, 1.0f, 1.0f),
-            new CharacterArt("kim", "Kim", "Fast and focused, samurai balance", 1.2f, 1.15f, 0.85f),
-            new CharacterArt("mikel", "Mikel", "Strong and full of energy", 1.1f, 0.95f, 1.2f)
+            new CharacterArt("yossi", "Yossi", "Tough and confident, never gives up", CelebrationStyle.KissBadge, 1.0f, 1.05f, 1.1f),
+            new CharacterArt("david", "David", "Classy and precise, plays with style", CelebrationStyle.Heart, 1.05f, 1.0f, 1.0f),
+            new CharacterArt("kim", "Kim", "Fast and focused, samurai balance", CelebrationStyle.Bow, 1.2f, 1.15f, 0.85f),
+            new CharacterArt("mikel", "Mikel", "Strong and full of energy", CelebrationStyle.Flip, 1.1f, 0.95f, 1.2f)
         };
 
         /// <summary>Creates or refreshes the roster asset from the Characters table.</summary>
@@ -372,10 +385,13 @@ namespace HeadSoccer.EditorTools
                 CharacterArt art = Characters[i];
                 var idle = AssetDatabase.LoadAssetAtPath<Sprite>($"{CharactersFolder}/{art.file}.png");
                 var kick = AssetDatabase.LoadAssetAtPath<Sprite>($"{CharactersFolder}/{art.file}_kick.png");
+                var celebrate = AssetDatabase.LoadAssetAtPath<Sprite>($"{CharactersFolder}/{art.file}_celebrate.png");
                 if (idle == null) Debug.LogWarning($"Head Soccer: missing {CharactersFolder}/{art.file}.png");
 
-                FillCharacter(list.GetArrayElementAtIndex(i), art.name, art.hint, idle, kick, true,
-                    Color.white, art.speed, art.jump, art.power);
+                SerializedProperty element = list.GetArrayElementAtIndex(i);
+                FillCharacter(element, art.name, art.hint, idle, kick, true, Color.white, art.speed, art.jump, art.power);
+                element.FindPropertyRelative("celebration").objectReferenceValue = celebrate;
+                element.FindPropertyRelative("celebrationStyle").enumValueIndex = (int)art.celebration;
             }
 
             serialized.ApplyModifiedPropertiesWithoutUndo();
@@ -501,6 +517,21 @@ namespace HeadSoccer.EditorTools
             if (stadiumSprite != null)
                 CreateFittedSprite("Stadium", pitch, stadiumSprite, new Vector2(0f, 0.35f), 10.4f, "Background");
 
+            // Scrolling advertising board along the front of the stands, as in a real ground.
+            if (adBoardSprite != null)
+            {
+                var board = new GameObject("AdBoard");
+                board.transform.SetParent(pitch);
+                board.transform.position = new Vector3(0f, AdBoardY, 0f);
+                var ads = board.AddComponent<AdBoard>();
+                Set(ads, "banner", adBoardSprite);
+                Set(ads, "boardWidth", 18.5f);
+                Set(ads, "boardHeight", AdBoardHeight);
+                Set(ads, "scrollSpeed", -0.6f);
+                Set(ads, "sortingLayer", "Pitch");
+                Set(ads, "sortingOrder", 5);
+            }
+
             // Invisible colliders: the stadium painting already shows the ground and walls.
             HideRenderer(CreateSolid("Ground", pitch, new Vector2(0f, GroundTopY - 4f), new Vector2(60f, 8f),
                         Color.white, "Pitch", "Ground"));
@@ -588,12 +619,21 @@ namespace HeadSoccer.EditorTools
 
             if (goalSprite != null)
             {
+                // goal.png is a side view with the mouth open to the RIGHT and the front
+                // post on its right edge. It goes on the left-hand side of the pitch as
+                // drawn and is mirrored for the right-hand goal, so both open onto the pitch.
+                // Art height = mouth + crossbar; the net is squeezed a little in depth so
+                // its front post lands on the goal line and its back stays on screen.
+                const float depthSqueeze = 0.8f;
+                float artHeight = mouthHeight + 0.15f;
+                float artWidth = artHeight * (goalSprite.bounds.size.x / goalSprite.bounds.size.y) * depthSqueeze;
+                float artCentreX = sign * (GoalLineX - 0.03f + artWidth * 0.5f);
+
                 GameObject art = CreateFittedSprite("NetArt", goal, goalSprite,
-                    new Vector2(sign * 8.15f, GroundTopY + 1.15f), 2.7f, "Goals");
+                    new Vector2(artCentreX, GroundTopY + artHeight * 0.5f), artHeight, "Goals");
                 Vector3 scale = art.transform.localScale;
-                // The painting opens toward the left. Flip it for the left-hand goal.
-                if (side == Side.Left)
-                    art.transform.localScale = new Vector3(-Mathf.Abs(scale.x), scale.y, 1f);
+                float flip = side == Side.Right ? -1f : 1f;
+                art.transform.localScale = new Vector3(flip * Mathf.Abs(scale.x) * depthSqueeze, scale.y, 1f);
             }
             else
             {
@@ -676,7 +716,7 @@ namespace HeadSoccer.EditorTools
                 // Character PNGs are trimmed to their content, so this is the real body height,
                 // matched to the capsule + head colliders (-1.0 .. 1.1).
                 GameObject visual = CreateFittedSprite("Visual", root.transform, character,
-                    root.transform.position, 2.15f, "Players");
+                    root.transform.position, PlayerHeight, "Players");
                 visual.transform.localPosition = new Vector3(0f, 0.05f, 0f);
                 var pose = visual.AddComponent<PlayerVisual>();
                 Set(pose, "player", controller);
@@ -981,6 +1021,8 @@ namespace HeadSoccer.EditorTools
 
             Image portrait = CreateUIImage(card.transform, "Portrait", playerRedSprite,
                 new Vector2(0f, 0.5f), new Vector2(190f, 0f), new Vector2(230f, 310f));
+            // Loops each character's signature celebration while he is on the card.
+            var celebration = portrait.gameObject.AddComponent<CelebrationLoop>();
 
             TextMeshProUGUI nameText = CreateText(card.transform, "Name", Characters[0].name.ToUpperInvariant(), 56,
                 new Vector2(1f, 1f), new Vector2(-220f, -70f), new Vector2(360f, 70f), Color.white);
@@ -1008,6 +1050,7 @@ namespace HeadSoccer.EditorTools
             UnityEventTools.AddVoidPersistentListener(back.onClick, menu.BackToMain);
 
             Set(select, "portrait", portrait);
+            Set(select, "celebration", celebration);
             Set(select, "nameText", nameText);
             Set(select, "statText", statText);
             Set(select, "speedBar", speedBar);
