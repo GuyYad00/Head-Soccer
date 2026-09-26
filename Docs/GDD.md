@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 2D |
 | **Orientation & reference resolution** | Landscape, 1280 x 720 reference |
 | **Expected session length** | 30 seconds to 3 minutes per match |
-| **Document version** | v1.1, 2026-09-26 |
+| **Document version** | v1.2, 2026-09-26 |
 
 ---
 
@@ -104,8 +104,8 @@ stateDiagram-v2
 
 ![Wireframe of the four main screens](images/screens-wireframe.png)
 
-1. **Main Menu** with the title HEAD SOCCER, a PLAY button that opens Character Select, a CHARACTER button that opens the same screen directly, and a small settings icon for audio on and off.
-2. **Character Select** with a character portrait in the center, left and right arrows to change character, the character name, a short stat hint (speed, jump, power), and a CONFIRM button that starts the match.
+1. **Main Menu** with the title HEAD SOCCER, two play buttons (PLAY VS CPU and 2 PLAYERS) that both open Character Select, a CPU difficulty toggle (EASY / MEDIUM / HARD), and a SOUND ON / OFF toggle.
+2. **Character Select** with a character portrait in the center, left and right arrows to change character, the character name, a short stat hint with speed, jump and power bars, a KICK OFF! button that starts the match, and BACK.
 3. **Gameplay HUD** with a scoreboard P1 and P2 at the top center, a countdown timer beside it, and a special charge meter for each player. Deliberately absent: no minimap, no ads, no on-screen currency.
 4. **Match Over** with a WINNER banner, the final score, a REMATCH button, and a MENU button.
 5. **Pause overlay** with RESUME, RESTART, and QUIT to menu.
@@ -130,7 +130,7 @@ stateDiagram-v2
 
 **Licence note:** every sprite and sound in the repository was made for this project, so there is no third party art to attribute. The only external asset is the Oswald font, distributed under the SIL Open Font License, whose licence file ships next to the font. Nothing here is taken from a source that forbids reuse.
 
-**Technical art rules:** vector cartoon sprites import with Bilinear filtering, pixel art with Point (no filter), PPU 100, a single SpriteAtlas per scene to keep draw calls low, and sorting layers back to front: background, pitch, goals, ball, players, fx, UI.
+**Technical art rules:** vector cartoon sprites import with Bilinear filtering, PPU 100, a per-sprite max texture size (the ball ships at 256 px, the stadium at 2048 px), a single SpriteAtlas (`Assets/Art/HeadSoccer.spriteatlasv2`) holding every game and UI sprite to keep draw calls low, and sorting layers back to front: background, pitch, goals, ball, players, fx, UI.
 
 ---
 
@@ -222,4 +222,5 @@ graph TD
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
+| v1.2 | 2026-09-26 | Section 5: the menu ships with two play buttons (VS CPU, 2 PLAYERS) instead of PLAY plus a separate CHARACTER button, since both modes go through Character Select anyway; the confirm button is labelled KICK OFF!. Section 6: sprite atlas path and per-sprite texture sizes recorded. Pause also on the gamepad Start button, as section 4 already listed. |
 | v1.1 | 2026-09-26 | Implementation pass. Unity version corrected to the one the project actually uses (6000.3.20f1). Art and audio table replaced with the assets that ship: original sprites, Oswald font (OFL), synthesised SFX and music, so there is no CC-BY attribution to track. Section 4: Kick fires the Super when the meter is full, gamepads mapped (first pad P1, second pad P2), keyboard Super chord documented. Section 7: script table updated to the real class list (`CharacterRoster`, `PlayerVisual`, `MatchRecords`, input sources, camera helpers). Match length 90 s, goal target 5 and 6 s Super charge are now the shipped values in `GameConfig.asset`. Section 8.2 "best result kept in PlayerPrefs" is implemented as `MatchRecords`; the ball trail from section 7 was dropped, the pool holds confetti and kick sparks. |
