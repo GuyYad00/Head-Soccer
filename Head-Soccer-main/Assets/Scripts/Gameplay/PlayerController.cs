@@ -59,6 +59,8 @@ namespace HeadSoccer
         public bool SpecialUsed => special != null && special.IsUsed;
         /// <summary>+1 for the left character (it attacks right), -1 for the right one.</summary>
         public float FacingDirection => side == Side.Left ? 1f : -1f;
+        /// <summary>Current body velocity, so a running kick can hit harder than a standing one.</summary>
+        public Vector2 Velocity => rb != null ? rb.linearVelocity : Vector2.zero;
 
         private void Awake()
         {

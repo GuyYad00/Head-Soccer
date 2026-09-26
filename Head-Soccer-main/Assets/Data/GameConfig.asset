@@ -17,7 +17,9 @@ MonoBehaviour:
   gravityScale: 3
   kickImpulse: 14
   kickRange: 1.2
-  kickUpwardBias: 0.55
+  kickMinAngle: 0
+  kickMaxAngle: 45
+  kickMomentumBonus: 0.5
   kickCooldown: 0.25
   ballBounciness: 0.7
   ballMaxSpeed: 22

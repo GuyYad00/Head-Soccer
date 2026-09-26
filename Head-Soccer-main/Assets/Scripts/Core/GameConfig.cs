@@ -17,8 +17,11 @@ namespace HeadSoccer
         [Header("Kick")]
         public float kickImpulse = 14f;
         public float kickRange = 1.2f;
-        [Tooltip("How much the kick pushes the ball upwards instead of straight forward.")]
-        public float kickUpwardBias = 0.55f;
+        [Tooltip("Every kick leaves the foot at a random angle between these two, in degrees above the ground. 0 is a flat drive, 45 a lob.")]
+        public float kickMinAngle = 0f;
+        public float kickMaxAngle = 45f;
+        [Tooltip("Extra impulse for a running kick: at full move speed toward the ball the kick is this much stronger (0.5 = +50%).")]
+        public float kickMomentumBonus = 0.5f;
         [Tooltip("Seconds before the same character may kick again.")]
         public float kickCooldown = 0.25f;
 
