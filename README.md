@@ -28,6 +28,21 @@ Final project for the Unity course. The approved design document is in [`Docs/GD
 
 The first gamepad drives Player 1, the second drives Player 2.
 
+## The players
+
+![Yossi, David, Kim and Mikel](Docs/images/characters.png)
+
+The roster is our own art, drawn for this project and inspired by the makers of the game we set out to build. We wanted the players to feel different from each other, so we picked four countries and built one character around each of them. Each one has an idle drawing and a kick drawing, and each one plays a little differently in speed, jump and power.
+
+| | | |
+|---|---|---|
+| **Yossi** | Israel | Tough and confident, never gives up |
+| **David** | England | Classy and precise, plays with style |
+| **Kim** | Japan | Fast and focused, samurai balance |
+| **Mikel** | Nigeria | Strong and full of energy |
+
+You pick yours on the character select screen before kickoff. The CPU plays the next one in the list.
+
 ## Run it
 
 **Windows / editor**
