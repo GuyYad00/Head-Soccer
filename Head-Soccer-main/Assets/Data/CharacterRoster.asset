@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db7e98f301934eee86a69bac4cc652fb, type: 3}
+  m_Name: CharacterRoster
+  m_EditorClassIdentifier: Assembly-CSharp::HeadSoccer.CharacterRoster
+  characters:
+  - displayName: Rocket
+    statHint: Fast and bouncy, lighter kick
+    portrait: {fileID: 21300000, guid: 30c65a02fc2fdb54e88e664221358b98, type: 3}
+    facesRight: 1
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    speed: 1.15
+    jump: 1.1
+    power: 0.9
+  - displayName: Tank
+    statHint: Slower, but every kick is a cannon
+    portrait: {fileID: 21300000, guid: 6e4544dfef06b44409a1447dc19b6e04, type: 3}
+    facesRight: 0
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    speed: 0.9
+    jump: 0.95
+    power: 1.25
