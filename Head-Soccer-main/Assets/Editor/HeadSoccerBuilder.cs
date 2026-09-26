@@ -54,11 +54,13 @@ namespace HeadSoccer.EditorTools
         private const float PlayerHeight = 2.15f;
         // The player drawing is centred 0.05 above its root, so the top of the head is here.
         private const float PlayerHeadTopY = PlayerRootY + 0.05f + PlayerHeight * 0.5f;
-        // GDD: the goal is twice as tall as the players' heads, so headers still need a jump.
-        private const float GoalMouthTopY = GroundTopY + (PlayerHeadTopY - GroundTopY) * 2f;
-        // The advertising board runs along the front of the stands, just above the grass.
-        private const float AdBoardY = -0.95f;
-        private const float AdBoardHeight = 0.55f;
+        // GDD: the crossbar sits at one and a half times the players' head height, so a
+        // header still needs a real jump but a lob can still be kept out.
+        private const float GoalMouthTopY = GroundTopY + (PlayerHeadTopY - GroundTopY) * 1.5f;
+        // The advertising board stands in front of the first row of the crowd, the way
+        // stadium LED boards hide the spectators' legs. Big enough to read from the sofa.
+        private const float AdBoardHeight = 1.15f;
+        private const float AdBoardY = -1.15f + AdBoardHeight * 0.5f;   // bottom edge on the grass line
 
         // --- palette ---------------------------------------------------------------
         private static readonly Color PanelDark = new Color(0.07f, 0.09f, 0.14f, 0.92f);

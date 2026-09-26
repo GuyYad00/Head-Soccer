@@ -17,6 +17,7 @@ Final project for the Unity course. The approved design document is in [`Docs/GD
 ## How to play
 
 - **Goal:** put the ball in the other net. First to 5 goals, or the higher score when the 90-second clock hits zero, wins.
+- **Kick:** no two kicks are the same. The ball leaves the foot at a random angle, a flat drive one time and a lob the next, and a kick on the run hits harder than a kick standing still.
 - **Super:** staying on the ball fills your Super meter (under your score). When it reads SUPER READY, your next kick is a boosted shot with slow motion. One per match.
 
 | Action | Player 1 | Player 2 | Gamepad | Touch |
@@ -53,8 +54,8 @@ This is the screen before kickoff. The portrait in the middle is alive: the play
 |---|---|
 | **Yossi** | Kneels and kisses the badge on his shirt |
 | **David** | Beats a heart with his hands |
-| **Kim** | Bows |
-| **Mikel** | Backflip |
+| **Kim** | Bows to you, the player, not to the side |
+| **Mikel** | Crouches, backflips and lands on his feet |
 
 Arrows on the card change the character, the bars show speed, jump and power, and **KICK OFF!** starts the match. The celebration plays on this screen only. Once the match starts, the players go back to their idle and kick drawings.
 
