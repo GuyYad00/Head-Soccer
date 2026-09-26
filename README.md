@@ -2,7 +2,7 @@
 
 A 1v1 arcade Head Soccer game built in Unity 6 (URP, 2D). Two big-headed characters on one screen, arcade ball physics, 90-second matches to five goals, and a Super shot each player can fire once per match. Runs on Windows and as an Android APK with touch controls.
 
-Final project for the Unity course. The approved design document is in [`Docs/GDD.md`](Docs/GDD.md); the Unity project is in [`Head-Soccer-main/`](Head-Soccer-main/).
+Final project for the Unity course. The approved design document is in [`Docs/GDD.md`](Docs/GDD.md). Decisions we made while planning and while playing each other are in [`Docs/design-decisions.md`](Docs/design-decisions.md). The Unity project is in [`Head-Soccer-main/`](Head-Soccer-main/).
 
 ## Screenshots
 
@@ -108,6 +108,10 @@ Head-Soccer-main/Assets
 │   └── Effects/    EffectsPool, CameraShake, SuperReadySign, AdBoard
 └── UI/         RoundedPanel (9-sliced panel sprite)
 ```
+
+## Design decisions
+
+The write-up of why the kick, the boards, the celebrations and the goal height ended up the way they did is in [`Docs/design-decisions.md`](Docs/design-decisions.md). We add to it as we keep playing.
 
 ## Credits
 
