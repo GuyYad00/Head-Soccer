@@ -57,7 +57,7 @@ The first gamepad drives Player 1, the second drives Player 2.
 
 ```
 Head-Soccer-main/Assets
-├── Art/        stadium, goal, ball and the two characters (original sprites)
+├── Art/        stadium, goal, ball and Characters/ (four players, idle + kick)
 ├── Audio/      synthesised SFX and the match music loop
 ├── Data/       GameConfig, CharacterRoster, ball physics material
 ├── Editor/     HeadSoccerBuilder (rebuilds both scenes), HeadSoccerBuildPipeline (one-click builds)
