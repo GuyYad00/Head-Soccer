@@ -119,7 +119,7 @@ stateDiagram-v2
 
 | Asset | Variants / frames | Source & licence | Use |
 |---|---|---|---|
-| Character (head plus body) | 2 characters (red, blue), 2 poses each: idle and kick; run and jump are code driven flip, squash and stretch | Original cartoon art made for this project (`Assets/Art/player_*.png`, `player_*_kick.png`) | The two players |
+| Character (head plus body) | 4 characters (Yossi, David, Kim, Mikel), 2 poses each: idle and kick; run and jump are code driven flip, squash and stretch | Original cartoon art made for this project (`Assets/Art/Characters/<name>.png`, `<name>_kick.png`) | The selectable players |
 | Ball | 1 sprite | Original (`Assets/Art/ball.png`) | The ball |
 | App icon | 1, 1024 x 1024 | Original (`Assets/Branding/icon.png`) | Android launcher and Windows icon |
 | Pitch and stadium background | 1 | Original (`Assets/Art/stadium.png`) | Static background |
@@ -223,5 +223,5 @@ graph TD
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
-| v1.2 | 2026-09-26 | Section 6: a kick pose drawing per character and an app icon added to the asset list; sprites trimmed to their content so the drawing matches the collider. Section 5: the menu ships with two play buttons (VS CPU, 2 PLAYERS) instead of PLAY plus a separate CHARACTER button, since both modes go through Character Select anyway; the confirm button is labelled KICK OFF!. Section 6: sprite atlas path and per-sprite texture sizes recorded. Pause also on the gamepad Start button, as section 4 already listed. |
+| v1.2 | 2026-09-26 | Section 6: the two placeholder characters are replaced by a roster of four (Yossi, David, Kim, Mikel), each with an idle and a kick drawing and its own speed / jump / power; still well under the 8+ roster ruled out in 8.3. App icon added to the asset list; sprites trimmed to their content so the drawing matches the collider. Section 5: the menu ships with two play buttons (VS CPU, 2 PLAYERS) instead of PLAY plus a separate CHARACTER button, since both modes go through Character Select anyway; the confirm button is labelled KICK OFF!. Section 6: sprite atlas path and per-sprite texture sizes recorded. Pause also on the gamepad Start button, as section 4 already listed. |
 | v1.1 | 2026-09-26 | Implementation pass. Unity version corrected to the one the project actually uses (6000.3.20f1). Art and audio table replaced with the assets that ship: original sprites, Oswald font (OFL), synthesised SFX and music, so there is no CC-BY attribution to track. Section 4: Kick fires the Super when the meter is full, gamepads mapped (first pad P1, second pad P2), keyboard Super chord documented. Section 7: script table updated to the real class list (`CharacterRoster`, `PlayerVisual`, `MatchRecords`, input sources, camera helpers). Match length 90 s, goal target 5 and 6 s Super charge are now the shipped values in `GameConfig.asset`. Section 8.2 "best result kept in PlayerPrefs" is implemented as `MatchRecords`; the ball trail from section 7 was dropped, the pool holds confetti and kick sparks. |
