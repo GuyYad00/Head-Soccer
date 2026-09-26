@@ -103,7 +103,7 @@ namespace HeadSoccer
 
         private void Update()
         {
-            if (Keyboard.current != null && Keyboard.current[Key.Escape].wasPressedThisFrame)
+            if (PausePressedThisFrame())
                 TogglePause();
 
             if (State != MatchState.Playing) return;
@@ -114,6 +114,19 @@ namespace HeadSoccer
                 TimeRemaining = 0f;
                 EndMatch();
             }
+        }
+
+        /// <summary>Esc on the keyboard or Start on any connected gamepad (GDD section 4).</summary>
+        private static bool PausePressedThisFrame()
+        {
+            if (Keyboard.current != null && Keyboard.current[Key.Escape].wasPressedThisFrame)
+                return true;
+
+            var pads = Gamepad.all;
+            for (int i = 0; i < pads.Count; i++)
+                if (pads[i].startButton.wasPressedThisFrame) return true;
+
+            return false;
         }
 
         private void OnApplicationFocus(bool hasFocus)
