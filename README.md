@@ -32,16 +32,20 @@ The first gamepad drives Player 1, the second drives Player 2.
 
 ![Yossi, David, Kim and Mikel](Docs/images/characters.png)
 
-The roster is our own art, drawn for this project and inspired by the makers of the game we set out to build. We wanted the players to feel different from each other, so we picked four countries and built one character around each of them. Each one has an idle drawing and a kick drawing, and each one plays a little differently in speed, jump and power.
+The roster is our own art, drawn for this project and inspired by the makers of the game we set out to build. We wanted the players to feel different from each other, so we picked four countries and built one character around each of them. Each one has an idle drawing, a kick drawing and his own goal celebration, and each one plays a little differently in speed, jump and power.
 
-| | | |
-|---|---|---|
-| **Yossi** | Israel | Tough and confident, never gives up |
-| **David** | England | Classy and precise, plays with style |
-| **Kim** | Japan | Fast and focused, samurai balance |
-| **Mikel** | Nigeria | Strong and full of energy |
+| | | | Celebration |
+|---|---|---|---|
+| **Yossi** | Israel | Tough and confident, never gives up | Kisses the badge |
+| **David** | England | Classy and precise, plays with style | Hands make a heart |
+| **Kim** | Japan | Fast and focused, samurai balance | Bows |
+| **Mikel** | Nigeria | Strong and full of energy | Backflip |
 
-You pick yours on the character select screen before kickoff. The CPU plays the next one in the list.
+You pick yours on the character select screen before kickoff, where each player loops his celebration live. The CPU plays the next one in the list.
+
+## The stadium
+
+Below the crowd runs an advertising board, the way every real ground has one. Football has always carried messages beyond the game itself, and we wanted the pitch to reflect that world rather than a sterile one. So the board shows real things: the shawarma place, the university this project was made for, the food app, the card company and the game everyone is waiting for.
 
 ## Run it
 
@@ -72,7 +76,7 @@ You pick yours on the character select screen before kickoff. The CPU plays the 
 
 ```
 Head-Soccer-main/Assets
-├── Art/        stadium, goal, ball and Characters/ (four players, idle + kick)
+├── Art/        stadium, goal, ball, ad board and Characters/ (four players, idle + kick + celebration)
 ├── Audio/      synthesised SFX and the match music loop
 ├── Data/       GameConfig, CharacterRoster, ball physics material
 ├── Editor/     HeadSoccerBuilder (rebuilds both scenes), HeadSoccerBuildPipeline (one-click builds)
@@ -83,9 +87,9 @@ Head-Soccer-main/Assets
 │   ├── Core/       GameManager, GameConfig, MatchState, MatchSettings, MatchRecords, CharacterRoster, CameraFitter
 │   ├── Gameplay/   PlayerController, PlayerVisual, SpecialShot, KickHitbox, BallController, GoalTrigger, AIController
 │   ├── Input/      IInputSource, Keyboard/Gamepad/Touch/Composite sources, HoldButton
-│   ├── UI/         UIManager, MainMenuController, CharacterSelect, SafeAreaFitter
+│   ├── UI/         UIManager, MainMenuController, CharacterSelect, CelebrationLoop, SafeAreaFitter
 │   ├── Audio/      AudioManager
-│   └── Effects/    EffectsPool, CameraShake, SuperReadySign
+│   └── Effects/    EffectsPool, CameraShake, SuperReadySign, AdBoard
 └── UI/         RoundedPanel (9-sliced panel sprite)
 ```
 

@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 2D |
 | **Orientation & reference resolution** | Landscape, 1280 x 720 reference |
 | **Expected session length** | 30 seconds to 3 minutes per match |
-| **Document version** | v1.2, 2026-09-26 |
+| **Document version** | v1.3, 2026-09-27 |
 
 ---
 
@@ -119,11 +119,13 @@ stateDiagram-v2
 
 | Asset | Variants / frames | Source & licence | Use |
 |---|---|---|---|
-| Character (head plus body) | 4 characters (Yossi, David, Kim, Mikel), 2 poses each: idle and kick; run and jump are code driven flip, squash and stretch | Original cartoon art made for this project (`Assets/Art/Characters/<name>.png`, `<name>_kick.png`) | The selectable players |
+| Character (head plus body) | 4 characters (Yossi, David, Kim, Mikel), 3 poses each: idle, kick and celebration; run and jump are code driven flip, squash and stretch | Original cartoon art made for this project (`Assets/Art/Characters/<name>.png`, `<name>_kick.png`, `<name>_celebrate.png`) | The selectable players |
+| Celebration loop | 1 frame per character; the motion (kneel, heartbeat, bow, backflip) is code driven on the portrait, Character Select only | `CelebrationLoop` component | Brings the Character Select card to life |
 | Ball | 1 sprite | Original (`Assets/Art/ball.png`) | The ball |
 | App icon | 1, 1024 x 1024 | Original (`Assets/Branding/icon.png`) | Android launcher and Windows icon |
 | Pitch and stadium background | 1 | Original (`Assets/Art/stadium.png`) | Static background |
-| Goal net | 1, mirrored for the left goal | Original (`Assets/Art/goal.png`) | The two goals |
+| Goal net | 1 side view, mouth open to the right; placed as drawn on the left, mirrored on the right. Goal height is twice the height of the players' heads | Original (`Assets/Art/goal.png`) | The two goals |
+| Advertising board | 1 banner strip, 1024 x 65, scrolled and wrapped by `AdBoard` under the crowd | Original (`Assets/Art/adboard.png`); real brands, as on a real pitch | Stadium dressing |
 | UI panel | 1 rounded rectangle, 9-sliced | Original (`Assets/UI/RoundedPanel.png`) | Scoreboard, cards, buttons |
 | Font | Oswald Bold | Google Fonts, SIL Open Font License 1.1 (`Assets/Fonts/Oswald-OFL.txt`) | All UI text |
 | SFX (kick, bounce, jump, whistle, goal, crowd cheer, beep, special, UI click) | 9 | Synthesised for this project with a small Python script, no samples | Feedback |
@@ -177,6 +179,8 @@ graph TD
 | `IInputSource`, `KeyboardInputSource`, `GamepadInputSource`, `TouchInputSource`, `CompositeInputSource` | One interface for every input device, merged per player |
 | `UIManager` | HUD, pause, match over, goal flash and score bump |
 | `MainMenuController`, `CharacterSelect` | Menu flow, choosing a character and saving the choice |
+| `CelebrationLoop` | Coroutine that loops the chosen character's celebration on the Character Select portrait |
+| `AdBoard` | Scrolling, wrapping advertising board under the crowd, clipped by a SpriteMask |
 | `AudioManager` | One-shot SFX and looping music, mute saved in `PlayerPrefs` |
 | `EffectsPool` | Object pool for goal confetti and kick sparks |
 | `CameraFitter`, `CameraShake`, `SafeAreaFitter` | Full pitch visible on any aspect ratio, screen shake, notch safe UI |
@@ -223,5 +227,6 @@ graph TD
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
+| v1.3 | 2026-09-27 | Section 6: each character gets a third drawing, his goal celebration, looped live on the Character Select card by `CelebrationLoop` (Character Select only, never during the match). The goal is redrawn as a side view and its height fixed at twice the players' head height, so headers need a real jump; the drawing opens to the right, sits on the left as drawn and is mirrored on the right. An advertising board with real brands scrolls under the crowd (`AdBoard`), because a football pitch without boards does not look like football. |
 | v1.2 | 2026-09-26 | Section 6: the two placeholder characters are replaced by a roster of four (Yossi, David, Kim, Mikel), each with an idle and a kick drawing and its own speed / jump / power; still well under the 8+ roster ruled out in 8.3. App icon added to the asset list; sprites trimmed to their content so the drawing matches the collider. Section 5: the menu ships with two play buttons (VS CPU, 2 PLAYERS) instead of PLAY plus a separate CHARACTER button, since both modes go through Character Select anyway; the confirm button is labelled KICK OFF!. Section 6: sprite atlas path and per-sprite texture sizes recorded. Pause also on the gamepad Start button, as section 4 already listed. |
 | v1.1 | 2026-09-26 | Implementation pass. Unity version corrected to the one the project actually uses (6000.3.20f1). Art and audio table replaced with the assets that ship: original sprites, Oswald font (OFL), synthesised SFX and music, so there is no CC-BY attribution to track. Section 4: Kick fires the Super when the meter is full, gamepads mapped (first pad P1, second pad P2), keyboard Super chord documented. Section 7: script table updated to the real class list (`CharacterRoster`, `PlayerVisual`, `MatchRecords`, input sources, camera helpers). Match length 90 s, goal target 5 and 6 s Super charge are now the shipped values in `GameConfig.asset`. Section 8.2 "best result kept in PlayerPrefs" is implemented as `MatchRecords`; the ball trail from section 7 was dropped, the pool holds confetti and kick sparks. |
