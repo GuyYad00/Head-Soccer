@@ -13,6 +13,8 @@ namespace HeadSoccer
     {
         [SerializeField] private CharacterRoster roster;
         [SerializeField] private Image portrait;
+        [Tooltip("Optional. Lives on the portrait and loops the character's celebration.")]
+        [SerializeField] private CelebrationLoop celebration;
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI statText;
         [SerializeField] private Image speedBar;
@@ -51,6 +53,9 @@ namespace HeadSoccer
                 portrait.color = character.tint;
                 portrait.preserveAspect = true;
             }
+
+            // The celebration restarts from idle on every change so the swap never lands mid-flip.
+            if (celebration != null) celebration.Play(character);
 
             if (nameText != null) nameText.text = character.displayName;
             if (statText != null) statText.text = character.statHint;

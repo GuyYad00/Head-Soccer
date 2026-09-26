@@ -2,6 +2,23 @@ using UnityEngine;
 
 namespace HeadSoccer
 {
+    /// <summary>
+    /// How a character celebrates on the Character Select screen. The sprite is one
+    /// frame; the style tells CelebrationLoop which motion to add on top of it.
+    /// </summary>
+    public enum CelebrationStyle
+    {
+        None,
+        /// <summary>Kneels and kisses the badge on the shirt.</summary>
+        KissBadge,
+        /// <summary>Hands form a heart that beats.</summary>
+        Heart,
+        /// <summary>A deep, respectful bow.</summary>
+        Bow,
+        /// <summary>A full backflip in the air.</summary>
+        Flip
+    }
+
     /// <summary>One selectable character: a name, a look and three small stat multipliers.</summary>
     [System.Serializable]
     public struct CharacterDefinition
@@ -11,6 +28,9 @@ namespace HeadSoccer
         public Sprite portrait;
         [Tooltip("Optional. Shown for a moment on every kick. Leave empty to reuse the portrait.")]
         public Sprite kickPose;
+        [Tooltip("Optional. The celebration frame looped on the Character Select screen only.")]
+        public Sprite celebration;
+        public CelebrationStyle celebrationStyle;
         [Tooltip("Which way the drawing looks, so PlayerVisual can flip it correctly.")]
         public bool facesRight;
         [Tooltip("Tints the portrait so two characters can share one drawing.")]
