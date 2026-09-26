@@ -6,10 +6,10 @@
 | **Team** | Guy Yad Shalom (design, programming, art integration, audio), Tomer Yad Shalom (design, programming, art integration, audio) |
 | **Genre** | Arcade / 1v1 physics sports / local versus |
 | **Target platform** | Android (mobile build), plus PC (Windows) standalone for development |
-| **Engine / Unity version** | Unity 6 (6000.3.22f1), URP, 2D |
+| **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 2D |
 | **Orientation & reference resolution** | Landscape, 1280 x 720 reference |
 | **Expected session length** | 30 seconds to 3 minutes per match |
-| **Document version** | v1.0, 2026-09-10 |
+| **Document version** | v1.1, 2026-09-26 |
 
 ---
 
@@ -86,8 +86,12 @@ stateDiagram-v2
 |---|---|---|---|---|
 | Move left / right | A / D | Left / Right arrow | Left stick or D-pad | Left / right buttons on the left thumb side |
 | Jump | W | Up arrow | South button | Jump button on the right thumb side |
-| Kick / Special | Space | Right Ctrl | West button | Kick button on the right thumb side |
+| Kick / Special | Space | Right Ctrl | West or East button | Kick button on the right thumb side |
+| Special only (optional chord) | Tab + Shift | Up + Down | North button or a shoulder button | not needed, Kick fires it when the meter is full |
 | Pause | Esc | Esc | Start button | Pause icon, top corner |
+
+- The first connected gamepad drives P1 and the second drives P2, so two controllers on one PC give a couch match.
+- When the Super meter is full, a plain Kick fires the Super. The extra chord exists only so a keyboard player can fire it deliberately; the touch layout stays at four buttons.
 
 - Input is read on **press** in `Update`, buffered, and applied in `FixedUpdate`, so a jump or a kick is never dropped between physics steps and always lines up with the ball simulation.
 - A press on a UI button (menu, pause, rematch) never triggers a kick or a jump in the match underneath it.
@@ -115,14 +119,16 @@ stateDiagram-v2
 
 | Asset | Variants / frames | Source & licence | Use |
 |---|---|---|---|
-| Character (head plus body) | 2 characters, idle / run / jump / kick | Kenney or itch.io free 2D pack, CC0, or custom | The two players |
-| Ball | 1 sprite | Kenney sports assets, CC0 | The ball |
-| Pitch and stadium background | 1 | Kenney or OpenGameArt, CC0 | Static background |
-| Goal net | 1 | CC0 pack | The two goals |
-| SFX (kick, bounce, whistle, goal, crowd cheer) | 5 | Kenney audio or freesound CC0 | Feedback |
-| Music (menu loop, match loop) | 2 | OpenGameArt or incompetech, CC0 or CC-BY | Ambience |
+| Character (head plus body) | 2 characters (red, blue), single pose; run, jump and kick are code driven squash and flip | Original cartoon art made for this project (`Assets/Art/player_*.png`) | The two players |
+| Ball | 1 sprite | Original (`Assets/Art/ball.png`) | The ball |
+| Pitch and stadium background | 1 | Original (`Assets/Art/stadium.png`) | Static background |
+| Goal net | 1, mirrored for the left goal | Original (`Assets/Art/goal.png`) | The two goals |
+| UI panel | 1 rounded rectangle, 9-sliced | Original (`Assets/UI/RoundedPanel.png`) | Scoreboard, cards, buttons |
+| Font | Oswald Bold | Google Fonts, SIL Open Font License 1.1 (`Assets/Fonts/Oswald-OFL.txt`) | All UI text |
+| SFX (kick, bounce, jump, whistle, goal, crowd cheer, beep, special, UI click) | 9 | Synthesised for this project with a small Python script, no samples | Feedback |
+| Music (match loop) | 1, 15 s chiptune loop at 128 bpm | Synthesised for this project | Ambience |
 
-**Licence note:** every asset used is a free-to-use CC0 or CC-BY pack. For a public build, any CC-BY asset keeps its attribution in a credits screen and in the repository README, and any placeholder sprite is swapped for an original or commissioned one. Nothing here is taken from a source that forbids reuse.
+**Licence note:** every sprite and sound in the repository was made for this project, so there is no third party art to attribute. The only external asset is the Oswald font, distributed under the SIL Open Font License, whose licence file ships next to the font. Nothing here is taken from a source that forbids reuse.
 
 **Technical art rules:** vector cartoon sprites import with Bilinear filtering, pixel art with Point (no filter), PPU 100, a single SpriteAtlas per scene to keep draw calls low, and sorting layers back to front: background, pitch, goals, ball, players, fx, UI.
 
@@ -154,19 +160,25 @@ graph TD
 
 | Script | Responsibility |
 |---|---|
-| `GameManager` | Singleton, match state machine, score, timer, kickoff, restart |
+| `GameManager` | Singleton, match state machine, score, timer, kickoff, goal target, restart |
 | `MatchState` | State enum (Menu, CharacterSelect, Kickoff, Playing, GoalScored, Paused, MatchOver) |
+| `MatchRecords` | Best win and P1 win count in `PlayerPrefs`, shown on the match over screen |
+| `MatchSettings` | Static mode and difficulty chosen on the menu, read by `Match.unity` |
 | `GameConfig` | ScriptableObject holding every tuning number |
+| `CharacterRoster` | ScriptableObject with the selectable characters and the saved choice in `PlayerPrefs` |
 | `PlayerController` | Reads input and drives move, jump, and kick for one character |
+| `PlayerVisual` | Flips, squashes and stretches the character drawing, swaps it for the chosen character |
 | `AIController` | Moves a character toward the ball and decides when to jump and kick |
 | `BallController` | Ball physics, speed cap, and reset to center |
 | `GoalTrigger` | Detects a scored goal once per ball entry |
 | `KickHitbox` | Applies the kick impulse when the ball is in range |
-| `UIManager` | HUD, menus, pause, and match over |
-| `CharacterSelect` | Choosing a character and saving the choice |
-| `AudioManager` | One-shot SFX and looping music |
-| `EffectsPool` | Object pool for goal confetti, kick sparks, and dust |
-| `SpecialShot` | Charges from ball contact time and fires a boosted shot |
+| `SpecialShot` | Charges from ball contact and connecting kicks, fires a boosted shot once per match |
+| `IInputSource`, `KeyboardInputSource`, `GamepadInputSource`, `TouchInputSource`, `CompositeInputSource` | One interface for every input device, merged per player |
+| `UIManager` | HUD, pause, match over, goal flash and score bump |
+| `MainMenuController`, `CharacterSelect` | Menu flow, choosing a character and saving the choice |
+| `AudioManager` | One-shot SFX and looping music, mute saved in `PlayerPrefs` |
+| `EffectsPool` | Object pool for goal confetti and kick sparks |
+| `CameraFitter`, `CameraShake`, `SafeAreaFitter` | Full pitch visible on any aspect ratio, screen shake, notch safe UI |
 
 ### The course features you are implementing
 
@@ -209,3 +221,5 @@ graph TD
 
 | Version | Date | Change |
 |---|---|---|
+| v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
+| v1.1 | 2026-09-26 | Implementation pass. Unity version corrected to the one the project actually uses (6000.3.20f1). Art and audio table replaced with the assets that ship: original sprites, Oswald font (OFL), synthesised SFX and music, so there is no CC-BY attribution to track. Section 4: Kick fires the Super when the meter is full, gamepads mapped (first pad P1, second pad P2), keyboard Super chord documented. Section 7: script table updated to the real class list (`CharacterRoster`, `PlayerVisual`, `MatchRecords`, input sources, camera helpers). Match length 90 s, goal target 5 and 6 s Super charge are now the shipped values in `GameConfig.asset`. Section 8.2 "best result kept in PlayerPrefs" is implemented as `MatchRecords`; the ball trail from section 7 was dropped, the pool holds confetti and kick sparks. |
