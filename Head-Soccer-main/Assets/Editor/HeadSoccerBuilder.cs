@@ -39,6 +39,7 @@ namespace HeadSoccer.EditorTools
         private const string FontAssetPath = FontFolder + "/Oswald-Bold SDF.asset";
         private const string AtlasPath = SpriteFolder + "/HeadSoccer.spriteatlasv2";
         private const string IconPath = "Assets/Branding/icon.png";
+        private const string CharactersFolder = SpriteFolder + "/Characters";
         private const string MatchScenePath = SceneFolder + "/Match.unity";
         private const string MenuScenePath = SceneFolder + "/Menu.unity";
 
@@ -117,8 +118,8 @@ namespace HeadSoccer.EditorTools
             squareSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{ArtFolder}/Square.png");
             circleSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{ArtFolder}/Circle.png");
             roundedSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{UIFolder}/RoundedPanel.png");
-            playerRedSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/player_red.png");
-            playerBlueSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/player_blue.png");
+            playerRedSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{CharactersFolder}/{Characters[0].file}.png");
+            playerBlueSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{CharactersFolder}/{Characters[1].file}.png");
             ballSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/ball.png");
             goalSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/goal.png");
             stadiumSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/stadium.png");
@@ -132,13 +133,16 @@ namespace HeadSoccer.EditorTools
         {
             // Max texture size per sprite. The source PNGs are 1024px+ but the ball is
             // drawn at about 40 px, so shipping it at 1024 would only waste phone memory.
-            var files = new (string path, int maxSize)[]
+            var files = new List<(string path, int maxSize)>
             {
-                ($"{SpriteFolder}/player_red.png", 1024), ($"{SpriteFolder}/player_blue.png", 1024),
-                ($"{SpriteFolder}/player_red_kick.png", 1024), ($"{SpriteFolder}/player_blue_kick.png", 1024),
                 ($"{SpriteFolder}/ball.png", 256), ($"{SpriteFolder}/goal.png", 1024),
                 ($"{SpriteFolder}/stadium.png", 2048), ($"{UIFolder}/RoundedPanel.png", 128)
             };
+            foreach (CharacterArt character in Characters)
+            {
+                files.Add(($"{CharactersFolder}/{character.file}.png", 1024));
+                files.Add(($"{CharactersFolder}/{character.file}_kick.png", 1024));
+            }
 
             foreach ((string path, int maxSize) in files)
             {
@@ -224,8 +228,9 @@ namespace HeadSoccer.EditorTools
             texture.sRGB = true;
             importer.textureSettings = texture;
 
+            // Four characters with two poses each need more than one 2048 page.
             TextureImporterPlatformSettings platform = importer.GetPlatformSettings("DefaultTexturePlatform");
-            platform.maxTextureSize = 2048;
+            platform.maxTextureSize = 4096;
             importer.SetPlatformSettings(platform);
 
             importer.SaveAndReimport();
@@ -326,32 +331,56 @@ namespace HeadSoccer.EditorTools
             return config;
         }
 
+        /// <summary>
+        /// The selectable characters. Each has an idle and a kick drawing in
+        /// Assets/Art/Characters, all drawn facing right. Stats are multipliers on GameConfig.
+        /// </summary>
+        private struct CharacterArt
+        {
+            public string file, name, hint;
+            public float speed, jump, power;
+
+            public CharacterArt(string file, string name, string hint, float speed, float jump, float power)
+            {
+                this.file = file; this.name = name; this.hint = hint;
+                this.speed = speed; this.jump = jump; this.power = power;
+            }
+        }
+
+        private static readonly CharacterArt[] Characters =
+        {
+            new CharacterArt("yossi", "Yossi", "Tough and confident, never gives up", 1.0f, 1.05f, 1.1f),
+            new CharacterArt("david", "David", "Classy and precise, plays with style", 1.05f, 1.0f, 1.0f),
+            new CharacterArt("kim", "Kim", "Fast and focused, samurai balance", 1.2f, 1.15f, 0.85f),
+            new CharacterArt("mikel", "Mikel", "Strong and full of energy", 1.1f, 0.95f, 1.2f)
+        };
+
+        /// <summary>Creates or refreshes the roster asset from the Characters table.</summary>
         private static CharacterRoster CreateRoster()
         {
             EnsureFolder(DataFolder);
             var roster = AssetDatabase.LoadAssetAtPath<CharacterRoster>(RosterPath);
-            if (roster != null) return roster;
+            bool isNew = roster == null;
+            if (isNew) roster = ScriptableObject.CreateInstance<CharacterRoster>();
 
-            var red = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/player_red.png");
-            var blue = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/player_blue.png");
-
-            roster = ScriptableObject.CreateInstance<CharacterRoster>();
             var serialized = new SerializedObject(roster);
             SerializedProperty list = serialized.FindProperty("characters");
-            list.arraySize = 2;
+            list.arraySize = Characters.Length;
 
-            // The red drawing looks right, the blue one looks left.
-            // Optional kick poses: drop player_red_kick.png / player_blue_kick.png into Assets/Art.
-            var redKick = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/player_red_kick.png");
-            var blueKick = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/player_blue_kick.png");
+            for (int i = 0; i < Characters.Length; i++)
+            {
+                CharacterArt art = Characters[i];
+                var idle = AssetDatabase.LoadAssetAtPath<Sprite>($"{CharactersFolder}/{art.file}.png");
+                var kick = AssetDatabase.LoadAssetAtPath<Sprite>($"{CharactersFolder}/{art.file}_kick.png");
+                if (idle == null) Debug.LogWarning($"Head Soccer: missing {CharactersFolder}/{art.file}.png");
 
-            FillCharacter(list.GetArrayElementAtIndex(0), "Rocket", "Fast and bouncy, lighter kick", red, redKick, true,
-                Color.white, 1.15f, 1.1f, 0.9f);
-            FillCharacter(list.GetArrayElementAtIndex(1), "Tank", "Slower, but every kick is a cannon", blue, blueKick, false,
-                Color.white, 0.9f, 0.95f, 1.25f);
+                FillCharacter(list.GetArrayElementAtIndex(i), art.name, art.hint, idle, kick, true,
+                    Color.white, art.speed, art.jump, art.power);
+            }
 
             serialized.ApplyModifiedPropertiesWithoutUndo();
-            AssetDatabase.CreateAsset(roster, RosterPath);
+            if (isNew) AssetDatabase.CreateAsset(roster, RosterPath);
+            else EditorUtility.SetDirty(roster);
             return roster;
         }
 
@@ -953,7 +982,7 @@ namespace HeadSoccer.EditorTools
             Image portrait = CreateUIImage(card.transform, "Portrait", playerRedSprite,
                 new Vector2(0f, 0.5f), new Vector2(190f, 0f), new Vector2(230f, 310f));
 
-            TextMeshProUGUI nameText = CreateText(card.transform, "Name", "ROCKET", 56,
+            TextMeshProUGUI nameText = CreateText(card.transform, "Name", Characters[0].name.ToUpperInvariant(), 56,
                 new Vector2(1f, 1f), new Vector2(-220f, -70f), new Vector2(360f, 70f), Color.white);
             nameText.alignment = TextAlignmentOptions.Left;
             TextMeshProUGUI statText = CreateText(card.transform, "StatHint", "Fast and bouncy", 20,
