@@ -10,13 +10,11 @@ We chose Head Soccer because we love football. It is the game we play and the ga
 
 ## Screenshots
 
-| Main menu | Character select |
-|---|---|
-| ![Main menu](Docs/images/screen-menu.png) | ![Character select](Docs/images/screen-character.png) |
+![Main menu](Docs/images/screen-menu.png)
 
-| Match | Match over |
+| Character select | Match |
 |---|---|
-| ![Match](Docs/images/screen-match.png) | ![Match over](Docs/images/screen-matchover.png) |
+| ![Character select](Docs/images/screen-character.png) | ![Match, Kim against Mikel](Docs/images/screen-match.png) |
 
 ## How to play
 
