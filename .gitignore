@@ -8,6 +8,8 @@
 **/[Mm]emoryCaptures/
 **/[Uu]serSettings/
 **/[Rr]ecordings/
+**/[Aa]ssets/_Recovery/
+**/[Aa]ssets/_Recovery.meta
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/**/[Aa]ssets/**/*.meta
