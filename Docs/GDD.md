@@ -192,7 +192,7 @@ graph TD
 ### The course features you are implementing
 
 1. **Singleton** appears as `GameManager`, the single source of truth for match state, score, and timer. Every system reads state from it, so there is never an ambiguous owner of the score or the clock.
-2. **Object pooling** appears in goal confetti, kick sparks, and the ball trail, with a fixed set of recycled instances (for example 20). A goal spawns a burst of dozens of particles, and Instantiate and Destroy during a fast match cause GC spikes that drop frames, and a dropped frame during a kick is an unfair miss.
+2. **Object pooling** appears in goal confetti and kick sparks, with a fixed set of recycled instances pre-warmed on scene load. A goal spawns a burst of dozens of particles, and Instantiate and Destroy during a fast match cause GC spikes that drop frames, and a dropped frame during a kick is an unfair miss.
 3. **Coroutines** appear in the 3, 2, 1 kickoff, the goal celebration freeze, and the special shot slow motion window. These are time sequenced one-shot flows, and they are far clearer as a coroutine than as timers scattered across `Update`.
 4. **Compile to mobile** appears as an Android APK with on-screen touch controls. The reference is a phone game, so the touch build is the proof that this is a real product rather than an editor only toy.
 5. **Command pattern** appears as `IInputSource`. Keyboard, gamepad, touch and `AIController` all implement the same interface, and `PlayerController` only ever asks "horizontal, jump, kick". Human against human and human against AI are the same code path with a different source plugged in.
@@ -205,19 +205,19 @@ graph TD
 
 ### 8.1 MVP, the game is not a game without these
 
-- [ ] One pitch and two characters on a single, non-scrolling screen
-- [ ] Move, jump, and kick with arcade ball physics and a ball speed cap
-- [ ] 1P versus CPU, and 2P versus 2P on one keyboard
-- [ ] Scoreboard, match timer, kickoff, goal detection, and a match over screen with REMATCH
-- [ ] `GameManager` singleton, pooled goal and kick effects, coroutine kickoff
+- [x] One pitch and two characters on a single, non-scrolling screen
+- [x] Move, jump, and kick with arcade ball physics and a ball speed cap
+- [x] 1P versus CPU, and 2P versus 2P on one keyboard
+- [x] Scoreboard, match timer, kickoff, goal detection, and a match over screen with REMATCH
+- [x] `GameManager` singleton, pooled goal and kick effects, coroutine kickoff
 - [ ] An Android APK that runs with touch controls
 
 ### 8.2 Polish, if the MVP is done and playable
 
-- [ ] Character select with two or three characters that differ slightly in speed, jump, and power
-- [ ] One special shot per character with slow motion and screen shake
-- [ ] Crowd, confetti, dust, SFX, music, and a whistle
-- [ ] Short intro before kickoff, a goal flash, and a best result kept in `PlayerPrefs`
+- [x] Character select with four characters that differ slightly in speed, jump, and power
+- [x] One special shot per character with slow motion and screen shake
+- [x] Crowd, confetti, SFX, music, and a whistle
+- [x] Short intro before kickoff, a goal flash, and a best result kept in `PlayerPrefs`
 
 ### 8.3 Explicitly out of scope, we are **not** building these
 
