@@ -13,19 +13,47 @@ MonoBehaviour:
   m_Name: CharacterRoster
   m_EditorClassIdentifier: Assembly-CSharp::HeadSoccer.CharacterRoster
   characters:
-  - displayName: Rocket
-    statHint: Fast and bouncy, lighter kick
-    portrait: {fileID: 21300000, guid: 30c65a02fc2fdb54e88e664221358b98, type: 3}
+  - displayName: Yossi
+    statHint: Tough and confident, never gives up
+    portrait: {fileID: 21300000, guid: 1a8a175151df6d040a8fcdaa425d4913, type: 3}
+    kickPose: {fileID: 21300000, guid: 9775b5fa5d9afe446aaf3dd895dd526a, type: 3}
+    celebration: {fileID: 21300000, guid: f9739f2afefeee64a845ccda382c1fb5, type: 3}
+    celebrationStyle: 1
     facesRight: 1
     tint: {r: 1, g: 1, b: 1, a: 1}
-    speed: 1.15
-    jump: 1.1
-    power: 0.9
-  - displayName: Tank
-    statHint: Slower, but every kick is a cannon
-    portrait: {fileID: 21300000, guid: 6e4544dfef06b44409a1447dc19b6e04, type: 3}
-    facesRight: 0
+    speed: 1
+    jump: 1.05
+    power: 1.1
+  - displayName: David
+    statHint: Classy and precise, plays with style
+    portrait: {fileID: 21300000, guid: c6f5bb45ca7abca419e9323505de9c1a, type: 3}
+    kickPose: {fileID: 21300000, guid: d1586be486aca5443a62238f1cfc3dd6, type: 3}
+    celebration: {fileID: 21300000, guid: 6cd177b174d837d45ad67de1d5b08035, type: 3}
+    celebrationStyle: 2
+    facesRight: 1
     tint: {r: 1, g: 1, b: 1, a: 1}
-    speed: 0.9
+    speed: 1.05
+    jump: 1
+    power: 1
+  - displayName: Kim
+    statHint: Fast and focused, samurai balance
+    portrait: {fileID: 21300000, guid: 0e24e73e93cb79b42acd060ef82d731d, type: 3}
+    kickPose: {fileID: 21300000, guid: 48398057eeb45454894641a4c97c17cf, type: 3}
+    celebration: {fileID: 21300000, guid: 6f0c22e8130789548bd1345e560f864b, type: 3}
+    celebrationStyle: 3
+    facesRight: 1
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    speed: 1.2
+    jump: 1.15
+    power: 0.85
+  - displayName: Mikel
+    statHint: Strong and full of energy
+    portrait: {fileID: 21300000, guid: d2e34dbbaf1dc9d47ae0126d307fa6b9, type: 3}
+    kickPose: {fileID: 21300000, guid: f15932b5c7347ad4eb044ea60b5d6e11, type: 3}
+    celebration: {fileID: 21300000, guid: 2fcd4b87843ce984fb34eb56d9a6da39, type: 3}
+    celebrationStyle: 4
+    facesRight: 1
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    speed: 1.1
     jump: 0.95
-    power: 1.25
+    power: 1.2
