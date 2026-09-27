@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 2D |
 | **Orientation & reference resolution** | Landscape, 1280 x 720 reference |
 | **Expected session length** | 30 seconds to 3 minutes per match |
-| **Document version** | v1.3, 2026-09-27 |
+| **Document version** | v1.4, 2026-09-28 |
 
 ---
 
@@ -147,6 +147,8 @@ stateDiagram-v2
 
 **Target device:** an Android phone as the demo device, with Windows standalone used during development.
 
+**Prefabs:** `Assets/Prefabs` holds `Player`, `Ball`, `Goal`, `KickSpark` and `GoalConfetti`. `Match.unity` is assembled from instances: two of `Player` (the instance only overrides which side it plays), two of `Goal` (the right-hand one is the same prefab with X scale -1, which mirrors the net and its colliders together), one `Ball`, and the effects are pooled from their prefabs by `EffectsPool`. A change to a prefab reaches every instance.
+
 **Architecture:**
 
 ```mermaid
@@ -229,6 +231,7 @@ graph TD
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
+| v1.4 | 2026-09-28 | Section 7: Player, Ball and Goal are prefabs in `Assets/Prefabs`, and `Match.unity` is built from their instances (two players from one prefab, two goals from one prefab mirrored by scale). Before this only the two pooled effects were prefabs and the players, ball and goals were built straight into the scene. |
 | v1.3 | 2026-09-27 | Section 6: each character gets a third drawing, his goal celebration, looped live on the Character Select card by `CelebrationLoop` (Character Select only, never during the match). The goal is redrawn as a side view with the crossbar at one and a half times the players' head height, so headers need a real jump but a lob can still be kept out; the drawing opens to the right, sits on the left as drawn and is mirrored on the right. An advertising board with real brands scrolls in front of the first row of the crowd (`AdBoard`), because a football pitch without boards does not look like football. Section 3: the kick now leaves the foot at a random angle between `kickMinAngle` and `kickMaxAngle` (a flat drive one time, a lob the next) and a running kick hits up to `kickMomentumBonus` harder than a standing one; the fixed `kickUpwardBias` is gone. |
 | v1.2 | 2026-09-26 | Section 6: the two placeholder characters are replaced by a roster of four (Yossi, David, Kim, Mikel), each with an idle and a kick drawing and its own speed / jump / power; still well under the 8+ roster ruled out in 8.3. App icon added to the asset list; sprites trimmed to their content so the drawing matches the collider. Section 5: the menu ships with two play buttons (VS CPU, 2 PLAYERS) instead of PLAY plus a separate CHARACTER button, since both modes go through Character Select anyway; the confirm button is labelled KICK OFF!. Section 6: sprite atlas path and per-sprite texture sizes recorded. Pause also on the gamepad Start button, as section 4 already listed. |
 | v1.1 | 2026-09-26 | Implementation pass. Unity version corrected to the one the project actually uses (6000.3.20f1). Art and audio table replaced with the assets that ship: original sprites, Oswald font (OFL), synthesised SFX and music, so there is no CC-BY attribution to track. Section 4: Kick fires the Super when the meter is full, gamepads mapped (first pad P1, second pad P2), keyboard Super chord documented. Section 7: script table updated to the real class list (`CharacterRoster`, `PlayerVisual`, `MatchRecords`, input sources, camera helpers). Match length 90 s, goal target 5 and 6 s Super charge are now the shipped values in `GameConfig.asset`. Section 8.2 "best result kept in PlayerPrefs" is implemented as `MatchRecords`; the ball trail from section 7 was dropped, the pool holds confetti and kick sparks. |
