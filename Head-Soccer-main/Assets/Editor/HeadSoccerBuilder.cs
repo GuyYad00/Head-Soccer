@@ -20,7 +20,8 @@ namespace HeadSoccer.EditorTools
 {
     /// <summary>
     /// Builds the whole playable project from the art in Assets/Art: the tuning asset,
-    /// the character roster, the pooled effect prefabs and both scenes, fully wired.
+    /// the character roster, the prefabs (Player, Ball, Goal and the pooled effects)
+    /// and both scenes, assembled from instances of those prefabs and fully wired.
     /// Everything it makes is a normal asset afterwards, so it can be hand edited.
     /// Run it once from the menu "Head Soccer / Build Everything".
     /// </summary>
@@ -100,6 +101,12 @@ namespace HeadSoccer.EditorTools
             CreateRoster();
             CreateEffectPrefab("KickSpark", new Color(1f, 0.85f, 0.3f), 12, 0.35f, 4f, 0.12f);
             CreateEffectPrefab("GoalConfetti", new Color(0.4f, 0.9f, 1f), 60, 1.4f, 8f, 0.18f);
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            // Gameplay prefabs come after the data assets they reference are on disk.
+            CreateGameplayPrefabs();
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -503,8 +510,6 @@ namespace HeadSoccer.EditorTools
             // assets, and a ScriptableObject reference taken before that point is dead
             // by the time it is assigned, which serialises silently as null.
             GameConfig config = AssetDatabase.LoadAssetAtPath<GameConfig>(ConfigPath);
-            var roster = AssetDatabase.LoadAssetAtPath<CharacterRoster>(RosterPath);
-            var ballMaterial = AssetDatabase.LoadAssetAtPath<PhysicsMaterial2D>(BallMaterialPath);
             var spark = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabFolder + "/KickSpark.prefab");
             var confetti = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabFolder + "/GoalConfetti.prefab");
             LoadArt();
@@ -544,37 +549,18 @@ namespace HeadSoccer.EditorTools
             HideRenderer(CreateSolid("WallRight", pitch, new Vector2(WallInnerX + 10f, 1f), new Vector2(20f, 30f),
                         Color.white, "Pitch", "Wall"));
 
-            CreateGoal(Side.Left, pitch);
-            CreateGoal(Side.Right, pitch);
+            // ----- goals, ball, players: instances of the prefabs in Assets/Prefabs -----
+            // One Goal prefab serves both ends: the right-hand goal is the same prefab
+            // mirrored by its X scale, which flips the net art and the colliders together.
+            PlaceGoal(Side.Left, pitch);
+            PlaceGoal(Side.Right, pitch);
 
-            // ----- ball -------------------------------------------------------
-            var ballObject = new GameObject("Ball");
+            GameObject ballObject = InstantiatePrefab("Ball", null);
             ballObject.transform.position = new Vector3(0f, 2f, 0f);
-            ballObject.layer = LayerMask.NameToLayer("Ball");
-            ballObject.tag = "Ball";
+            var ball = ballObject.GetComponent<BallController>();
 
-            Sprite usedBall = ballSprite != null ? ballSprite : circleSprite;
-            if (usedBall != null)
-            {
-                GameObject ballArt = CreateFittedSprite("Visual", ballObject.transform, usedBall,
-                    ballObject.transform.position, BallRadius * 2f, "Ball");
-                ballArt.transform.localPosition = Vector3.zero;
-            }
-
-            var ballBody = ballObject.AddComponent<Rigidbody2D>();
-            ballBody.mass = 0.9f;
-            ballBody.angularDamping = 0.4f;
-
-            var ballCollider = ballObject.AddComponent<CircleCollider2D>();
-            ballCollider.radius = BallRadius;
-            ballCollider.sharedMaterial = ballMaterial;
-
-            var ball = ballObject.AddComponent<BallController>();
-            Set(ball, "config", config);
-
-            // ----- players ----------------------------------------------------
-            GameObject leftPlayerObject = CreatePlayer(Side.Left, config, roster);
-            GameObject rightPlayerObject = CreatePlayer(Side.Right, config, roster);
+            GameObject leftPlayerObject = PlacePlayer(Side.Left);
+            GameObject rightPlayerObject = PlacePlayer(Side.Right);
 
             var leftPlayer = leftPlayerObject.GetComponent<PlayerController>();
             var rightPlayer = rightPlayerObject.GetComponent<PlayerController>();
@@ -608,74 +594,150 @@ namespace HeadSoccer.EditorTools
             EditorSceneManager.SaveScene(scene, MatchScenePath);
         }
 
-        private static void CreateGoal(Side side, Transform parent)
+        // ------------------------------------------------------------------
+        // Gameplay prefabs. Player, Ball and Goal are built once here, saved to
+        // Assets/Prefabs, and the match scene is assembled from instances of them.
+        // Fix a prefab and every instance follows; the scene only holds positions,
+        // the side each instance plays for, and the mirror for the right-hand goal.
+        // ------------------------------------------------------------------
+
+        [MenuItem("Head Soccer/Rebuild Gameplay Prefabs", priority = 21)]
+        public static void CreateGameplayPrefabs()
         {
-            float sign = side == Side.Left ? -1f : 1f;
-            float centreX = sign * (WallInnerX + GoalLineX) * 0.5f;
+            EnsureFolder(PrefabFolder);
+            LoadArt();
+
+            GameConfig config = AssetDatabase.LoadAssetAtPath<GameConfig>(ConfigPath);
+            var roster = AssetDatabase.LoadAssetAtPath<CharacterRoster>(RosterPath);
+            var ballMaterial = AssetDatabase.LoadAssetAtPath<PhysicsMaterial2D>(BallMaterialPath);
+
+            CreateGoalPrefab();
+            CreateBallPrefab(config, ballMaterial);
+            CreatePlayerPrefab(config, roster);
+        }
+
+        private static GameObject SavePrefab(GameObject root, string name)
+        {
+            string path = $"{PrefabFolder}/{name}.prefab";
+            GameObject prefab = PrefabUtility.SaveAsPrefabAsset(root, path);
+            Object.DestroyImmediate(root);
+            return prefab;
+        }
+
+        private static GameObject InstantiatePrefab(string name, Transform parent)
+        {
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{PrefabFolder}/{name}.prefab");
+            if (prefab == null)
+                throw new System.InvalidOperationException($"Head Soccer: missing prefab {PrefabFolder}/{name}.prefab. Run Build Everything.");
+
+            var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+            if (parent != null) instance.transform.SetParent(parent, false);
+            return instance;
+        }
+
+        /// <summary>
+        /// The goal as it stands on the LEFT: root on the goal line at ground level, net
+        /// receding to the left, mouth open toward the pitch. The right-hand goal is this
+        /// prefab with X scale -1.
+        /// </summary>
+        private static void CreateGoalPrefab()
+        {
             float depth = WallInnerX - GoalLineX;
             float mouthHeight = GoalMouthTopY - GroundTopY;
-            float mouthCentreY = (GoalMouthTopY + GroundTopY) * 0.5f;
 
-            var goal = new GameObject($"Goal{side}").transform;
-            goal.SetParent(parent);
+            var goal = new GameObject("Goal");
 
             if (goalSprite != null)
             {
                 // goal.png is a side view with the mouth open to the RIGHT and the front
-                // post on its right edge. It goes on the left-hand side of the pitch as
-                // drawn and is mirrored for the right-hand goal, so both open onto the pitch.
-                // Art height = mouth + crossbar; the net is squeezed a little in depth so
-                // its front post lands on the goal line and its back stays on screen.
+                // post on its right edge. The net is squeezed a little in depth so the
+                // front post lands on the goal line and the back stays on screen.
                 const float depthSqueeze = 0.8f;
                 float artHeight = mouthHeight + 0.15f;
                 float artWidth = artHeight * (goalSprite.bounds.size.x / goalSprite.bounds.size.y) * depthSqueeze;
-                float artCentreX = sign * (GoalLineX - 0.03f + artWidth * 0.5f);
 
-                GameObject art = CreateFittedSprite("NetArt", goal, goalSprite,
-                    new Vector2(artCentreX, GroundTopY + artHeight * 0.5f), artHeight, "Goals");
+                GameObject art = CreateFittedSprite("NetArt", goal.transform, goalSprite,
+                    new Vector2(0.03f - artWidth * 0.5f, artHeight * 0.5f), artHeight, "Goals");
                 Vector3 scale = art.transform.localScale;
-                float flip = side == Side.Right ? -1f : 1f;
-                art.transform.localScale = new Vector3(flip * Mathf.Abs(scale.x) * depthSqueeze, scale.y, 1f);
+                art.transform.localScale = new Vector3(Mathf.Abs(scale.x) * depthSqueeze, scale.y, 1f);
             }
             else
             {
-                CreateSprite("Net", goal, squareSprite, new Vector2(centreX, mouthCentreY),
+                CreateSprite("Net", goal.transform, squareSprite, new Vector2(-depth * 0.5f, mouthHeight * 0.5f),
                     new Vector2(depth, mouthHeight), new Color(1f, 1f, 1f, 0.18f), "Goals");
             }
 
-            HideRenderer(CreateSolid("Crossbar", goal, new Vector2(centreX, GoalMouthTopY + 0.15f),
+            HideRenderer(CreateSolid("Crossbar", goal.transform, new Vector2(-depth * 0.5f, mouthHeight + 0.15f),
                 new Vector2(depth + 0.1f, 0.3f), Color.white, "Goals", "Wall"));
-            HideRenderer(CreateSolid("BackPost", goal, new Vector2(sign * WallInnerX, mouthCentreY),
+            HideRenderer(CreateSolid("BackPost", goal.transform, new Vector2(-depth, mouthHeight * 0.5f),
                 new Vector2(0.18f, mouthHeight), Color.white, "Goals", "Wall"));
 
             // Sits far enough inside the net that the ball has fully crossed the line
             // by the time its centre enters the trigger.
-            float triggerOuterX = sign * WallInnerX;
-            float triggerInnerX = sign * (GoalLineX + BallRadius);
             var mouth = new GameObject("GoalMouth");
-            mouth.transform.SetParent(goal);
-            mouth.transform.position = new Vector3((triggerOuterX + triggerInnerX) * 0.5f, mouthCentreY, 0f);
+            mouth.transform.SetParent(goal.transform);
+            mouth.transform.localPosition = new Vector3(-(depth + BallRadius) * 0.5f, mouthHeight * 0.5f, 0f);
             mouth.layer = LayerMask.NameToLayer("Goal");
 
             var trigger = mouth.AddComponent<BoxCollider2D>();
             trigger.isTrigger = true;
-            trigger.size = new Vector2(Mathf.Abs(triggerOuterX - triggerInnerX), mouthHeight - 0.1f);
+            trigger.size = new Vector2(depth - BallRadius, mouthHeight - 0.1f);
 
             var goalTrigger = mouth.AddComponent<GoalTrigger>();
-            Set(goalTrigger, "goalOwner", side);
+            Set(goalTrigger, "goalOwner", Side.Left);
+
+            SavePrefab(goal, "Goal");
         }
 
-        private static GameObject CreatePlayer(Side side, GameConfig config, CharacterRoster roster)
+        private static void PlaceGoal(Side side, Transform parent)
         {
             float sign = side == Side.Left ? -1f : 1f;
-            var root = new GameObject($"Player{(side == Side.Left ? 1 : 2)}");
-            root.transform.position = new Vector3(sign * PlayerSpawnX, PlayerRootY, 0f);
+            GameObject goal = InstantiatePrefab("Goal", parent);
+            goal.name = $"Goal{side}";
+            goal.transform.position = new Vector3(sign * GoalLineX, GroundTopY, 0f);
+            // Mirror the whole goal for the right-hand side: art, posts and trigger together.
+            goal.transform.localScale = new Vector3(-sign, 1f, 1f);
+            Set(goal.GetComponentInChildren<GoalTrigger>(), "goalOwner", side);
+        }
+
+        private static void CreateBallPrefab(GameConfig config, PhysicsMaterial2D ballMaterial)
+        {
+            var ballObject = new GameObject("Ball");
+            ballObject.layer = LayerMask.NameToLayer("Ball");
+            ballObject.tag = "Ball";
+
+            Sprite usedBall = ballSprite != null ? ballSprite : circleSprite;
+            if (usedBall != null)
+                CreateFittedSprite("Visual", ballObject.transform, usedBall, Vector2.zero, BallRadius * 2f, "Ball");
+
+            var ballBody = ballObject.AddComponent<Rigidbody2D>();
+            ballBody.mass = 0.9f;
+            ballBody.angularDamping = 0.4f;
+
+            var ballCollider = ballObject.AddComponent<CircleCollider2D>();
+            ballCollider.radius = BallRadius;
+            ballCollider.sharedMaterial = ballMaterial;
+
+            var ball = ballObject.AddComponent<BallController>();
+            Set(ball, "config", config);
+
+            SavePrefab(ballObject, "Ball");
+        }
+
+        /// <summary>
+        /// One Player prefab for both sides. It is built as Player 1 (left, attacking
+        /// right); PlacePlayer overrides the side on the instance, and at runtime
+        /// PlayerController swaps in the chosen character's drawings from the roster.
+        /// </summary>
+        private static void CreatePlayerPrefab(GameConfig config, CharacterRoster roster)
+        {
+            var root = new GameObject("Player");
             root.layer = LayerMask.NameToLayer("Player");
 
             if (circleSprite != null)
             {
                 CreateSprite("Shadow", root.transform, circleSprite,
-                    new Vector2(root.transform.position.x, GroundTopY + 0.06f),
+                    new Vector2(0f, GroundTopY + 0.06f - PlayerRootY),
                     new Vector2(1.15f, 0.28f), new Color(0f, 0f, 0f, 0.35f), "Pitch");
             }
 
@@ -704,7 +766,7 @@ namespace HeadSoccer.EditorTools
 
             var controller = root.AddComponent<PlayerController>();
             Set(controller, "config", config);
-            Set(controller, "side", side);
+            Set(controller, "side", Side.Left);
             Set(controller, "inputMode", InputMode.Auto);
             Set(controller, "groundCheck", groundCheck);
             Set(controller, "kickHitbox", kickHitbox);
@@ -712,27 +774,23 @@ namespace HeadSoccer.EditorTools
             Set(controller, "groundLayer",
                 (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Wall")));
 
-            Sprite character = side == Side.Left ? playerRedSprite : playerBlueSprite;
-            if (character != null)
+            if (playerRedSprite != null)
             {
                 // Character PNGs are trimmed to their content, so this is the real body height,
                 // matched to the capsule + head colliders (-1.0 .. 1.1).
-                GameObject visual = CreateFittedSprite("Visual", root.transform, character,
-                    root.transform.position, PlayerHeight, "Players");
-                visual.transform.localPosition = new Vector3(0f, 0.05f, 0f);
+                GameObject visual = CreateFittedSprite("Visual", root.transform, playerRedSprite,
+                    new Vector2(0f, 0.05f), PlayerHeight, "Players");
                 var pose = visual.AddComponent<PlayerVisual>();
                 Set(pose, "player", controller);
                 Set(pose, "spriteRenderer", visual.GetComponent<SpriteRenderer>());
-                Set(pose, "spriteFacesRight", side == Side.Left);
+                Set(pose, "spriteFacesRight", true);
                 Set(controller, "visual", pose);
             }
             else
             {
-                CreateSprite("Body", root.transform, squareSprite,
-                    new Vector2(root.transform.position.x, root.transform.position.y - 0.4f),
-                    new Vector2(0.9f, 1.2f), side == Side.Left ? RedTeam : BlueTeam, "Players");
-                CreateSprite("Head", root.transform, circleSprite,
-                    new Vector2(root.transform.position.x, root.transform.position.y + 0.55f),
+                CreateSprite("Body", root.transform, squareSprite, new Vector2(0f, -0.4f),
+                    new Vector2(0.9f, 1.2f), RedTeam, "Players");
+                CreateSprite("Head", root.transform, circleSprite, new Vector2(0f, 0.55f),
                     Vector2.one * 1.1f, Color.white, "Players");
             }
 
@@ -753,7 +811,22 @@ namespace HeadSoccer.EditorTools
             Set(readySign, "mark", mark.transform);
             mark.SetActive(false);
 
-            return root;
+            SavePrefab(root, "Player");
+        }
+
+        private static GameObject PlacePlayer(Side side)
+        {
+            float sign = side == Side.Left ? -1f : 1f;
+            GameObject player = InstantiatePrefab("Player", null);
+            player.name = $"Player{(side == Side.Left ? 1 : 2)}";
+            player.transform.position = new Vector3(sign * PlayerSpawnX, PlayerRootY, 0f);
+
+            var controller = player.GetComponent<PlayerController>();
+            Set(controller, "side", side);
+
+            var pose = player.GetComponentInChildren<PlayerVisual>();
+            if (pose != null) Set(pose, "spriteFacesRight", side == Side.Left);
+            return player;
         }
 
         private static void WireAudio(AudioManager audio)
