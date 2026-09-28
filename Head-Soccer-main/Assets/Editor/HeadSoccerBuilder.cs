@@ -374,8 +374,24 @@ namespace HeadSoccer.EditorTools
             new CharacterArt("yossi", "Yossi", "Tough and confident, never gives up", CelebrationStyle.KissBadge, 1.0f, 1.05f, 1.1f),
             new CharacterArt("david", "David", "Classy and precise, plays with style", CelebrationStyle.Heart, 1.05f, 1.0f, 1.0f),
             new CharacterArt("kim", "Kim", "Fast and focused, samurai balance", CelebrationStyle.Bow, 1.2f, 1.15f, 0.85f),
-            new CharacterArt("mikel", "Mikel", "Strong and full of energy", CelebrationStyle.Flip, 1.1f, 0.95f, 1.2f)
+            new CharacterArt("mikel", "Mikel", "Strong and full of energy", CelebrationStyle.Flip, 1.1f, 0.95f, 1.2f),
+            new CharacterArt("noa", "Noa", "Fearless captain, lights up the pitch", CelebrationStyle.Cheer, 1.15f, 1.1f, 0.95f),
+            new CharacterArt("anna", "Anna", "Ice cool, slides into every goal", CelebrationStyle.KneeSlide, 1.05f, 1.2f, 1.0f)
         };
+
+        /// <summary>
+        /// Re-imports the character art and refreshes the roster asset only, leaving
+        /// the scenes and prefabs untouched. Use after adding a character to the table.
+        /// </summary>
+        [MenuItem("Head Soccer/Refresh Character Roster", priority = 22)]
+        public static void RefreshRoster()
+        {
+            ImportGameSprites();
+            CreateRoster();
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            Debug.Log($"Head Soccer: roster refreshed with {Characters.Length} characters.");
+        }
 
         /// <summary>Creates or refreshes the roster asset from the Characters table.</summary>
         private static CharacterRoster CreateRoster()

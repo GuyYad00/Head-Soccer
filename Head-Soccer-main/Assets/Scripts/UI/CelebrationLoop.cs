@@ -105,6 +105,8 @@ namespace HeadSoccer
                         case CelebrationStyle.KissBadge: yield return KissBadge(); break;
                         case CelebrationStyle.Heart: yield return Heartbeat(); break;
                         case CelebrationStyle.Bow: yield return Bow(); break;
+                        case CelebrationStyle.Cheer: yield return Cheer(); break;
+                        case CelebrationStyle.KneeSlide: yield return KneeSlide(); break;
                     }
 
                     yield return Hop(0.24f, hopHeight * 0.6f, swapTo: idle);
@@ -191,6 +193,68 @@ namespace HeadSoccer
                 rect.localScale = new Vector3(baseScale.x * sx, baseScale.y * sy, baseScale.z);
                 // Scale happens around the centre; drop the sprite so the feet stay planted.
                 rect.anchoredPosition = basePosition + new Vector2(0f, -(1f - sy) * height * 0.5f);
+                yield return null;
+            }
+            ResetPose();
+        }
+
+        /// <summary>
+        /// Arms up to the sky: joyful little bounces on the spot with a sway from side
+        /// to side, like celebrating in front of the crowd.
+        /// </summary>
+        private IEnumerator Cheer()
+        {
+            const float duration = 1.8f;
+            for (float t = 0f; t < duration; t += Time.unscaledDeltaTime)
+            {
+                // Ease the bounces in and out so she lands calmly before the hop back.
+                float envelope = Mathf.Clamp01(t / 0.2f) * Mathf.Clamp01((duration - t) / 0.3f);
+                float bounce = Mathf.Abs(Mathf.Sin(t * Mathf.PI * 2.4f));
+                rect.anchoredPosition = basePosition + new Vector2(0f, bounce * hopHeight * 0.5f * envelope);
+                rect.localRotation = Quaternion.Euler(0f, 0f, 5f * Mathf.Sin(t * Mathf.PI * 1.2f) * envelope);
+                yield return null;
+            }
+            ResetPose();
+        }
+
+        /// <summary>
+        /// Knee slide straight at the camera, the same trick as the bow but in
+        /// reverse: instead of shrinking away she GROWS, as if sliding out of the
+        /// screen toward the viewer. She stays centred on the card, slides in fast,
+        /// brakes, holds the pose for the photographers, then eases back into depth.
+        /// </summary>
+        private IEnumerator KneeSlide()
+        {
+            const float duration = 1.9f;
+            const float zoom = 0.30f;   // how much she grows as she comes at us
+            float height = rect.rect.height * baseScale.y;
+            for (float t = 0f; t < duration; t += Time.unscaledDeltaTime)
+            {
+                float u = t / duration;
+                float approach;
+                if (u < 0.45f)
+                {
+                    // Fast start that dies out, the way a slide brakes on wet grass.
+                    float k = u / 0.45f;
+                    approach = 1f - Mathf.Pow(1f - k, 3f);
+                }
+                else if (u < 0.75f)
+                {
+                    approach = 1f;   // hold the pose in the viewer's face
+                }
+                else
+                {
+                    approach = 1f - Mathf.SmoothStep(0f, 1f, (u - 0.75f) / 0.25f);
+                }
+
+                float scale = 1f + zoom * approach;
+                rect.localScale = new Vector3(baseScale.x * scale, baseScale.y * scale, baseScale.z);
+                // Coming closer also means sinking a little in frame, so the knees
+                // keep gliding along the same ground line instead of floating up.
+                rect.anchoredPosition = basePosition + new Vector2(0f, -height * zoom * approach * 0.45f);
+                // A touch of lean while she is moving, straight while she holds.
+                float lean = Mathf.Clamp01(u * 5f) * Mathf.Clamp01((0.85f - u) * 4f);
+                rect.localRotation = Quaternion.Euler(0f, 0f, -6f * lean);
                 yield return null;
             }
             ResetPose();
