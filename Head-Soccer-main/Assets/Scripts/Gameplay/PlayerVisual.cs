@@ -31,6 +31,10 @@ namespace HeadSoccer
         public void ApplyLook(Sprite idle, Sprite kick, bool facesRight, Color tint)
         {
             if (spriteRenderer == null) return;
+            // ApplyLook can run before Awake (script order across objects is undefined),
+            // so the reference height must be captured from the prefab's sprite BEFORE
+            // the swap. Otherwise characters drawn at other pixel sizes come out wrong.
+            CaptureWorldHeight();
             spriteFacesRight = facesRight;
 
             if (idle != null)
@@ -44,9 +48,18 @@ namespace HeadSoccer
 
         private void Awake()
         {
-            if (spriteRenderer == null) return;
-            idleSprite = spriteRenderer.sprite;
-            // The builder sized the idle drawing; remember that height for every sprite.
+            CaptureWorldHeight();
+        }
+
+        /// <summary>
+        /// Remembers the world height the builder gave the prefab's idle drawing.
+        /// Runs once, from Awake or from the first ApplyLook, whichever comes first,
+        /// so the measurement is always taken before any character swap.
+        /// </summary>
+        private void CaptureWorldHeight()
+        {
+            if (worldHeight > 0f || spriteRenderer == null) return;
+            if (idleSprite == null) idleSprite = spriteRenderer.sprite;
             if (idleSprite != null)
                 worldHeight = idleSprite.bounds.size.y * Mathf.Abs(transform.localScale.y);
         }
