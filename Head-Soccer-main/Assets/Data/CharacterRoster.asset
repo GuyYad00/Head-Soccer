@@ -57,3 +57,25 @@ MonoBehaviour:
     speed: 1.1
     jump: 0.95
     power: 1.2
+  - displayName: Noa
+    statHint: Fearless captain, lights up the pitch
+    portrait: {fileID: 21300000, guid: f6541f7c29bb36546b9c71fd93cf41ca, type: 3}
+    kickPose: {fileID: 21300000, guid: 077a696bf0b8a87469ea821c15c3f720, type: 3}
+    celebration: {fileID: 21300000, guid: 533a735a497a57249afc7606e9f83677, type: 3}
+    celebrationStyle: 5
+    facesRight: 1
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    speed: 1.15
+    jump: 1.1
+    power: 0.95
+  - displayName: Anna
+    statHint: Ice cool, slides into every goal
+    portrait: {fileID: 21300000, guid: e88baef470a5fed4e8217a1856a50365, type: 3}
+    kickPose: {fileID: 21300000, guid: 9bfbd75baadc71b40bb16c8ee270d5da, type: 3}
+    celebration: {fileID: 21300000, guid: 3080314d7cd31404693d98a2dc5ca9e0, type: 3}
+    celebrationStyle: 6
+    facesRight: 1
+    tint: {r: 1, g: 1, b: 1, a: 1}
+    speed: 1.05
+    jump: 1.2
+    power: 1

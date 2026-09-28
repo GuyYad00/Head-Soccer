@@ -16,7 +16,11 @@ namespace HeadSoccer
         /// <summary>A deep, respectful bow.</summary>
         Bow,
         /// <summary>A full backflip in the air.</summary>
-        Flip
+        Flip,
+        /// <summary>Both arms shoot skyward and the whole body bounces with joy.</summary>
+        Cheer,
+        /// <summary>Drops down and glides across the grass on the knees.</summary>
+        KneeSlide
     }
 
     /// <summary>One selectable character: a name, a look and three small stat multipliers.</summary>
