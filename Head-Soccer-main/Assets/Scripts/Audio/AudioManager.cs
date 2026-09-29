@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace HeadSoccer
@@ -26,15 +27,22 @@ namespace HeadSoccer
         [Header("Voice")]
         [Tooltip("The commentator's goal call. Played on its own channel so a second goal cuts the first call instead of stacking on it.")]
         [SerializeField] private AudioClip commentatorGoal;
+        [Tooltip("The call plays alone over a muted game mix, so it takes the whole headroom.")]
+        [SerializeField, Range(0f, 1f)] private float voiceVolume = 1f;
 
         [Header("Music")]
         [SerializeField] private AudioClip musicLoop;
         [SerializeField, Range(0f, 1f)] private float musicVolume = 0.4f;
         [SerializeField, Range(0f, 1f)] private float sfxVolume = 0.8f;
 
+        // Seconds to cut the call at kickoff and to bring the game mix back afterwards.
+        private const float VoiceCutSeconds = 0.12f;
+        private const float MixRestoreSeconds = 0.3f;
+
         private AudioSource sfxSource;
         private AudioSource voiceSource;
         private AudioSource musicSource;
+        private Coroutine mixRoutine;
 
         public bool IsMuted { get; private set; }
 
@@ -88,14 +96,66 @@ namespace HeadSoccer
             PlayOneShot(crowdCheer, 0.7f);
         }
 
-        /// <summary>The commentator's call. Restarts if he is still shouting the last goal.</summary>
+        /// <summary>
+        /// The commentator's call, alone in the mix: music and SFX are ducked to silence
+        /// while he shouts, the way a broadcast drops the stadium feed under the booth.
+        /// Restarts if he is still shouting the last goal. The mix comes back when the
+        /// call ends or when <see cref="StopCommentator"/> cuts it at kickoff.
+        /// </summary>
         public void PlayCommentator()
         {
             if (commentatorGoal == null || voiceSource == null) return;
+
+            if (mixRoutine != null) StopCoroutine(mixRoutine);
             voiceSource.Stop();
             voiceSource.clip = commentatorGoal;
-            voiceSource.volume = sfxVolume;
+            voiceSource.volume = voiceVolume;
             voiceSource.Play();
+
+            musicSource.volume = 0f;
+            sfxSource.volume = 0f;
+            mixRoutine = StartCoroutine(RestoreMixWhenCallEnds());
+        }
+
+        /// <summary>Cuts the call with a short fade and brings the game mix back.</summary>
+        public void StopCommentator()
+        {
+            if (voiceSource == null || !voiceSource.isPlaying) return;
+            if (mixRoutine != null) StopCoroutine(mixRoutine);
+            mixRoutine = StartCoroutine(FadeOutCallAndRestoreMix());
+        }
+
+        private IEnumerator RestoreMixWhenCallEnds()
+        {
+            while (voiceSource.isPlaying) yield return null;
+            yield return RestoreMix();
+        }
+
+        private IEnumerator FadeOutCallAndRestoreMix()
+        {
+            float startVolume = voiceSource.volume;
+            for (float t = 0f; t < VoiceCutSeconds; t += Time.unscaledDeltaTime)
+            {
+                voiceSource.volume = Mathf.Lerp(startVolume, 0f, t / VoiceCutSeconds);
+                yield return null;
+            }
+            voiceSource.Stop();
+            yield return RestoreMix();
+        }
+
+        /// <summary>Ramps music and SFX back up. Unscaled time, since the Super slow motion plays with Time.timeScale.</summary>
+        private IEnumerator RestoreMix()
+        {
+            for (float t = 0f; t < MixRestoreSeconds; t += Time.unscaledDeltaTime)
+            {
+                float u = t / MixRestoreSeconds;
+                musicSource.volume = musicVolume * u;
+                sfxSource.volume = u;
+                yield return null;
+            }
+            musicSource.volume = musicVolume;
+            sfxSource.volume = 1f;
+            mixRoutine = null;
         }
 
         private void PlayOneShot(AudioClip clip, float scale = 1f)

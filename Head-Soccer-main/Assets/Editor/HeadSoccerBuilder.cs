@@ -1044,9 +1044,11 @@ namespace HeadSoccer.EditorTools
         }
 
         /// <summary>
-        /// The broadcast box for the commentator: an accent frame, a black screen and
-        /// the portrait, hidden until a goal. CommentatorCutIn moves it to the scorer's
-        /// side and pops it in; one of the three drawings is picked per match.
+        /// The commentator figure: the cut-out portrait with a small LIVE tag above his
+        /// head, no frame, hidden until a goal. The figure's pivot is at its feet;
+        /// CommentatorCutIn stands it in the crowd above the goal that received the ball
+        /// and scales it from world units, so it never leaves the stadium. One of the
+        /// three drawings is picked per match.
         /// </summary>
         private static void BuildCommentatorCutIn(Transform hud)
         {
@@ -1056,23 +1058,30 @@ namespace HeadSoccer.EditorTools
             Stretch(root.GetComponent<RectTransform>());
             var cutIn = root.AddComponent<CommentatorCutIn>();
 
-            GameObject frame = CreatePanel(root.transform, "Frame", Accent,
-                new Vector2(0f, 1f), new Vector2(175f, -150f), new Vector2(256f, 216f), new Vector2(0.5f, 0.5f));
-            GameObject screen = CreatePanel(frame.transform, "Screen", new Color(0.02f, 0.02f, 0.03f),
-                new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(244f, 204f), new Vector2(0.5f, 0.5f));
-            Image portrait = CreateUIImage(screen.transform, "Portrait", commentatorSprites[0],
-                new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(236f, 196f));
+            // Reference size in canvas pixels; the runtime scale comes from the pitch geometry.
+            const float portraitHeight = 230f;
+            const float tagHeight = 24f;
+            const float tagGap = 6f;
 
-            // A small LIVE tag in the corner, the way a broadcast marks a cut-in.
-            GameObject tag = CreatePanel(frame.transform, "LiveTag", RedTeam,
-                new Vector2(0f, 1f), new Vector2(40f, -10f), new Vector2(64f, 24f), new Vector2(0.5f, 0.5f));
+            GameObject figure = CreateUIObject("Figure", root.transform);
+            var figureRect = figure.GetComponent<RectTransform>();
+            Place(figureRect, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(220f, portraitHeight + tagGap + tagHeight));
+            figureRect.pivot = new Vector2(0.5f, 0f);
+
+            Image portrait = CreateUIImage(figure.transform, "Portrait", commentatorSprites[0],
+                new Vector2(0.5f, 0f), new Vector2(0f, portraitHeight * 0.5f), new Vector2(220f, portraitHeight));
+
+            // The LIVE tag floats just above his head, the way a broadcast marks a cut-in.
+            GameObject tag = CreatePanel(figure.transform, "LiveTag", RedTeam,
+                new Vector2(0.5f, 0f), new Vector2(0f, portraitHeight + tagGap + tagHeight * 0.5f),
+                new Vector2(64f, tagHeight), new Vector2(0.5f, 0.5f));
             CreateText(tag.transform, "Label", "LIVE", 14, new Vector2(0.5f, 0.5f), Vector2.zero,
-                new Vector2(64f, 24f), Color.white).characterSpacing = 4f;
+                new Vector2(64f, tagHeight), Color.white).characterSpacing = 4f;
 
             Set(cutIn, "commentators", commentatorSprites);
-            Set(cutIn, "frame", frame.GetComponent<RectTransform>());
+            Set(cutIn, "figure", figureRect);
             Set(cutIn, "portrait", portrait);
-            frame.SetActive(false);
+            figure.SetActive(false);
         }
 
         // ================================================================== menu scene
