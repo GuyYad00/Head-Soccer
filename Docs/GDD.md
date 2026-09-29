@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 2D |
 | **Orientation & reference resolution** | Landscape, 1280 x 720 reference |
 | **Expected session length** | 30 seconds to 3 minutes per match |
-| **Document version** | v1.4, 2026-09-28 |
+| **Document version** | v1.5, 2026-09-30 |
 
 ---
 
@@ -55,6 +55,7 @@ stateDiagram-v2
 
 - Gravity pulls both characters and the ball down every frame. A character leaves the ground only by jumping, and cannot double jump.
 - A kick applies a fixed impulse to the ball only when the ball is inside the character's kick range at the moment the kick is pressed. It never teleports the ball and never fires if the ball is out of range.
+- A kick that lands on the rival shoves him a step back. The shove is small and follows the kicker's run, not a dice roll: a standing kick nudges, a kick on the run pushes a little further. Two players kicking at each other with the ball wedged between them used to lock the match in place with both kick animations stuck; the shove opens a gap and the ball moves again.
 - The ball bounces off heads, bodies, walls, and the ceiling with a fixed bounciness, so rallies happen naturally, and the ball speed is capped so it always stays trackable.
 - **Scoring:** a point is awarded the instant the ball fully crosses a goal line. The ball then resets to the center and a 3, 2, 1 kickoff starts.
 - **Failure:** there is no player death. The failure state is losing the match, which ends when the timer reaches 0 or a player reaches the goal target, whichever comes first. In the 1.5 seconds after a goal, control is frozen for a short celebration, then kickoff resumes.
@@ -70,6 +71,7 @@ stateDiagram-v2
 | `kickRange` | Radius around the character where a kick connects | 1.2 u |
 | `kickMinAngle`, `kickMaxAngle` | Each kick leaves the foot at a fresh random angle in this range, from a flat drive to a lob | 0 to 45 degrees |
 | `kickMomentumBonus` | How much harder a running kick hits than a standing one | +50% at full speed |
+| `kickPushback`, `kickPushbackLift`, `kickPushbackDecay` | How far a kick that lands on the rival shoves him back, scaled by the same momentum bonus, and how fast the shove fades | 4 u/s, 2 u/s lift, fades at 14 u/s per second |
 | `ballBounciness` | How lively the ball is off surfaces | 0.7 |
 | `ballMaxSpeed` | Speed cap so the ball stays trackable | 22 u/s |
 | `matchLength` | Seconds on the match clock | 90 |
@@ -84,7 +86,7 @@ stateDiagram-v2
 
 ## 4. Controls & Input
 
-| Action | Keyboard P1 | Keyboard P2 | Gamepad | Touch |
+| Action | Keyboard layout WASD (P1 default) | Keyboard layout ARROWS (P2 default) | Gamepad | Touch |
 |---|---|---|---|---|
 | Move left / right | A / D | Left / Right arrow | Left stick or D-pad | Left / right buttons on the left thumb side |
 | Jump | W | Up arrow | South button | Jump button on the right thumb side |
@@ -92,6 +94,7 @@ stateDiagram-v2
 | Special only (optional chord) | Tab + Shift | Up + Down | North button or a shoulder button | not needed, Kick fires it when the meter is full |
 | Pause | Esc | Esc | Start button | Pause icon, top corner |
 
+- **The player chooses the keys.** WASD + Space is the default for player one and the arrows + Right Ctrl for player two, and a P1 KEYS button on the main menu swaps the two. Some people come from PC gaming and have WASD in their hands, others grew up on the arrows; we did not want to decide for them. The idea comes from FIFA, where every player picks Classic, Alternate or another preset and nobody is asked to relearn a habit. Our goal is that the simplest, least experienced player is comfortable from the first match, so the choice is one button, in plain sight, and it is remembered in `PlayerPrefs`.
 - The first connected gamepad drives P1 and the second drives P2, so two controllers on one PC give a couch match.
 - When the Super meter is full, a plain Kick fires the Super. The extra chord exists only so a keyboard player can fire it deliberately; the touch layout stays at four buttons.
 
@@ -106,8 +109,8 @@ stateDiagram-v2
 
 ![Wireframe of the four main screens](images/screens-wireframe.png)
 
-1. **Main Menu** with the title HEAD SOCCER, two play buttons (PLAY VS CPU and 2 PLAYERS) that both open Character Select, a CPU difficulty toggle (EASY / MEDIUM / HARD), and a SOUND ON / OFF toggle.
-2. **Character Select** with a character portrait in the center, left and right arrows to change character, the character name, a short stat hint with speed, jump and power bars, a KICK OFF! button that starts the match, and BACK.
+1. **Main Menu** with the title HEAD SOCCER, two play buttons (PLAY VS CPU and 2 PLAYERS) that both open Character Select, a CPU difficulty toggle (EASY / MEDIUM / HARD), a SOUND ON / OFF toggle, and a P1 KEYS toggle (WASD / ARROWS) that swaps the two keyboard layouts. The key reminder line at the bottom follows the choice.
+2. **Character Select** with a character portrait in the center, left and right arrows to change character, the character name, a short stat hint with speed, jump and power bars, and BACK. The screen runs twice before a match. First PLAYER 1: PICK YOUR PLAYER with a NEXT button. Then the right side: in a 2 PLAYERS match it reads PLAYER 2: PICK YOUR PLAYER and the second player chooses for himself; against the computer it reads PICK THE CPU'S PLAYER and player one decides who he wants to face. The second confirm is KICK OFF! and starts the match. BACK on the second step returns to the first, not to the menu. Both choices are remembered in `PlayerPrefs`. Before this the second character was assigned automatically, the next one in the list, which meant a friend never got to choose and a player could never pick a particular opponent.
 3. **Gameplay HUD** with a scoreboard P1 and P2 at the top center, a countdown timer beside it, and a special charge meter for each player. Deliberately absent: no minimap, no ads, no on-screen currency.
 4. **Match Over** with a WINNER banner, the final score, a REMATCH button, and a MENU button.
 5. **Pause overlay** with RESUME, RESTART, and QUIT to menu.
@@ -121,9 +124,9 @@ stateDiagram-v2
 
 | Asset | Variants / frames | Source & licence | Use |
 |---|---|---|---|
-| Character (head plus body) | 4 characters (Yossi, David, Kim, Mikel), 3 poses each: idle, kick and celebration; run and jump are code driven flip, squash and stretch | Original cartoon art made for this project (`Assets/Art/Characters/<name>.png`, `<name>_kick.png`, `<name>_celebrate.png`) | The selectable players |
-| Celebration loop | 1 frame per character; the motion (kneel, heartbeat, bow, backflip) is code driven on the portrait, Character Select only | `CelebrationLoop` component | Brings the Character Select card to life |
-| Ball | 1 sprite | Original (`Assets/Art/ball.png`) | The ball |
+| Character (head plus body) | 6 characters (Yossi, David, Kim, Mikel, Noa, Anna), 3 poses each: idle in side view facing right, kick and celebration; run and jump are code driven flip, squash and stretch | Original cartoon art made for this project (`Assets/Art/Characters/<name>.png`, `<name>_kick.png`, `<name>_celebrate.png`) | The selectable players |
+| Celebration loop | 1 frame per character; the motion (kneel, heartbeat, bow, backflip, cheer, knee slide) is code driven on the portrait, Character Select only | `CelebrationLoop` component | Brings the Character Select card to life |
+| Ball | 1 sprite, 0.34 world units radius (was 0.28) | Original (`Assets/Art/ball.png`) | The ball |
 | App icon | 1, 1024 x 1024 | Original (`Assets/Branding/icon.png`) | Android launcher and Windows icon |
 | Pitch and stadium background | 1 | Original (`Assets/Art/stadium.png`) | Static background |
 | Goal net | 1 side view, mouth open to the right; placed as drawn on the left, mirrored on the right. The crossbar sits at one and a half times the players' head height | Original (`Assets/Art/goal.png`) | The two goals |
@@ -131,7 +134,9 @@ stateDiagram-v2
 | UI panel | 1 rounded rectangle, 9-sliced | Original (`Assets/UI/RoundedPanel.png`) | Scoreboard, cards, buttons |
 | Font | Oswald Bold | Google Fonts, SIL Open Font License 1.1 (`Assets/Fonts/Oswald-OFL.txt`) | All UI text |
 | SFX (kick, bounce, jump, whistle, goal, crowd cheer, beep, special, UI click) | 9 | Synthesised for this project with a small Python script, no samples | Feedback |
-| Music (match loop) | 1, 15 s chiptune loop at 128 bpm | Synthesised for this project | Ambience |
+| Music (match loop) | 1, 12.8 s loop at 150 bpm, 8 bars: four on the floor kick, claps, driving hi-hats, an octave bass and a chant-like lead hook, with a riser into the loop point | Synthesised for this project | Energy. Replaced a slower 128 bpm loop that did not carry the pace of a 90 second match |
+
+**Two women in the roster.** The original Head Soccer, as far as we remember it, shipped with no women; the launch roster was men, aliens and monsters. We played that game, and we want ours to be for everyone who plays football, not for men only, because we do not think this game has a gender. So Noa and Anna are in the roster on the same terms as the four men: their own drawings, their own celebrations, their own speed, jump and power. This is the same thought as the advertising boards: the game carries a message beyond the match, and we would rather set this one right than repeat it.
 
 **Licence note:** every sprite and sound in the repository was made for this project, so there is no third party art to attribute. The only external asset is the Oswald font, distributed under the SIL Open Font License, whose licence file ships next to the font. Nothing here is taken from a source that forbids reuse.
 
@@ -170,19 +175,19 @@ graph TD
 | `GameManager` | Singleton, match state machine, score, timer, kickoff, goal target, restart |
 | `MatchState` | State enum (Menu, CharacterSelect, Kickoff, Playing, GoalScored, Paused, MatchOver) |
 | `MatchRecords` | Best win and P1 win count in `PlayerPrefs`, shown on the match over screen |
-| `MatchSettings` | Static mode and difficulty chosen on the menu, read by `Match.unity` |
+| `MatchSettings` | Static mode, difficulty and keyboard layout chosen on the menu, read by `Match.unity` |
 | `GameConfig` | ScriptableObject holding every tuning number |
-| `CharacterRoster` | ScriptableObject with the selectable characters and the saved choice in `PlayerPrefs` |
+| `CharacterRoster` | ScriptableObject with the selectable characters and both saved choices (left and right side) in `PlayerPrefs` |
 | `PlayerController` | Reads input and drives move, jump, and kick for one character |
 | `PlayerVisual` | Flips, squashes and stretches the character drawing, swaps it for the chosen character |
 | `AIController` | Moves a character toward the ball and decides when to jump and kick |
 | `BallController` | Ball physics, speed cap, and reset to center |
 | `GoalTrigger` | Detects a scored goal once per ball entry |
-| `KickHitbox` | Applies the kick impulse when the ball is in range |
+| `KickHitbox` | Applies the kick impulse when the ball is in range, and the small momentum-scaled shove when the rival is |
 | `SpecialShot` | Charges from ball contact and connecting kicks, fires a boosted shot once per match |
 | `IInputSource`, `KeyboardInputSource`, `GamepadInputSource`, `TouchInputSource`, `CompositeInputSource` | One interface for every input device, merged per player |
 | `UIManager` | HUD, pause, match over, goal flash and score bump |
-| `MainMenuController`, `CharacterSelect` | Menu flow, choosing a character and saving the choice |
+| `MainMenuController`, `CharacterSelect` | Menu flow, the keyboard layout swap, choosing both characters in two steps and saving the choices |
 | `CelebrationLoop` | Coroutine that loops the chosen character's celebration on the Character Select portrait |
 | `AdBoard` | Scrolling, wrapping advertising board under the crowd, clipped by a SpriteMask |
 | `AudioManager` | One-shot SFX and looping music, mute saved in `PlayerPrefs` |
@@ -214,7 +219,7 @@ graph TD
 
 ### 8.2 Polish, if the MVP is done and playable
 
-- [x] Character select with four characters that differ slightly in speed, jump, and power
+- [x] Character select with six characters that differ slightly in speed, jump, and power, chosen for both sides
 - [x] One special shot per character with slow motion and screen shake
 - [x] Crowd, confetti, SFX, music, and a whistle
 - [x] Short intro before kickoff, a goal flash, and a best result kept in `PlayerPrefs`
@@ -234,6 +239,7 @@ graph TD
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
+| v1.5 | 2026-09-30 | Section 6: two women join the roster, Noa and Anna, with idle, kick and celebration drawings and two new celebration motions (cheer, knee slide); the paragraph explains why, the original game had none and we want ours for everyone who plays football. Their idle drawings were redrawn in side view facing the rival, like the four men, after a first pass had them facing the camera. Section 5: Character Select runs twice, so player two picks his own character and, against the computer, player one picks the CPU's; before, the right side was assigned automatically. Section 4: the keyboard layout is the player's choice, a P1 KEYS button swaps WASD and the arrows between the two players, inspired by FIFA's Classic and Alternate presets. Section 3: a kick that lands on the rival shoves him back a small, momentum-scaled step (`kickPushback`), which fixes two players locking up with the ball wedged between them. Ball radius raised from 0.28 to 0.34 world units; after many matches it read as too small and a bigger ball gives a miss more weight. The match music is a new 150 bpm loop and the goal sound a new fanfare, both closer to the pace of the game. Fix: Anna's knee slide grew past the portrait and ran under the arrows on the card; she now slides in from smaller to normal size and the arrows sit further out. |
 | v1.4 | 2026-09-28 | Section 7: Player, Ball and Goal are prefabs in `Assets/Prefabs`, and `Match.unity` is built from their instances (two players from one prefab, two goals from one prefab mirrored by scale). Before this only the two pooled effects were prefabs and the players, ball and goals were built straight into the scene. Course features list now names the Command pattern (`IInputSource`), the Pub/Sub events on `GameManager` and the Prefabs, all of which were already in the code. |
 | v1.3 | 2026-09-27 | Section 6: each character gets a third drawing, his goal celebration, looped live on the Character Select card by `CelebrationLoop` (Character Select only, never during the match). The goal is redrawn as a side view with the crossbar at one and a half times the players' head height, so headers need a real jump but a lob can still be kept out; the drawing opens to the right, sits on the left as drawn and is mirrored on the right. An advertising board with real brands scrolls in front of the first row of the crowd (`AdBoard`), because a football pitch without boards does not look like football. Section 3: the kick now leaves the foot at a random angle between `kickMinAngle` and `kickMaxAngle` (a flat drive one time, a lob the next) and a running kick hits up to `kickMomentumBonus` harder than a standing one; the fixed `kickUpwardBias` is gone. |
 | v1.2 | 2026-09-26 | Section 6: the two placeholder characters are replaced by a roster of four (Yossi, David, Kim, Mikel), each with an idle and a kick drawing and its own speed / jump / power; still well under the 8+ roster ruled out in 8.3. App icon added to the asset list; sprites trimmed to their content so the drawing matches the collider. Section 5: the menu ships with two play buttons (VS CPU, 2 PLAYERS) instead of PLAY plus a separate CHARACTER button, since both modes go through Character Select anyway; the confirm button is labelled KICK OFF!. Section 6: sprite atlas path and per-sprite texture sizes recorded. Pause also on the gamepad Start button, as section 4 already listed. |
