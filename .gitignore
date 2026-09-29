@@ -18,6 +18,7 @@
 
 # Written by the test framework on every build; the game does not read them
 **/[Aa]ssets/Resources/PerformanceTestRun*
+**/[Aa]ssets/Resources.meta
 
 # Visual Studio / Rider / IDE
 .vs/
