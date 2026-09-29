@@ -55,7 +55,7 @@ Both sides are chosen before kickoff. Player 1 picks first. Then, in a 2 PLAYERS
 
 ![The three commentators](Docs/images/commentators.jpg)
 
-There is no football without a commentator. At the start of every match one of these three is drawn at random and he is the voice of that match. On every goal his broadcast box pops up over the crowd on the scorer's side, LIVE tag in the corner, and he shouts the call while the celebration freezes and the kickoff counts down. Then he is gone until the next one.
+There is no football without a commentator. At the start of every match one of these three is drawn at random and he is the voice of that match. On every goal he pops up in the crowd above the goal that just received the ball, a small red LIVE tag over his head, and shouts the call while the celebration freezes and the kickoff counts down. The game mix goes silent under him so the call is the only thing you hear, and the moment the whistle puts the ball back in play he is cut and gone until the next one.
 
 This was never in the plan. We fell in love with the idea while building, because a goal in silence is a number changing and a goal with a voice is a goal. It is there for one reason, to make the match feel alive.
 
@@ -120,7 +120,7 @@ The full log, and the decisions we add as we keep playing, is in [`Docs/design-d
 | **ScriptableObjects** | `GameConfig` (all tuning numbers) and `CharacterRoster` (the selectable characters). |
 | **Input System** | Keyboard, gamepad and touch behind one `IInputSource` interface, merged per player by `CompositeInputSource`. |
 | **Command pattern** | `PlayerController` never knows who is driving it. A human (`KeyboardInputSource`, `GamepadInputSource`, `TouchInputSource`) and the computer (`AIController`) all implement the same `IInputSource`, so swapping a player for an AI is one line. |
-| **Pub/Sub events** | `GameManager` raises `ScoreChanged`, `GoalScored`, `StateChanged`, `CountdownChanged` and `MatchEnded`. `UIManager` subscribes and updates the HUD, pause and match-over panels from those events, and `CommentatorCutIn` subscribes to `GoalScored` for the commentator; the manager never holds a reference to either. |
+| **Pub/Sub events** | `GameManager` raises `ScoreChanged`, `GoalScored`, `StateChanged`, `CountdownChanged` and `MatchEnded`. `UIManager` subscribes and updates the HUD, pause and match-over panels from those events, and `CommentatorCutIn` subscribes to `GoalScored` and `StateChanged` for the commentator; the manager never holds a reference to either. |
 | **PlayerPrefs** | Both chosen characters, keyboard layout, mute setting, best win and P1 win count. |
 
 ## Project layout
