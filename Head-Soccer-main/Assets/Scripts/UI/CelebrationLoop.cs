@@ -219,41 +219,30 @@ namespace HeadSoccer
 
         /// <summary>
         /// Knee slide straight at the camera, the same trick as the bow but in
-        /// reverse: instead of shrinking away she GROWS, as if sliding out of the
-        /// screen toward the viewer. She stays centred on the card, slides in fast,
-        /// brakes, holds the pose for the photographers, then eases back into depth.
+        /// reverse: she comes toward the viewer. She starts the slide a little further
+        /// away (drawn smaller) and grows to her normal size, slides in fast, brakes and
+        /// holds the pose for the photographers. She never grows past the card's
+        /// portrait area, so the arrows either side stay clear; an earlier version
+        /// scaled her up beyond it and she overlapped them.
         /// </summary>
         private IEnumerator KneeSlide()
         {
             const float duration = 1.9f;
-            const float zoom = 0.30f;   // how much she grows as she comes at us
+            const float depth = 0.18f;   // how much smaller she starts, far down the pitch
             float height = rect.rect.height * baseScale.y;
             for (float t = 0f; t < duration; t += Time.unscaledDeltaTime)
             {
                 float u = t / duration;
-                float approach;
-                if (u < 0.45f)
-                {
-                    // Fast start that dies out, the way a slide brakes on wet grass.
-                    float k = u / 0.45f;
-                    approach = 1f - Mathf.Pow(1f - k, 3f);
-                }
-                else if (u < 0.75f)
-                {
-                    approach = 1f;   // hold the pose in the viewer's face
-                }
-                else
-                {
-                    approach = 1f - Mathf.SmoothStep(0f, 1f, (u - 0.75f) / 0.25f);
-                }
+                // Fast start that dies out, the way a slide brakes on wet grass, then hold.
+                float approach = u < 0.45f ? 1f - Mathf.Pow(1f - u / 0.45f, 3f) : 1f;
 
-                float scale = 1f + zoom * approach;
+                float scale = 1f - depth * (1f - approach);
                 rect.localScale = new Vector3(baseScale.x * scale, baseScale.y * scale, baseScale.z);
-                // Coming closer also means sinking a little in frame, so the knees
-                // keep gliding along the same ground line instead of floating up.
-                rect.anchoredPosition = basePosition + new Vector2(0f, -height * zoom * approach * 0.45f);
+                // Scale happens around the centre; lift her while small so the knees
+                // keep gliding along the same ground line instead of sinking.
+                rect.anchoredPosition = basePosition + new Vector2(0f, (1f - scale) * height * 0.5f);
                 // A touch of lean while she is moving, straight while she holds.
-                float lean = Mathf.Clamp01(u * 5f) * Mathf.Clamp01((0.85f - u) * 4f);
+                float lean = Mathf.Clamp01(u * 5f) * Mathf.Clamp01((0.6f - u) * 4f);
                 rect.localRotation = Quaternion.Euler(0f, 0f, -6f * lean);
                 yield return null;
             }
