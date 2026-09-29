@@ -28,11 +28,26 @@ namespace HeadSoccer
             this.superCombo = superCombo;
         }
 
-        public static KeyboardInputSource PlayerOne() =>
+        /// <summary>Player one reads the layout chosen on the menu (WASD unless swapped).</summary>
+        public static KeyboardInputSource PlayerOne() => For(MatchSettings.PlayerOneLayout);
+
+        /// <summary>Player two always takes the layout player one is not using.</summary>
+        public static KeyboardInputSource PlayerTwo() => For(MatchSettings.PlayerTwoLayout);
+
+        public static KeyboardInputSource For(KeyboardLayout layout) =>
+            layout == KeyboardLayout.Arrows ? Arrows() : Wasd();
+
+        public static KeyboardInputSource Wasd() =>
             new KeyboardInputSource(Key.A, Key.D, Key.W, Key.Space, SuperCombo.TabAndShift);
 
-        public static KeyboardInputSource PlayerTwo() =>
+        public static KeyboardInputSource Arrows() =>
             new KeyboardInputSource(Key.LeftArrow, Key.RightArrow, Key.UpArrow, Key.RightCtrl, SuperCombo.UpAndDown);
+
+        /// <summary>Short label for the menu and the controls hint.</summary>
+        public static string Describe(KeyboardLayout layout) =>
+            layout == KeyboardLayout.Arrows
+                ? "ARROWS move    UP jump    RIGHT CTRL kick"
+                : "A / D move    W jump    SPACE kick";
 
         public void Poll()
         {

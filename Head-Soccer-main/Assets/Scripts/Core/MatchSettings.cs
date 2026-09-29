@@ -5,6 +5,12 @@ namespace HeadSoccer
     public enum GameMode { OnePlayerVsCPU, TwoPlayers }
 
     /// <summary>
+    /// The two keyboard layouts. Player one gets one of them and player two the other,
+    /// so the pair never collides on the same keys.
+    /// </summary>
+    public enum KeyboardLayout { Wasd, Arrows }
+
+    /// <summary>
     /// The few choices that have to survive the trip from Menu.unity to Match.unity.
     /// Backed by PlayerPrefs, which the GDD names as the only save system in scope.
     /// </summary>
@@ -12,6 +18,20 @@ namespace HeadSoccer
     {
         private const string ModeKey = "hs_game_mode_v2";
         private const string DifficultyKey = "hs_ai_difficulty";
+        private const string LayoutKey = "hs_p1_keys";
+
+        /// <summary>
+        /// Which keys player one uses. WASD + Space is the default; the menu button
+        /// swaps it for the arrows + Right Ctrl, and player two takes whichever is left.
+        /// </summary>
+        public static KeyboardLayout PlayerOneLayout
+        {
+            get => (KeyboardLayout)PlayerPrefs.GetInt(LayoutKey, (int)KeyboardLayout.Wasd);
+            set { PlayerPrefs.SetInt(LayoutKey, (int)value); PlayerPrefs.Save(); }
+        }
+
+        public static KeyboardLayout PlayerTwoLayout =>
+            PlayerOneLayout == KeyboardLayout.Wasd ? KeyboardLayout.Arrows : KeyboardLayout.Wasd;
 
         public static GameMode Mode
         {

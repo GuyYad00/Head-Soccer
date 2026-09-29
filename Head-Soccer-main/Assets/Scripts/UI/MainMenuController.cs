@@ -14,6 +14,9 @@ namespace HeadSoccer
         [SerializeField] private string matchSceneName = "Match";
         [SerializeField] private TextMeshProUGUI difficultyLabel;
         [SerializeField] private TextMeshProUGUI audioLabel;
+        [SerializeField] private TextMeshProUGUI controlsLabel;
+        [Tooltip("The one-line key reminder at the bottom of the menu; follows the chosen layout.")]
+        [SerializeField] private TextMeshProUGUI controlsHint;
 
         [Header("Panels")]
         [SerializeField] private GameObject mainPanel;
@@ -55,6 +58,20 @@ namespace HeadSoccer
         public void ToggleAudio()
         {
             AudioManager.Instance?.ToggleMute();
+            AudioManager.Instance?.PlayUiClick();
+            RefreshLabels();
+        }
+
+        /// <summary>
+        /// Swaps the keyboard layouts between the two players. Some people grew up on
+        /// WASD, some on the arrows, so the choice is theirs, the way FIFA offers
+        /// Classic and Alternate.
+        /// </summary>
+        public void ToggleControls()
+        {
+            MatchSettings.PlayerOneLayout = MatchSettings.PlayerOneLayout == KeyboardLayout.Wasd
+                ? KeyboardLayout.Arrows
+                : KeyboardLayout.Wasd;
             AudioManager.Instance?.PlayUiClick();
             RefreshLabels();
         }
@@ -109,6 +126,18 @@ namespace HeadSoccer
             {
                 bool muted = AudioManager.Instance != null && AudioManager.Instance.IsMuted;
                 audioLabel.text = muted ? "SOUND: OFF" : "SOUND: ON";
+            }
+
+            KeyboardLayout one = MatchSettings.PlayerOneLayout;
+            KeyboardLayout two = MatchSettings.PlayerTwoLayout;
+
+            if (controlsLabel != null)
+                controlsLabel.text = $"P1 KEYS: {one.ToString().ToUpper()}";
+
+            if (controlsHint != null)
+            {
+                controlsHint.text =
+                    $"P1   {KeyboardInputSource.Describe(one)}          P2   {KeyboardInputSource.Describe(two)}";
             }
         }
     }
