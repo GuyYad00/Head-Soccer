@@ -34,7 +34,7 @@ We chose Head Soccer because we love football. We like to play and watch footbal
 
 ## The players
 
-![Yossi, David, Kim and Mikel](Docs/images/characters.png)
+![Yossi, David, Kim, Mikel, Noa and Anna](Docs/images/characters.png)
 
 The roster was drawn for this project, with ChatGPT working from our descriptions, and inspired by the makers of the game we set out to build. We wanted the players to feel different from each other, so we picked six countries and built one character around each of them. Each one has an idle drawing, a kick drawing and their own goal celebration, and each one plays a little differently in speed, jump and power.
 
@@ -55,13 +55,15 @@ Both sides are chosen before kickoff. Player 1 picks first. Then, in a 2 PLAYERS
 
 ![The three commentators](Docs/images/commentators.jpg)
 
+![Goal: the commentator pops up in the crowd above the goal, LIVE tag over his head, while GOAL! flashes](Docs/images/screen-commentator.png)
+
 There is no football without a commentator. At the start of every match one of these three is drawn at random and he is the voice of that match. On every goal he pops up in the crowd above the goal that just received the ball, a small red LIVE tag over his head, and shouts the call while the celebration freezes and the kickoff counts down. The game mix goes silent under him so the call is the only thing you hear, and the moment the whistle puts the ball back in play he is cut and gone until the next one.
 
 This was never in the plan. We fell in love with the idea while building, because a goal in silence is a number changing and a goal with a voice is a goal. It is there for one reason, to make the match feel alive.
 
 ## Select character window
 
-![Choose your player: Yossi kisses the badge, David makes a heart, Kim bows, Mikel backflips](Docs/images/character-select.png)
+![Choose your player: Yossi kisses the badge, David makes a heart, Kim bows, Mikel backflips, Noa cheers the stands, Anna knee slides](Docs/images/character-select.png)
 
 This is the screen before kickoff. The portrait in the middle is alive: the player stands for a moment, hops into their own goal celebration, holds it, and drops back to idle, then does it again.
 
