@@ -41,6 +41,8 @@ namespace HeadSoccer.EditorTools
         private const string AtlasPath = SpriteFolder + "/HeadSoccer.spriteatlasv2";
         private const string IconPath = "Assets/Branding/icon.png";
         private const string CharactersFolder = SpriteFolder + "/Characters";
+        private const string CommentatorsFolder = SpriteFolder + "/Commentators";
+        private const int CommentatorCount = 3;
         private const string MatchScenePath = SceneFolder + "/Match.unity";
         private const string MenuScenePath = SceneFolder + "/Menu.unity";
 
@@ -85,6 +87,7 @@ namespace HeadSoccer.EditorTools
         private static Sprite goalSprite;
         private static Sprite stadiumSprite;
         private static Sprite adBoardSprite;
+        private static Sprite[] commentatorSprites = Array.Empty<Sprite>();
         private static TMP_FontAsset font;
 
         [MenuItem("Head Soccer/Build Everything", priority = 0)]
@@ -145,6 +148,14 @@ namespace HeadSoccer.EditorTools
             adBoardSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/adboard.png");
             font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontAssetPath);
 
+            var commentators = new List<Sprite>();
+            for (int i = 1; i <= CommentatorCount; i++)
+            {
+                var sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{CommentatorsFolder}/commentator_{i}.png");
+                if (sprite != null) commentators.Add(sprite);
+            }
+            commentatorSprites = commentators.ToArray();
+
             if (playerRedSprite == null || ballSprite == null || goalSprite == null || stadiumSprite == null)
                 Debug.LogWarning("Head Soccer: some sprites in Assets/Art are missing; placeholders will be used.");
         }
@@ -159,6 +170,8 @@ namespace HeadSoccer.EditorTools
                 ($"{SpriteFolder}/stadium.png", 2048), ($"{UIFolder}/RoundedPanel.png", 128)
             };
             files.Add(($"{SpriteFolder}/adboard.png", 1024));
+            for (int i = 1; i <= CommentatorCount; i++)
+                files.Add(($"{CommentatorsFolder}/commentator_{i}.png", 512));
             foreach (CharacterArt character in Characters)
             {
                 files.Add(($"{CharactersFolder}/{character.file}.png", 1024));
@@ -859,6 +872,7 @@ namespace HeadSoccer.EditorTools
             TrySetClip(audio, "countdownBeep", "beep");
             TrySetClip(audio, "special", "special");
             TrySetClip(audio, "uiClick", "ui_click");
+            TrySetClip(audio, "commentatorGoal", "commentator_goal");
             TrySetClip(audio, "musicLoop", "music_loop");
         }
 
@@ -931,6 +945,8 @@ namespace HeadSoccer.EditorTools
             TextMeshProUGUI rightSuperLabel = CreateText(hud, "P2SuperLabel", "SUPER", 16,
                 new Vector2(0.5f, 1f), new Vector2(190f, -132f), new Vector2(160f, 24f), TextDim);
             rightSuperLabel.characterSpacing = 4f;
+
+            BuildCommentatorCutIn(hud);
 
             // Big centred message: 3 2 1 GO! and GOAL!
             // A dark copy underneath acts as a drop shadow; TMP outlines need a material
@@ -1025,6 +1041,38 @@ namespace HeadSoccer.EditorTools
             overPanel.SetActive(false);
 
             CreateEventSystem();
+        }
+
+        /// <summary>
+        /// The broadcast box for the commentator: an accent frame, a black screen and
+        /// the portrait, hidden until a goal. CommentatorCutIn moves it to the scorer's
+        /// side and pops it in; one of the three drawings is picked per match.
+        /// </summary>
+        private static void BuildCommentatorCutIn(Transform hud)
+        {
+            if (commentatorSprites.Length == 0) return;
+
+            GameObject root = CreateUIObject("Commentator", hud);
+            Stretch(root.GetComponent<RectTransform>());
+            var cutIn = root.AddComponent<CommentatorCutIn>();
+
+            GameObject frame = CreatePanel(root.transform, "Frame", Accent,
+                new Vector2(0f, 1f), new Vector2(175f, -150f), new Vector2(256f, 216f), new Vector2(0.5f, 0.5f));
+            GameObject screen = CreatePanel(frame.transform, "Screen", new Color(0.02f, 0.02f, 0.03f),
+                new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(244f, 204f), new Vector2(0.5f, 0.5f));
+            Image portrait = CreateUIImage(screen.transform, "Portrait", commentatorSprites[0],
+                new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(236f, 196f));
+
+            // A small LIVE tag in the corner, the way a broadcast marks a cut-in.
+            GameObject tag = CreatePanel(frame.transform, "LiveTag", RedTeam,
+                new Vector2(0f, 1f), new Vector2(40f, -10f), new Vector2(64f, 24f), new Vector2(0.5f, 0.5f));
+            CreateText(tag.transform, "Label", "LIVE", 14, new Vector2(0.5f, 0.5f), Vector2.zero,
+                new Vector2(64f, 24f), Color.white).characterSpacing = 4f;
+
+            Set(cutIn, "commentators", commentatorSprites);
+            Set(cutIn, "frame", frame.GetComponent<RectTransform>());
+            Set(cutIn, "portrait", portrait);
+            frame.SetActive(false);
         }
 
         // ================================================================== menu scene
@@ -1475,6 +1523,11 @@ namespace HeadSoccer.EditorTools
                 case float number: property.floatValue = number; break;
                 case string text: property.stringValue = text; break;
                 case Enum enumValue: property.intValue = Convert.ToInt32(enumValue); break;
+                case Object[] references:
+                    property.arraySize = references.Length;
+                    for (int i = 0; i < references.Length; i++)
+                        property.GetArrayElementAtIndex(i).objectReferenceValue = references[i];
+                    break;
                 default:
                     Debug.LogError($"Unsupported value type for '{fieldName}': {value?.GetType()}");
                     break;

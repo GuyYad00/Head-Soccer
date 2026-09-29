@@ -23,12 +23,17 @@ namespace HeadSoccer
         [SerializeField] private AudioClip special;
         [SerializeField] private AudioClip uiClick;
 
+        [Header("Voice")]
+        [Tooltip("The commentator's goal call. Played on its own channel so a second goal cuts the first call instead of stacking on it.")]
+        [SerializeField] private AudioClip commentatorGoal;
+
         [Header("Music")]
         [SerializeField] private AudioClip musicLoop;
         [SerializeField, Range(0f, 1f)] private float musicVolume = 0.4f;
         [SerializeField, Range(0f, 1f)] private float sfxVolume = 0.8f;
 
         private AudioSource sfxSource;
+        private AudioSource voiceSource;
         private AudioSource musicSource;
 
         public bool IsMuted { get; private set; }
@@ -44,6 +49,9 @@ namespace HeadSoccer
 
             sfxSource = gameObject.AddComponent<AudioSource>();
             sfxSource.playOnAwake = false;
+
+            voiceSource = gameObject.AddComponent<AudioSource>();
+            voiceSource.playOnAwake = false;
 
             musicSource = gameObject.AddComponent<AudioSource>();
             musicSource.playOnAwake = false;
@@ -78,6 +86,16 @@ namespace HeadSoccer
         {
             PlayOneShot(goal);
             PlayOneShot(crowdCheer, 0.7f);
+        }
+
+        /// <summary>The commentator's call. Restarts if he is still shouting the last goal.</summary>
+        public void PlayCommentator()
+        {
+            if (commentatorGoal == null || voiceSource == null) return;
+            voiceSource.Stop();
+            voiceSource.clip = commentatorGoal;
+            voiceSource.volume = sfxVolume;
+            voiceSource.Play();
         }
 
         private void PlayOneShot(AudioClip clip, float scale = 1f)
