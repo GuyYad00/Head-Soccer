@@ -16,6 +16,9 @@
 **/[Aa]ssets/_Recovery/
 **/[Aa]ssets/_Recovery.meta
 
+# Written by the test framework on every build; the game does not read them
+**/[Aa]ssets/Resources/PerformanceTestRun*
+
 # Visual Studio / Rider / IDE
 .vs/
 .idea/
