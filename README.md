@@ -36,7 +36,7 @@ We chose Head Soccer because we love football. It is the game we play and the ga
 
 ![Yossi, David, Kim and Mikel](Docs/images/characters.png)
 
-The roster is our own art, drawn for this project and inspired by the makers of the game we set out to build. We wanted the players to feel different from each other, so we picked six countries and built one character around each of them. Each one has an idle drawing, a kick drawing and their own goal celebration, and each one plays a little differently in speed, jump and power.
+The roster was drawn for this project, with ChatGPT working from our descriptions, and inspired by the makers of the game we set out to build. We wanted the players to feel different from each other, so we picked six countries and built one character around each of them. Each one has an idle drawing, a kick drawing and their own goal celebration, and each one plays a little differently in speed, jump and power.
 
 | | | | Celebration |
 |---|---|---|---|
@@ -49,7 +49,15 @@ The roster is our own art, drawn for this project and inspired by the makers of 
 
 **Noa and Anna.** The original Head Soccer, as far as we remember it, shipped with no women; the launch roster was men, aliens and monsters. We played that game for years. Ours is for everyone who plays football, not for men only, because we do not think this game has a gender, so Noa and Anna are in on the same terms as the four men: their own drawings, their own celebrations, their own stats. We already said, about the advertising boards, that a game carries a message beyond the match. This is the same thought, and we would rather set this one right than repeat it.
 
-Both sides are chosen before kickoff. Player 1 picks first. Then, in a 2 PLAYERS match, Player 2 picks their own; against the computer, you pick who the CPU plays as.
+Both sides are chosen before kickoff. Player 1 picks first. Then, in a 2 PLAYERS match, Player 2 picks their own; against the computer, you pick who the CPU plays as. Two players may pick the same character. We thought about blocking that and decided not to tell anyone how to play.
+
+## The commentator
+
+![The three commentators](Docs/images/commentators.jpg)
+
+There is no football without a commentator. At the start of every match one of these three is drawn at random and he is the voice of that match. On every goal his broadcast box pops up over the crowd on the scorer's side, LIVE tag in the corner, and he shouts the call while the celebration freezes and the kickoff counts down. Then he is gone until the next one.
+
+This was never in the plan. We fell in love with the idea while building, because a goal in silence is a number changing and a goal with a voice is a goal. It is there for one reason, to make the match feel alive.
 
 ## Select character window
 
@@ -112,15 +120,15 @@ The full log, and the decisions we add as we keep playing, is in [`Docs/design-d
 | **ScriptableObjects** | `GameConfig` (all tuning numbers) and `CharacterRoster` (the selectable characters). |
 | **Input System** | Keyboard, gamepad and touch behind one `IInputSource` interface, merged per player by `CompositeInputSource`. |
 | **Command pattern** | `PlayerController` never knows who is driving it. A human (`KeyboardInputSource`, `GamepadInputSource`, `TouchInputSource`) and the computer (`AIController`) all implement the same `IInputSource`, so swapping a player for an AI is one line. |
-| **Pub/Sub events** | `GameManager` raises `ScoreChanged`, `GoalScored`, `StateChanged`, `CountdownChanged` and `MatchEnded`. `UIManager` subscribes and updates the HUD, pause and match-over panels from those events; the manager never holds a reference to the UI. |
+| **Pub/Sub events** | `GameManager` raises `ScoreChanged`, `GoalScored`, `StateChanged`, `CountdownChanged` and `MatchEnded`. `UIManager` subscribes and updates the HUD, pause and match-over panels from those events, and `CommentatorCutIn` subscribes to `GoalScored` for the commentator; the manager never holds a reference to either. |
 | **PlayerPrefs** | Both chosen characters, keyboard layout, mute setting, best win and P1 win count. |
 
 ## Project layout
 
 ```
 Head-Soccer-main/Assets
-├── Art/        stadium, goal, ball, ad board and Characters/ (six players, idle + kick + celebration)
-├── Audio/      synthesised SFX and the match music loop
+├── Art/        stadium, goal, ball, ad board, Characters/ (six players, idle + kick + celebration), Commentators/
+├── Audio/      synthesised SFX, the match music loop and the commentator's goal call
 ├── Data/       GameConfig, CharacterRoster, ball physics material
 ├── Editor/     HeadSoccerBuilder (rebuilds both scenes), HeadSoccerBuildPipeline (one-click builds)
 ├── Fonts/      Oswald Bold (SIL Open Font License)
@@ -130,7 +138,7 @@ Head-Soccer-main/Assets
 │   ├── Core/       GameManager, GameConfig, MatchState, MatchSettings, MatchRecords, CharacterRoster, CameraFitter
 │   ├── Gameplay/   PlayerController, PlayerVisual, SpecialShot, KickHitbox, BallController, GoalTrigger, AIController
 │   ├── Input/      IInputSource, Keyboard/Gamepad/Touch/Composite sources, HoldButton
-│   ├── UI/         UIManager, MainMenuController, CharacterSelect, CelebrationLoop, SafeAreaFitter
+│   ├── UI/         UIManager, MainMenuController, CharacterSelect, CelebrationLoop, CommentatorCutIn, SafeAreaFitter
 │   ├── Audio/      AudioManager
 │   └── Effects/    EffectsPool, CameraShake, SuperReadySign, AdBoard
 └── UI/         RoundedPanel (9-sliced panel sprite)
@@ -138,6 +146,9 @@ Head-Soccer-main/Assets
 
 ## Credits
 
-- Design, code and art: Guy Yad Shalom and Tomer Yad Shalom.
+- Design, code and art direction: Guy Yad Shalom and Tomer Yad Shalom.
+- Character and commentator drawings: made with ChatGPT from our descriptions, for this project.
+- Commentator goal call: generated with Gemini from an explicit prompt describing exactly the call we wanted.
+- We combined several AI tools and took from each one what it does best; the design, the code and every decision are ours.
 - Font: [Oswald](https://fonts.google.com/specimen/Oswald) by Vernon Adams, SIL Open Font License 1.1.
 - Sound effects and music were synthesised for this project; no third-party samples are used.

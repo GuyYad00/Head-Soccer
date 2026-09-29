@@ -42,6 +42,22 @@ After many matches we kept feeling the ball was too small. It was easy to lose a
 
 The first loop was 128 bpm and pleasant, and pleasant was the problem. A 90 second match to five goals is not pleasant, it is a sprint, and the music was behind it. The new loop runs at 150 bpm over eight bars: a four on the floor kick, claps on two and four, driving hi-hats, an octave bass and a lead hook that sounds like a chant from the stands, with a riser into the loop point so the return to bar one lands on the beat. The goal sound changed with it, from a short sting to a three note fanfare with a horn under it. Both are still synthesised from scratch, no samples. We wanted the sound to pull the player into the match, not sit beside it.
 
+### The commentator
+
+There is no football without a commentator. We wanted whoever plays our game to feel the grass as much as a screen allows, and in football the voice is a big part of that. A goal in silence is a number changing. A goal with someone screaming it is a goal.
+
+So we made three commentators. At the start of every match one of them is drawn at random and he is the voice of that match. On every goal his broadcast box pops up over the crowd on the scorer's side, LIVE tag in the corner, and he shouts the call while the celebration freezes and the kickoff counts down. Then he pops away until the next one. `CommentatorCutIn` listens to `GameManager.GoalScored`; the manager does not know he exists, and a rematch draws a new one.
+
+The reason is one word: liveness. The match should feel alive, the player should feel he is on the pitch and that the goal he just scored mattered, and the shout is what gives it that rush. None of this was in the original scope. We fell in love with the idea while building, because it brought the game to life, and went with it; the GDD records it under out of scope so the record is honest.
+
+The drawings were made with ChatGPT, like every other drawing in the game. The call itself was generated with Gemini from an explicit prompt that spelled out exactly what we wanted to hear. We used whichever AI tool gave the best result for each job and took from each only what we needed.
+
+### The mirror match, a painful dilemma
+
+Both of us thought there was no reason for two players to pick the same character. Yossi against Yossi looked pointless, and our first instinct was to block it on the select screen.
+
+We talked it over and decided we cannot. Blocking it is simply annoying, and we are not going to tell our players how to play or what to do. It makes no sense to us, but somebody may want exactly that, so it is allowed. The two Yossis are told apart by facing and by the names on the scoreboard. It hurt a little to leave it in, and it was the right call.
+
 ### Fix: Anna's knee slide left the card
 
 Anna's celebration grew as she slid toward the viewer, and at full size she ran under the arrows on either side of the portrait. She now starts the slide a little smaller and grows back to her normal size, never past it, and the arrows sit further out from the portrait so a wide celebration frame has room.
