@@ -24,6 +24,12 @@ namespace HeadSoccer
         public float kickMomentumBonus = 0.5f;
         [Tooltip("Seconds before the same character may kick again.")]
         public float kickCooldown = 0.25f;
+        [Tooltip("A kick that lands on the rival shoves him away at this speed (units/s) when standing still. Scaled by the same momentum bonus as the ball, so a running kick shoves further. Keeps two players from locking up with the ball wedged between them.")]
+        public float kickPushback = 4f;
+        [Tooltip("Small upward kick added to the shoved rival so the feet break contact with the ground.")]
+        public float kickPushbackLift = 2f;
+        [Tooltip("How fast the shove fades, in units/s per second. Higher means a shorter slide.")]
+        public float kickPushbackDecay = 14f;
 
         [Header("Ball")]
         public float ballBounciness = 0.7f;

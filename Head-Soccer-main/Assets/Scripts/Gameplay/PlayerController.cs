@@ -49,6 +49,8 @@ namespace HeadSoccer
         private bool kickBuffered;
         private bool superBuffered;
         private float nextKickAllowedTime;
+        /// <summary>Horizontal speed forced on us by a rival's kick; fades every physics step.</summary>
+        private float shoveVelocity;
 
         public Side Side => side;
         public bool IsGrounded { get; private set; }
@@ -168,6 +170,7 @@ namespace HeadSoccer
             if (!active)
             {
                 rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+                shoveVelocity = 0f;
                 return;
             }
 
@@ -175,7 +178,10 @@ namespace HeadSoccer
             if (Mathf.Abs(moveInput) < 0.01f)
                 xSpeed = 0f;
 
-            rb.linearVelocity = new Vector2(xSpeed, rb.linearVelocity.y);
+            // The shove rides on top of the player's own input and dies out on its own,
+            // so a kicked player slides back a step and is immediately in control again.
+            rb.linearVelocity = new Vector2(xSpeed + shoveVelocity, rb.linearVelocity.y);
+            shoveVelocity = Mathf.MoveTowards(shoveVelocity, 0f, config.kickPushbackDecay * Time.fixedDeltaTime);
 
             bool jumpRequested = Time.time <= jumpBufferedUntil;
             bool canJump = Time.time - lastGroundedTime <= config.coyoteTime;
@@ -248,10 +254,22 @@ namespace HeadSoccer
             special.ChargeFromBounce();
         }
 
+        /// <summary>
+        /// Called by the rival's KickHitbox when his kick lands on us. Horizontal speed
+        /// is signed away from the kicker; the lift only lifts, it never cuts a jump short.
+        /// </summary>
+        public void Shove(float horizontalVelocity, float lift)
+        {
+            shoveVelocity = horizontalVelocity;
+            if (lift > 0f && rb.linearVelocity.y < lift)
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, lift);
+        }
+
         public void ResetToSpawn()
         {
             transform.position = spawnPosition;
             rb.linearVelocity = Vector2.zero;
+            shoveVelocity = 0f;
             moveInput = 0f;
             kickBuffered = false;
             superBuffered = false;
