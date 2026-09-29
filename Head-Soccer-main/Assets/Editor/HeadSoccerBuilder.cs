@@ -49,7 +49,9 @@ namespace HeadSoccer.EditorTools
         private const float CeilingY = 5.0f;
         private const float WallInnerX = 8.9f;
         private const float GoalLineX = 7.7f;
-        private const float BallRadius = 0.28f;
+        // Was 0.28. After many matches a bigger ball read better and carried more weight,
+        // especially on a miss; see the GDD changelog and Docs/design-decisions.md.
+        private const float BallRadius = 0.34f;
         private const float PlayerRootY = -2.4f;
         private const float PlayerSpawnX = 4f;
         private const float PlayerHeight = 2.15f;
@@ -1082,30 +1084,40 @@ namespace HeadSoccer.EditorTools
             Button twoPlayers = CreateButton(mainPanel.transform, "TwoPlayerButton", "2 PLAYERS", 34, ButtonNeutral,
                 new Vector2(0.5f, 0.5f), new Vector2(0f, -80f), new Vector2(400f, 76f));
             Button difficulty = CreateButton(mainPanel.transform, "DifficultyButton", "CPU: MEDIUM", 24, ButtonNeutral,
-                new Vector2(0.5f, 0.5f), new Vector2(-105f, -165f), new Vector2(190f, 56f));
+                new Vector2(0.5f, 0.5f), new Vector2(-210f, -165f), new Vector2(190f, 56f));
             Button audio = CreateButton(mainPanel.transform, "AudioButton", "SOUND: ON", 24, ButtonNeutral,
-                new Vector2(0.5f, 0.5f), new Vector2(105f, -165f), new Vector2(190f, 56f));
+                new Vector2(0.5f, 0.5f), new Vector2(0f, -165f), new Vector2(190f, 56f));
+            // Keyboard layout swap: WASD is the default for player one, arrows for player
+            // two, and this button trades them. The hint line below follows the choice.
+            Button controls = CreateButton(mainPanel.transform, "ControlsButton", "P1 KEYS: WASD", 24, ButtonNeutral,
+                new Vector2(0.5f, 0.5f), new Vector2(210f, -165f), new Vector2(190f, 56f));
 
             UnityEventTools.AddVoidPersistentListener(play.onClick, menu.PlayVsCPU);
             UnityEventTools.AddVoidPersistentListener(twoPlayers.onClick, menu.PlayTwoPlayers);
             UnityEventTools.AddVoidPersistentListener(difficulty.onClick, menu.CycleDifficulty);
             UnityEventTools.AddVoidPersistentListener(audio.onClick, menu.ToggleAudio);
+            UnityEventTools.AddVoidPersistentListener(controls.onClick, menu.ToggleControls);
 
             Set(menu, "difficultyLabel", difficulty.GetComponentInChildren<TextMeshProUGUI>());
             Set(menu, "audioLabel", audio.GetComponentInChildren<TextMeshProUGUI>());
+            Set(menu, "controlsLabel", controls.GetComponentInChildren<TextMeshProUGUI>());
 
-            CreateText(mainPanel.transform, "Hint",
+            TextMeshProUGUI hint = CreateText(mainPanel.transform, "Hint",
                 "P1   A / D move    W jump    SPACE kick          P2   ARROWS move    UP jump    RIGHT CTRL kick",
                 18, new Vector2(0.5f, 0f), new Vector2(0f, 34f), new Vector2(1200f, 30f), TextDim);
+            Set(menu, "controlsHint", hint);
 
             // --- character select panel ----------------------------------------------
             GameObject characterPanel = CreateUIObject("CharacterPanel", safeArea.transform);
             Stretch(characterPanel.GetComponent<RectTransform>());
             var select = characterPanel.AddComponent<CharacterSelect>();
             Set(select, "roster", roster);
+            Set(select, "menu", menu);
 
-            CreateText(characterPanel.transform, "Title", "CHOOSE YOUR PLAYER", 64,
-                new Vector2(0.5f, 1f), new Vector2(0f, -70f), new Vector2(900f, 90f), Accent);
+            // The panel is used twice: once for the left player, once for the right one
+            // (player two or the CPU). CharacterSelect rewrites this title per step.
+            TextMeshProUGUI selectTitle = CreateText(characterPanel.transform, "Title", "PLAYER 1: PICK YOUR PLAYER", 58,
+                new Vector2(0.5f, 1f), new Vector2(0f, -70f), new Vector2(1000f, 90f), Accent);
 
             GameObject card = CreatePanel(characterPanel.transform, "Card", PanelCard,
                 new Vector2(0.5f, 0.5f), new Vector2(0f, -10f), new Vector2(760f, 420f), new Vector2(0.5f, 0.5f));
@@ -1116,30 +1128,34 @@ namespace HeadSoccer.EditorTools
             var celebration = portrait.gameObject.AddComponent<CelebrationLoop>();
 
             TextMeshProUGUI nameText = CreateText(card.transform, "Name", Characters[0].name.ToUpperInvariant(), 56,
-                new Vector2(1f, 1f), new Vector2(-220f, -70f), new Vector2(360f, 70f), Color.white);
+                new Vector2(1f, 1f), new Vector2(-205f, -70f), new Vector2(360f, 70f), Color.white);
             nameText.alignment = TextAlignmentOptions.Left;
             TextMeshProUGUI statText = CreateText(card.transform, "StatHint", "Fast and bouncy", 20,
-                new Vector2(1f, 1f), new Vector2(-220f, -122f), new Vector2(360f, 40f), TextDim);
+                new Vector2(1f, 1f), new Vector2(-205f, -122f), new Vector2(360f, 40f), TextDim);
             statText.alignment = TextAlignmentOptions.TopLeft;
 
-            Image speedBar = CreateStatRow(card.transform, "SPEED", new Vector2(-220f, -190f), RedTeam);
-            Image jumpBar = CreateStatRow(card.transform, "JUMP", new Vector2(-220f, -240f), Accent);
-            Image powerBar = CreateStatRow(card.transform, "POWER", new Vector2(-220f, -290f), BlueTeam);
+            Image speedBar = CreateStatRow(card.transform, "SPEED", new Vector2(-205f, -190f), RedTeam);
+            Image jumpBar = CreateStatRow(card.transform, "JUMP", new Vector2(-205f, -240f), Accent);
+            Image powerBar = CreateStatRow(card.transform, "POWER", new Vector2(-205f, -290f), BlueTeam);
 
+            // The arrows sit clear of the portrait's 230 px, so a wide celebration frame
+            // (a knee slide, a cheer with the arms out) never runs under them.
             Button prev = CreateButton(card.transform, "PrevButton", "<", 40, ButtonNeutral,
-                new Vector2(0f, 0.5f), new Vector2(50f, 0f), new Vector2(60f, 90f));
+                new Vector2(0f, 0.5f), new Vector2(40f, 0f), new Vector2(60f, 90f));
             Button next = CreateButton(card.transform, "NextButton", ">", 40, ButtonNeutral,
-                new Vector2(0f, 0.5f), new Vector2(330f, 0f), new Vector2(60f, 90f));
+                new Vector2(0f, 0.5f), new Vector2(340f, 0f), new Vector2(60f, 90f));
             UnityEventTools.AddVoidPersistentListener(prev.onClick, select.Previous);
             UnityEventTools.AddVoidPersistentListener(next.onClick, select.Next);
 
-            Button confirm = CreateButton(characterPanel.transform, "ConfirmButton", "KICK OFF!", 34, ButtonGreen,
+            Button confirm = CreateButton(characterPanel.transform, "ConfirmButton", "NEXT", 34, ButtonGreen,
                 new Vector2(0.5f, 0f), new Vector2(120f, 70f), new Vector2(300f, 72f));
             Button back = CreateButton(characterPanel.transform, "BackButton", "BACK", 28, ButtonNeutral,
                 new Vector2(0.5f, 0f), new Vector2(-170f, 70f), new Vector2(200f, 72f));
-            UnityEventTools.AddVoidPersistentListener(confirm.onClick, menu.StartMatch);
-            UnityEventTools.AddVoidPersistentListener(back.onClick, menu.BackToMain);
+            UnityEventTools.AddVoidPersistentListener(confirm.onClick, select.Confirm);
+            UnityEventTools.AddVoidPersistentListener(back.onClick, select.Back);
 
+            Set(select, "titleText", selectTitle);
+            Set(select, "confirmLabel", confirm.GetComponentInChildren<TextMeshProUGUI>());
             Set(select, "portrait", portrait);
             Set(select, "celebration", celebration);
             Set(select, "nameText", nameText);
