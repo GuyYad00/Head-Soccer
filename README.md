@@ -6,7 +6,7 @@ Final project for the Unity course. The approved design document is in [`Docs/GD
 
 ## Vision
 
-We chose Head Soccer because we love football. It is the game we play and the game we watch, so this was not a theme we picked to fill a project. The passion was already there, and that is why getting the details right mattered so much to us. We know, from being players ourselves, how much a small thing decides whether a match feels real.
+We chose Head Soccer because we love football. We like to play and watch football, so this was not a theme we picked to fill a project. The passion was already there, and that is why getting the details right mattered so much to us. We know, from being players ourselves, how much a small thing decides whether a match feels real.
 
 ## Screenshots
 
