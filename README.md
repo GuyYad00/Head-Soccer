@@ -78,7 +78,7 @@ Arrows on the card change the character and the bars show speed, jump and power.
 
 ## The stadium
 
-Below the crowd runs an advertising board, the way every real ground has one. Football has always carried messages beyond the game itself, and we wanted the pitch to reflect that world rather than a sterile one. So the board shows real things: the shawarma place, the university this project was made for, the food app, the card company and the game everyone is waiting for.
+Below the crowd runs an advertising board, the way every real ground has one. Football has always carried messages beyond the game itself, and we wanted the pitch to reflect that world rather than a sterile one. So the board shows real things: the shawarma place, the academic college this project was made for, the food app, the card company and the game everyone is waiting for.
 
 ## Creation time
 
