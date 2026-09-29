@@ -45,13 +45,15 @@ namespace HeadSoccer
     }
 
     /// <summary>
-    /// The roster shown on the Character Select screen, and the player's saved choice.
-    /// Kept small on purpose: the GDD limits the game to two or three characters.
+    /// The roster shown on the Character Select screen, and both saved choices: the
+    /// character on the left (player one) and the one on the right (player two or the
+    /// CPU). Kept small on purpose: the GDD rules out a roster of eight or more.
     /// </summary>
     [CreateAssetMenu(fileName = "CharacterRoster", menuName = "Head Soccer/Character Roster")]
     public class CharacterRoster : ScriptableObject
     {
-        private const string ChoiceKey = "hs_character_p1";
+        private const string LeftChoiceKey = "hs_character_p1";
+        private const string RightChoiceKey = "hs_character_p2";
 
         [SerializeField] private CharacterDefinition[] characters = System.Array.Empty<CharacterDefinition>();
 
@@ -64,16 +66,26 @@ namespace HeadSoccer
             return characters[index];
         }
 
-        /// <summary>Index saved in PlayerPrefs, the only save system the GDD allows.</summary>
+        /// <summary>Player one's choice, saved in PlayerPrefs, the only save system the GDD allows.</summary>
         public static int SelectedIndex
         {
-            get => PlayerPrefs.GetInt(ChoiceKey, 0);
-            set { PlayerPrefs.SetInt(ChoiceKey, value); PlayerPrefs.Save(); }
+            get => PlayerPrefs.GetInt(LeftChoiceKey, 0);
+            set { PlayerPrefs.SetInt(LeftChoiceKey, value); PlayerPrefs.Save(); }
+        }
+
+        /// <summary>
+        /// The right-hand character. In a 2 PLAYERS match player two picks it; against
+        /// the CPU player one picks who the computer plays as. Defaults to the second
+        /// character so a first match is never a mirror match.
+        /// </summary>
+        public static int OpponentIndex
+        {
+            get => PlayerPrefs.GetInt(RightChoiceKey, 1);
+            set { PlayerPrefs.SetInt(RightChoiceKey, value); PlayerPrefs.Save(); }
         }
 
         public CharacterDefinition Selected => Get(SelectedIndex);
 
-        /// <summary>The CPU / second player takes the other character so the two never look alike.</summary>
-        public CharacterDefinition Opponent => Count > 1 ? Get((SelectedIndex + 1) % Count) : Selected;
+        public CharacterDefinition Opponent => Get(OpponentIndex);
     }
 }

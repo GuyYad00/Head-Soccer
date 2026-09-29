@@ -6,12 +6,19 @@ namespace HeadSoccer
 {
     /// <summary>
     /// The Character Select panel in Menu.unity: a portrait in the middle, arrows to
-    /// change character, the name and a stat hint, and CONFIRM which starts the match.
-    /// The choice is saved through CharacterRoster so Match.unity can read it.
+    /// change character, the name and a stat hint, and a confirm button.
+    /// It runs twice before a match. First the left side is chosen (player one), then
+    /// the right side: player two picks for himself in a 2 PLAYERS match, and against
+    /// the CPU player one also decides who the computer plays as. Both choices are
+    /// saved through CharacterRoster so Match.unity can read them.
     /// </summary>
     public class CharacterSelect : MonoBehaviour
     {
+        private enum Step { LeftPlayer, RightPlayer }
+
         [SerializeField] private CharacterRoster roster;
+        [SerializeField] private MainMenuController menu;
+        [SerializeField] private TextMeshProUGUI titleText;
         [SerializeField] private Image portrait;
         [Tooltip("Optional. Lives on the portrait and loops the character's celebration.")]
         [SerializeField] private CelebrationLoop celebration;
@@ -20,32 +27,80 @@ namespace HeadSoccer
         [SerializeField] private Image speedBar;
         [SerializeField] private Image jumpBar;
         [SerializeField] private Image powerBar;
+        [SerializeField] private TextMeshProUGUI confirmLabel;
 
+        private Step step;
         private int index;
 
         private void OnEnable()
         {
-            index = roster != null ? Mathf.Clamp(CharacterRoster.SelectedIndex, 0, Mathf.Max(0, roster.Count - 1)) : 0;
+            step = Step.LeftPlayer;
+            LoadIndexForStep();
             Refresh();
         }
 
-        public void Next() => Step(1);
+        public void Next() => Move(1);
 
-        public void Previous() => Step(-1);
+        public void Previous() => Move(-1);
 
-        private void Step(int direction)
+        /// <summary>NEXT after the left player, KICK OFF! after the right one.</summary>
+        public void Confirm()
+        {
+            if (step == Step.LeftPlayer)
+            {
+                AudioManager.Instance?.PlayUiClick();
+                step = Step.RightPlayer;
+                LoadIndexForStep();
+                Refresh();
+                return;
+            }
+
+            menu?.StartMatch();
+        }
+
+        /// <summary>Back from the right player returns to the left one, not to the menu.</summary>
+        public void Back()
+        {
+            if (step == Step.RightPlayer)
+            {
+                AudioManager.Instance?.PlayUiClick();
+                step = Step.LeftPlayer;
+                LoadIndexForStep();
+                Refresh();
+                return;
+            }
+
+            menu?.BackToMain();
+        }
+
+        private void Move(int direction)
         {
             if (roster == null || roster.Count == 0) return;
             index = (index + direction + roster.Count) % roster.Count;
-            CharacterRoster.SelectedIndex = index;
+            SaveIndexForStep();
             AudioManager.Instance?.PlayCountdownBeep();
             Refresh();
+        }
+
+        private void LoadIndexForStep()
+        {
+            int saved = step == Step.LeftPlayer ? CharacterRoster.SelectedIndex : CharacterRoster.OpponentIndex;
+            index = roster != null ? Mathf.Clamp(saved, 0, Mathf.Max(0, roster.Count - 1)) : 0;
+        }
+
+        private void SaveIndexForStep()
+        {
+            if (step == Step.LeftPlayer) CharacterRoster.SelectedIndex = index;
+            else CharacterRoster.OpponentIndex = index;
         }
 
         private void Refresh()
         {
             if (roster == null || roster.Count == 0) return;
             CharacterDefinition character = roster.Get(index);
+
+            if (titleText != null) titleText.text = TitleForStep();
+            if (confirmLabel != null) confirmLabel.text = step == Step.LeftPlayer ? "NEXT" : "KICK OFF!";
 
             if (portrait != null)
             {
@@ -64,6 +119,14 @@ namespace HeadSoccer
             SetBar(speedBar, character.speed);
             SetBar(jumpBar, character.jump);
             SetBar(powerBar, character.power);
+        }
+
+        private string TitleForStep()
+        {
+            if (step == Step.LeftPlayer) return "PLAYER 1: PICK YOUR PLAYER";
+            return MatchSettings.Mode == GameMode.OnePlayerVsCPU
+                ? "PICK THE CPU'S PLAYER"
+                : "PLAYER 2: PICK YOUR PLAYER";
         }
 
         private static void SetBar(Image bar, float multiplier)
