@@ -76,7 +76,7 @@ namespace HeadSoccer
         private void Move(int direction)
         {
             if (roster == null || roster.Count == 0) return;
-            index = (index + direction + roster.Count) % roster.Count;
+            index = CharacterRoster.Wrap(index, direction, roster.Count);
             SaveIndexForStep();
             AudioManager.Instance?.PlayCountdownBeep();
             Refresh();

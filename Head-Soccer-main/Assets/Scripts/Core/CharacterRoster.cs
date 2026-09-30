@@ -59,6 +59,18 @@ namespace HeadSoccer
 
         public int Count => characters.Length;
 
+        /// <summary>
+        /// Steps an index through a roster of <paramref name="count"/> and wraps at both
+        /// ends, so the arrows on Character Select go round in a circle. Shared by the
+        /// select screen and the tests.
+        /// </summary>
+        public static int Wrap(int index, int step, int count)
+        {
+            if (count <= 0) return 0;
+            int next = (index + step) % count;
+            return next < 0 ? next + count : next;
+        }
+
         public CharacterDefinition Get(int index)
         {
             if (characters.Length == 0) return default;

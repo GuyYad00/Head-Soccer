@@ -79,20 +79,18 @@ namespace HeadSoccer
         private Vector2 KickDirection()
         {
             float forward = owner != null ? owner.FacingDirection : 1f;
-            float angle = Random.Range(config.kickMinAngle, config.kickMaxAngle) * Mathf.Deg2Rad;
-            return new Vector2(Mathf.Cos(angle) * forward, Mathf.Sin(angle));
+            return KickMath.Direction(Random.Range(config.kickMinAngle, config.kickMaxAngle), forward);
         }
 
         /// <summary>
         /// 1 when standing still, up to 1 + kickMomentumBonus when running at full speed
-        /// toward the goal. Running away from the ball never weakens the kick below 1.
+        /// toward the goal. The arithmetic lives in KickMath so it can be tested.
         /// </summary>
         private float MomentumFactor()
         {
-            if (owner == null || config.moveSpeed <= 0f) return 1f;
+            if (owner == null) return 1f;
             float runSpeed = owner.Velocity.x * owner.FacingDirection;
-            float momentum = Mathf.Clamp01(runSpeed / config.moveSpeed);
-            return 1f + config.kickMomentumBonus * momentum;
+            return KickMath.MomentumFactor(runSpeed, config.moveSpeed, config.kickMomentumBonus);
         }
 
         private void OnDrawGizmosSelected()
