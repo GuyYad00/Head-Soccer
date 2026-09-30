@@ -153,5 +153,18 @@ namespace HeadSoccer.Tests
             AudioClip call = Load<AudioClip>("Assets/Audio/commentator_goal.wav");
             Assert.That(call.length, Is.InRange(5.5f, 6.5f));
         }
+
+        // ------------------------------------------------------------ the crowd
+
+        [TestCase("Assets/Audio/crowd_sing_loop.ogg", 15f)]
+        [TestCase("Assets/Audio/stadium_ambience_loop.ogg", 40f)]
+        public void Crowd_LoopsShipAndAreLongEnoughNotToRepeatObviously(string path, float minSeconds)
+        {
+            // The menu sings, the match roars; both loop for as long as the scene is open,
+            // so a short clip would give the seam away. The builder wires them by file name.
+            AudioClip loop = Load<AudioClip>(path);
+            Assert.That(loop.length, Is.GreaterThan(minSeconds), $"{path} is too short to loop unnoticed");
+            Assert.That(loop.channels, Is.InRange(1, 2), $"{path} should be mono or stereo");
+        }
     }
 }
