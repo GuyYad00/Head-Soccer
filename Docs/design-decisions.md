@@ -8,6 +8,12 @@ The numbers live in `GameConfig` (`Head-Soccer-main/Assets/Data/GameConfig.asset
 
 ## 30 September 2026
 
+### Beating the CPU gets an anthem
+
+Beating a friend is its own reward, because the two of you are in the room. Beating the computer is different. Nobody is there to see it, so the game has to be the one that notices. We wanted the player to feel he had done something that mattered, not just that a counter had ticked over.
+
+The anthem was generated with Gemini for this moment. It plays only when the human player, always the left side, wins a match against the CPU. It does not play when the CPU wins, on a draw, or in a two-player match, where the final whistle is enough. While it plays the stadium crowd and the effects go silent, the same way they do under the commentator, so the song is the only thing you hear. When it ends, the crowd comes back under the result screen. Gemini delivered it as a short video; we kept the song and left the picture out, because the celebration on the pitch is already the picture.
+
 ### The crowd is the sound of the game
 
 As football fans we know that the crowd is not background. It is what makes a ground a ground. Watch a match with the stadium feed muted and it turns into a training session; turn it back up and every touch matters again. So the sound under our match could not be a tune. It had to be people.

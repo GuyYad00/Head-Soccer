@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 2D |
 | **Orientation & reference resolution** | Landscape, 1280 x 720 reference |
 | **Expected session length** | 30 seconds to 3 minutes per match |
-| **Document version** | v1.9, 2026-09-30 |
+| **Document version** | v1.10, 2026-09-30 |
 
 ---
 
@@ -134,6 +134,7 @@ stateDiagram-v2
 | Advertising board | 1 banner strip, 1024 x 65, scrolled and wrapped by `AdBoard` in front of the first row of the crowd, large enough to read | Original (`Assets/Art/adboard.png`); real brands, as on a real pitch | Stadium dressing |
 | Commentators | 3 cut-out drawings, one commentator each, shouting into a headset; one is drawn at random per match | Drawn for this project with ChatGPT (`Assets/Art/Commentators/commentator_1..3.png`) | The cut-in above the goal on every goal |
 | Commentator goal call | 1 clip, 6 s | Generated for this project with Gemini from an explicit prompt describing the call we wanted, cut to its first six seconds (`Assets/Audio/commentator_goal.wav`) | Shouted on every goal, alone in the mix |
+| Victory anthem | 1 clip, 10 s | Generated for this project with Gemini (`Assets/Audio/player_victory.ogg`) | Plays only when the human beats the CPU, alone in the mix, so the win feels like it mattered. A two-player win, a loss and a draw keep the final whistle |
 | UI panel | 1 rounded rectangle, 9-sliced | Original (`Assets/UI/RoundedPanel.png`) | Scoreboard, cards, buttons |
 | Font | Oswald Bold | Google Fonts, SIL Open Font License 1.1 (`Assets/Fonts/Oswald-OFL.txt`) | All UI text |
 | SFX (kick, bounce, jump, whistle, goal, crowd cheer, beep, special, UI click) | 9 | Synthesised for this project with a small Python script, no samples | Feedback |
@@ -144,7 +145,7 @@ stateDiagram-v2
 
 **The commentator.** There is no football without a commentator. We wanted the player to feel the grass, and a goal in silence is not a goal. So three commentators were drawn, and at the start of every match one of them is picked at random and stays for that match. On every goal he pops up in the crowd above the goal that received the ball, a small LIVE tag over his head, and shouts the call while the celebration freezes and the kickoff counts down; the music and the effects go silent under him so the call is all you hear, and the kickoff whistle cuts him off. The first version was a framed box in a corner of the screen; it read as a foreign UI element and on a wide screen it floated outside the stadium, so the frame went and the figure is now placed in world units above the goal (see `Docs/design-decisions.md`). The decision came from one word, liveness. The match should feel alive, the player should feel he is on the pitch and that the goal mattered, and the shout is what gives it that excitement. This was not in the original scope (see 8.3). We fell in love with the idea while building, because it brought the game to life, and went with it. The drawings were made with ChatGPT and the call was generated with Gemini from an explicit prompt that said exactly what we wanted to hear.
 
-**AI tools.** Every drawing in the game, the six characters, their kick and celebration poses, and the three commentators, was made with ChatGPT from our descriptions. The commentator's goal call was generated with Gemini. We combined whichever AI tool gave the best result for each job, and took from each one only what we needed; the design, the code, the direction of every drawing and the decisions in this document are ours.
+**AI tools.** Every drawing in the game, the six characters, their kick and celebration poses, and the three commentators, was made with ChatGPT from our descriptions. The commentator's goal call, and the anthem that plays only when the player beats the CPU, were generated with Gemini. We combined whichever AI tool gave the best result for each job, and took from each one only what we needed; the design, the code, the direction of every drawing and the decisions in this document are ours.
 
 **Licence note:** every sprite and sound in the repository was made for this project, so there is no third party art to attribute. The only external asset is the Oswald font, distributed under the SIL Open Font License, whose licence file ships next to the font. Nothing here is taken from a source that forbids reuse.
 
@@ -200,7 +201,7 @@ graph TD
 | `CelebrationLoop` | Coroutine that loops the chosen character's celebration on the Character Select portrait |
 | `AdBoard` | Scrolling, wrapping advertising board under the crowd, clipped by a SpriteMask |
 | `CommentatorCutIn` | Picks one commentator per match, subscribes to `GoalScored` and `StateChanged`, stands the figure in the crowd above the goal that received the ball (world units converted to the canvas), plays the call and cuts it at kickoff |
-| `AudioManager` | One-shot SFX, the commentator's voice channel that ducks the crowd and SFX to silence while he shouts, the scene's looping crowd (one clip per scene, wired by the builder), mute saved in `PlayerPrefs` |
+| `AudioManager` | One-shot SFX, the commentator's voice channel that ducks the crowd and SFX to silence while he shouts, the victory anthem on that same channel when the human beats the CPU, the scene's looping crowd (one clip per scene, wired by the builder), mute saved in `PlayerPrefs` |
 | `EffectsPool` | Object pool for goal confetti and kick sparks |
 | `CameraFitter`, `CameraShake`, `SafeAreaFitter` | Full pitch visible on any aspect ratio, screen shake, notch safe UI |
 
@@ -253,6 +254,7 @@ graph TD
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
+| v1.10 | 2026-09-30 | Section 6: a victory anthem, generated with Gemini, plays only when the human beats the CPU. The crowd and the effects go silent under it and return when it ends. A two-player win, a loss and a draw keep the final whistle. `MatchSettings.HumanBeatTheCpu` is the rule, guarded by tests. |
 | v1.9 | 2026-09-30 | Section 6: the synthesised music loop is replaced by two real crowd recordings from Freesound, cut into seamless loops: the stands singing under the main menu (AxelTheCocker02, CC0) and supporters roaring under the match (devy32, CC BY 4.0, credited in the README). The goal sound, the cheer and the commentator's call are unchanged. Section 7: `AudioManager` holds one crowd loop per scene; two asset tests guard the loops. |
 | v1.8 | 2026-09-30 | Section 7: automated EditMode tests in `Assets/Tests/Editor` (kick arithmetic, Super, keyboard layouts, records, roster wrap, and guards on the shipped assets and build list). `KickMath` split out of `KickHitbox` and `CharacterRoster.Wrap` out of `CharacterSelect` so the arithmetic is testable without a scene. Section 5: an About screen on the main menu with the two creators, how the game was built and the original Head Soccer. Build menu: a Web (browser) build next to Android and Windows. The Android APK is built and attached to a GitHub pre-release; the 8.1 checkbox stays open until it has been installed and played on a device. |
 | v1.7 | 2026-09-30 | Section 6: the commentator, second pass after playing. No frame, only the cut-out figure with the LIVE tag above his head; he stands in the crowd above the goal that received the ball instead of the scorer's screen corner, placed in world units so he never leaves the stadium on a wide screen; the call is cut to its first six seconds, plays louder over a muted game mix, and stops at the kickoff whistle (`CommentatorCutIn` also listens to `StateChanged`, `AudioManager` ducks and restores the mix). |

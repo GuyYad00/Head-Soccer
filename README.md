@@ -133,7 +133,8 @@ A ready-to-install APK is attached to the [latest GitHub Release](../../releases
 | `KeyboardLayoutTests` | Player two always gets the layout player one did not pick, and the choice survives in `PlayerPrefs`. |
 | `MatchRecordsTests` | Biggest win and P1 win count: a smaller win keeps the bigger record, a draw records nothing. |
 | `CharacterRosterTests` | The select arrows wrap at both ends; a fresh install is never a mirror match. |
-| `ProjectAssetsTests` | The roster asset still has all six characters with all three drawings and sane stats (this exact asset once lost two of them on a re-save), the tuning asset can end a match, both scenes are in the build list, the commentator has three cut-outs and a call cut to six seconds, and both crowd loops ship and are long enough to loop unnoticed. |
+| `HumanVictoryTests` | The victory anthem is earned only by beating the CPU. A loss, a draw and any two-player result stay on the whistle. |
+| `ProjectAssetsTests` | The roster asset still has all six characters with all three drawings and sane stats (this exact asset once lost two of them on a re-save), the tuning asset can end a match, both scenes are in the build list, the commentator has three cut-outs and a call cut to six seconds, both crowd loops ship and are long enough to loop unnoticed, and the victory anthem is about ten seconds. |
 
 Tests that touch `PlayerPrefs` run inside a sandbox that restores the player's real settings afterwards.
 
@@ -157,7 +158,7 @@ Tests that touch `PlayerPrefs` run inside a sandbox that restores the player's r
 ```
 Head-Soccer-main/Assets
 ├── Art/        stadium, goal, ball, ad board, Characters/ (six players, idle + kick + celebration), Commentators/
-├── Audio/      synthesised SFX, the two crowd loops (menu, match) and the commentator's goal call
+├── Audio/      synthesised SFX, the two crowd loops (menu, match), the commentator's goal call and the victory anthem
 ├── Data/       GameConfig, CharacterRoster, ball physics material
 ├── Editor/     HeadSoccerBuilder (rebuilds both scenes), HeadSoccerBuildPipeline (one-click builds)
 ├── Fonts/      Oswald Bold (SIL Open Font License)
@@ -179,6 +180,7 @@ Head-Soccer-main/Assets
 - Design, code and art direction: Guy Yad Shalom and Tomer Yad Shalom.
 - Character and commentator drawings: made with ChatGPT from our descriptions, for this project.
 - Commentator goal call: generated with Gemini from an explicit prompt describing exactly the call we wanted.
+- Victory anthem, heard only when the player beats the CPU: generated with Gemini for this project, so the win feels like it mattered. The crowd and the effects go silent under it. A two-player win, a loss and a draw keep the final whistle.
 - We combined several AI tools and took from each one what it does best; the design, the code and every decision are ours.
 - Font: [Oswald](https://fonts.google.com/specimen/Oswald) by Vernon Adams, SIL Open Font License 1.1.
 - Sound effects and the goal fanfare were synthesised for this project.
