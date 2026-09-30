@@ -172,6 +172,9 @@ namespace HeadSoccer.EditorTools
             files.Add(($"{SpriteFolder}/adboard.png", 1024));
             for (int i = 1; i <= CommentatorCount; i++)
                 files.Add(($"{CommentatorsFolder}/commentator_{i}.png", 512));
+            // Creator photos for the About panel, already cropped to circles.
+            files.Add(($"{SpriteFolder}/Creators/tomer.png", 256));
+            files.Add(($"{SpriteFolder}/Creators/guy.png", 256));
             foreach (CharacterArt character in Characters)
             {
                 files.Add(($"{CharactersFolder}/{character.file}.png", 1024));
@@ -1149,11 +1152,17 @@ namespace HeadSoccer.EditorTools
             Button controls = CreateButton(mainPanel.transform, "ControlsButton", "P1 KEYS: WASD", 24, ButtonNeutral,
                 new Vector2(0.5f, 0.5f), new Vector2(210f, -165f), new Vector2(190f, 56f));
 
+            // A small ABOUT button under the settings row. Minor on purpose: same style
+            // as the settings buttons but shorter, because it is not part of playing.
+            Button aboutButton = CreateButton(mainPanel.transform, "AboutButton", "ABOUT", 20, ButtonNeutral,
+                new Vector2(0.5f, 0.5f), new Vector2(0f, -232f), new Vector2(190f, 44f));
+
             UnityEventTools.AddVoidPersistentListener(play.onClick, menu.PlayVsCPU);
             UnityEventTools.AddVoidPersistentListener(twoPlayers.onClick, menu.PlayTwoPlayers);
             UnityEventTools.AddVoidPersistentListener(difficulty.onClick, menu.CycleDifficulty);
             UnityEventTools.AddVoidPersistentListener(audio.onClick, menu.ToggleAudio);
             UnityEventTools.AddVoidPersistentListener(controls.onClick, menu.ToggleControls);
+            UnityEventTools.AddVoidPersistentListener(aboutButton.onClick, menu.OpenAbout);
 
             Set(menu, "difficultyLabel", difficulty.GetComponentInChildren<TextMeshProUGUI>());
             Set(menu, "audioLabel", audio.GetComponentInChildren<TextMeshProUGUI>());
@@ -1221,12 +1230,115 @@ namespace HeadSoccer.EditorTools
             Set(select, "jumpBar", jumpBar);
             Set(select, "powerBar", powerBar);
 
+            GameObject aboutPanel = BuildAboutPanel(safeArea.transform, menu);
+
             Set(menu, "mainPanel", mainPanel);
             Set(menu, "characterPanel", characterPanel);
+            Set(menu, "aboutPanel", aboutPanel);
             characterPanel.SetActive(false);
+            aboutPanel.SetActive(false);
 
             CreateEventSystem();
             EditorSceneManager.SaveScene(scene, MenuScenePath);
+        }
+
+        /// <summary>
+        /// Rebuilds only Menu.unity, leaving the match scene, prefabs and data assets
+        /// untouched. Use after changing the menu layout or the About panel.
+        /// </summary>
+        [MenuItem("Head Soccer/Rebuild Menu Scene", priority = 23)]
+        public static void RebuildMenuScene()
+        {
+            if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+                return;
+
+            ImportGameSprites();
+            BuildMenuScene();
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            EditorSceneManager.OpenScene(MenuScenePath);
+            Debug.Log("Head Soccer: menu scene rebuilt.");
+        }
+
+        // ================================================================== about panel
+
+        /// <summary>
+        /// The About screen: who made the game, what it is built with and where the
+        /// idea came from. Opened from the small ABOUT button on the main panel.
+        /// </summary>
+        private static GameObject BuildAboutPanel(Transform parent, MainMenuController menu)
+        {
+            GameObject aboutPanel = CreateOverlay(parent, "AboutPanel");
+
+            GameObject card = CreatePanel(aboutPanel.transform, "Card", PanelCard,
+                new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(860f, 640f), new Vector2(0.5f, 0.5f));
+
+            CreateText(card.transform, "Title", "ABOUT", 54,
+                new Vector2(0.5f, 1f), new Vector2(0f, -44f), new Vector2(400f, 70f), Accent).characterSpacing = 8f;
+
+            // The two creators, photos cropped to circles in Assets/Art/Creators.
+            CreateCreatorPortrait(card.transform, "Tomer", "TOMER YAD SHALOM", "tomer", new Vector2(-140f, -164f));
+            CreateCreatorPortrait(card.transform, "Guy", "GUY YAD SHALOM", "guy", new Vector2(140f, -164f));
+
+            string accentHex = ColorUtility.ToHtmlStringRGB(Accent);
+            CreateAboutBlock(card.transform, "GameBlock", new Vector2(0f, -286f), new Vector2(780f, 112f), 19,
+                "Head Soccer is a 2D arcade football game developed by\n" +
+                $"<color=#{accentHex}>Tomer Yad Shalom</color> and <color=#{accentHex}>Guy Yad Shalom</color>.\n" +
+                "We built it out of our love for football and a desire to recreate\n" +
+                "the fun of the original Head Soccer, with our own twist.");
+            CreateAboutBlock(card.transform, "TechBlock", new Vector2(0f, -410f), new Vector2(780f, 64f), 19,
+                $"Built with <color=#{accentHex}>Unity 6</color> and <color=#{accentHex}>URP 2D</color> - arcade physics, super shots,\n" +
+                "six unique characters, keyboard, gamepad and touch.");
+            CreateAboutBlock(card.transform, "InspirationBlock", new Vector2(0f, -486f), new Vector2(780f, 60f), 19,
+                $"Inspired by the original <color=#{accentHex}>Head Soccer</color>,\n" +
+                "the game we played for years and wanted to bring back to life.");
+
+            Button back = CreateButton(card.transform, "BackButton", "BACK", 26, Accent,
+                new Vector2(0.5f, 0f), new Vector2(0f, 44f), new Vector2(240f, 56f));
+            back.GetComponentInChildren<TextMeshProUGUI>().color = new Color(0.08f, 0.09f, 0.12f);
+            UnityEventTools.AddVoidPersistentListener(back.onClick, menu.CloseAbout);
+
+            return aboutPanel;
+        }
+
+        /// <summary>A circular creator photo with an accent ring and a name plate below it.</summary>
+        private static void CreateCreatorPortrait(Transform parent, string name, string label,
+                                                  string file, Vector2 position)
+        {
+            Image ring = CreateUIImage(parent, name + "Ring", circleSprite,
+                new Vector2(0.5f, 1f), position, new Vector2(150f, 150f));
+            ring.color = Accent;
+
+            var photo = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/Creators/{file}.png");
+            if (photo != null)
+            {
+                CreateUIImage(parent, name + "Photo", photo, new Vector2(0.5f, 1f), position, new Vector2(140f, 140f));
+            }
+            else
+            {
+                // No photo on disk: a dark disc with the first letter keeps the layout whole.
+                Image disc = CreateUIImage(parent, name + "Photo", circleSprite,
+                    new Vector2(0.5f, 1f), position, new Vector2(140f, 140f));
+                disc.color = ButtonNeutral;
+                CreateText(parent, name + "Initial", label.Substring(0, 1), 56,
+                    new Vector2(0.5f, 1f), position, new Vector2(140f, 140f), TextDim);
+            }
+
+            GameObject plate = CreatePanel(parent, name + "NamePlate", PanelDark,
+                new Vector2(0.5f, 1f), position + new Vector2(0f, -94f), new Vector2(236f, 34f), new Vector2(0.5f, 0.5f));
+            CreateText(plate.transform, "Label", label, 18,
+                new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(236f, 34f), Color.white).characterSpacing = 2f;
+        }
+
+        /// <summary>A rounded dark strip with a few centred lines of text, as on the About card.</summary>
+        private static void CreateAboutBlock(Transform parent, string name, Vector2 position,
+                                             Vector2 size, int fontSize, string content)
+        {
+            GameObject block = CreatePanel(parent, name, PanelDark,
+                new Vector2(0.5f, 1f), position, size, new Vector2(0.5f, 1f));
+            TextMeshProUGUI text = CreateText(block.transform, "Text", content, fontSize,
+                new Vector2(0.5f, 0.5f), Vector2.zero, size - new Vector2(30f, 8f), Color.white);
+            Stretch(text.rectTransform);
         }
 
         private static Image CreateStatRow(Transform parent, string label, Vector2 position, Color color)

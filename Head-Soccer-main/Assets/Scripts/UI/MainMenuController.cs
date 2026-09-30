@@ -21,6 +21,7 @@ namespace HeadSoccer
         [Header("Panels")]
         [SerializeField] private GameObject mainPanel;
         [SerializeField] private GameObject characterPanel;
+        [SerializeField] private GameObject aboutPanel;
 
         private void Start()
         {
@@ -94,6 +95,23 @@ namespace HeadSoccer
         {
             if (mainPanel != null) mainPanel.SetActive(true);
             if (characterPanel != null) characterPanel.SetActive(false);
+            if (aboutPanel != null) aboutPanel.SetActive(false);
+        }
+
+        // --- about panel --------------------------------------------------------
+
+        public void OpenAbout()
+        {
+            AudioManager.Instance?.PlayUiClick();
+            if (aboutPanel == null) return;
+            if (mainPanel != null) mainPanel.SetActive(false);
+            aboutPanel.SetActive(true);
+        }
+
+        public void CloseAbout()
+        {
+            AudioManager.Instance?.PlayUiClick();
+            ShowMain();
         }
 
         public void BackToMain()
