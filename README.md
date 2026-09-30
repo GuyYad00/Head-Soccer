@@ -4,6 +4,8 @@ A 1v1 arcade Head Soccer game built in Unity 6 (URP, 2D). Two big-headed charact
 
 Final project for the Unity course. The approved design document is in [`Docs/GDD.md`](Docs/GDD.md). Decisions we made while planning and while playing each other are in [`Docs/design-decisions.md`](Docs/design-decisions.md). The Unity project is in [`Head-Soccer-main/`](Head-Soccer-main/).
 
+![Nine seconds of a match: David and Mikel chase the ball across the pitch under the crowd and the advertising board](Docs/images/gameplay.gif)
+
 ## Vision
 
 We chose Head Soccer because we love football. We like to play and watch football, so this was not a theme we picked to fill a project. The passion was already there, and that is why getting the details right mattered so much to us. We know, from being players ourselves, how much a small thing decides whether a match feels real.
@@ -106,9 +108,30 @@ The full log, and the decisions we add as we keep playing, is in [`Docs/design-d
 
 **Android**
 
+A ready-to-install APK is attached to the [latest GitHub Release](../../releases/latest). Copy it to a phone and install; the game locks to landscape and shows on-screen buttons. To build it yourself:
+
 1. Install *Android Build Support* (with SDK, NDK and OpenJDK) for the same Unity version from Unity Hub.
-2. In Unity: **Head Soccer → Build Android APK**. The APK is written to `Head-Soccer-main/Builds/Android/HeadSoccer.apk`.
-3. Copy it to a phone and install. The game locks to landscape and shows on-screen buttons.
+2. In Unity: **Head Soccer → Build Android APK**. The APK is written to `Head-Soccer-main/Builds/Android/HeadSoccer.apk` (IL2CPP, ARM64, Android 7.1 and up).
+3. Without an Android phone, the touch layout can be checked in the editor: switch the Game view to **Simulator**, pick any Android device, and the on-screen buttons appear; the mouse acts as a finger.
+
+**Browser**
+
+**Head Soccer → Build Web (browser)** writes a WebGL build to `Head-Soccer-main/Builds/Web` (needs the Web Build Support module). The folder is a static site: upload it as-is to itch.io or GitHub Pages.
+
+## Automated tests
+
+`Head-Soccer-main/Assets/Tests/Editor` holds EditMode tests that run in the Unity Test Runner (**Window → General → Test Runner → EditMode → Run All**) without opening a scene. They cover the pure logic and, more usefully, the shipped assets:
+
+| Suite | What it guards |
+|---|---|
+| `KickMathTests` | The running kick bonus: exactly 1 when standing, capped at 1 + bonus at full speed, never below 1 when running away; every kick angle in the configured range travels forward and never into the grass. |
+| `SpecialShotTests` | The Super fills only from contact, never overfills, fires exactly once per match, cannot recharge after firing, and a rematch resets it. |
+| `KeyboardLayoutTests` | Player two always gets the layout player one did not pick, and the choice survives in `PlayerPrefs`. |
+| `MatchRecordsTests` | Biggest win and P1 win count: a smaller win keeps the bigger record, a draw records nothing. |
+| `CharacterRosterTests` | The select arrows wrap at both ends; a fresh install is never a mirror match. |
+| `ProjectAssetsTests` | The roster asset still has all six characters with all three drawings and sane stats (this exact asset once lost two of them on a re-save), the tuning asset can end a match, both scenes are in the build list, and the commentator has three cut-outs and a call cut to six seconds. |
+
+Tests that touch `PlayerPrefs` run inside a sandbox that restores the player's real settings afterwards.
 
 ## Course concepts used
 
@@ -138,11 +161,12 @@ Head-Soccer-main/Assets
 ├── Scenes/     Menu.unity, Match.unity
 ├── Scripts/
 │   ├── Core/       GameManager, GameConfig, MatchState, MatchSettings, MatchRecords, CharacterRoster, CameraFitter
-│   ├── Gameplay/   PlayerController, PlayerVisual, SpecialShot, KickHitbox, BallController, GoalTrigger, AIController
+│   ├── Gameplay/   PlayerController, PlayerVisual, SpecialShot, KickHitbox, KickMath, BallController, GoalTrigger, AIController
 │   ├── Input/      IInputSource, Keyboard/Gamepad/Touch/Composite sources, HoldButton
 │   ├── UI/         UIManager, MainMenuController, CharacterSelect, CelebrationLoop, CommentatorCutIn, SafeAreaFitter
 │   ├── Audio/      AudioManager
 │   └── Effects/    EffectsPool, CameraShake, SuperReadySign, AdBoard
+├── Tests/Editor/   EditMode tests (see Automated tests)
 └── UI/         RoundedPanel (9-sliced panel sprite)
 ```
 

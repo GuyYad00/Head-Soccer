@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 2D |
 | **Orientation & reference resolution** | Landscape, 1280 x 720 reference |
 | **Expected session length** | 30 seconds to 3 minutes per match |
-| **Document version** | v1.7, 2026-09-30 |
+| **Document version** | v1.8, 2026-09-30 |
 
 ---
 
@@ -109,7 +109,7 @@ stateDiagram-v2
 
 ![Wireframe of the four main screens](images/screens-wireframe.png)
 
-1. **Main Menu** with the title HEAD SOCCER, two play buttons (PLAY VS CPU and 2 PLAYERS) that both open Character Select, a CPU difficulty toggle (EASY / MEDIUM / HARD), a SOUND ON / OFF toggle, and a P1 KEYS toggle (WASD / ARROWS) that swaps the two keyboard layouts. The key reminder line at the bottom follows the choice.
+1. **Main Menu** with the title HEAD SOCCER, two play buttons (PLAY VS CPU and 2 PLAYERS) that both open Character Select, a CPU difficulty toggle (EASY / MEDIUM / HARD), a SOUND ON / OFF toggle, and a P1 KEYS toggle (WASD / ARROWS) that swaps the two keyboard layouts. The key reminder line at the bottom follows the choice. An ABOUT button opens a card with the two creators, how the game was built and a word on the original Head Soccer; BACK returns to the menu.
 2. **Character Select** with a character portrait in the center, left and right arrows to change character, the character name, a short stat hint with speed, jump and power bars, and BACK. The screen runs twice before a match. First PLAYER 1: PICK YOUR PLAYER with a NEXT button. Then the right side: in a 2 PLAYERS match it reads PLAYER 2: PICK YOUR PLAYER and the second player chooses for himself; against the computer it reads PICK THE CPU'S PLAYER and player one decides who he wants to face. The second confirm is KICK OFF! and starts the match. BACK on the second step returns to the first, not to the menu. Both choices are remembered in `PlayerPrefs`. Before this the second character was assigned automatically, the next one in the list, which meant a friend never got to choose and a player could never pick a particular opponent.
    **A painful dilemma: the mirror match.** Both of us thought there was no reason to let two players pick the same character, Yossi against Yossi, and our first instinct was to block it. After talking it over we decided we cannot. Blocking it is simply annoying, and we are not going to tell our players how to play or what to do. It makes no sense to us, but somebody may want exactly that, so it is allowed. The two are told apart by facing and by the names on the scoreboard.
 3. **Gameplay HUD** with a scoreboard P1 and P2 at the top center, a countdown timer beside it, and a special charge meter for each player. On a goal, the commentator pops up in the crowd above the goal that received the ball, with a small LIVE tag over his head, for the celebration and the kickoff count, and is cut the moment the ball is back in play. He is placed in world units so he always stays inside the stadium. Deliberately absent: no minimap, no ads, no on-screen currency.
@@ -191,6 +191,7 @@ graph TD
 | `BallController` | Ball physics, speed cap, and reset to center |
 | `GoalTrigger` | Detects a scored goal once per ball entry |
 | `KickHitbox` | Applies the kick impulse when the ball is in range, and the small momentum-scaled shove when the rival is |
+| `KickMath` | The arithmetic behind a kick (momentum factor, launch direction), kept out of MonoBehaviour so it can be unit tested |
 | `SpecialShot` | Charges from ball contact and connecting kicks, fires a boosted shot once per match |
 | `IInputSource`, `KeyboardInputSource`, `GamepadInputSource`, `TouchInputSource`, `CompositeInputSource` | One interface for every input device, merged per player |
 | `UIManager` | HUD, pause, match over, goal flash and score bump |
@@ -201,6 +202,8 @@ graph TD
 | `AudioManager` | One-shot SFX, the commentator's voice channel that ducks music and SFX to silence while he shouts, looping music, mute saved in `PlayerPrefs` |
 | `EffectsPool` | Object pool for goal confetti and kick sparks |
 | `CameraFitter`, `CameraShake`, `SafeAreaFitter` | Full pitch visible on any aspect ratio, screen shake, notch safe UI |
+
+**Tests:** `Assets/Tests/Editor` holds EditMode tests for the Unity Test Runner. They cover the pure logic (`KickMath`, `SpecialShot`, the keyboard layout swap, `MatchRecords`, the roster index wrap) and the shipped assets: the roster asset has all six characters with all three drawings, the tuning asset can end a match, both scenes are in the build list, the commentator has his three cut-outs and a six second call. The asset tests exist because of a real incident, the roster asset once dropped two characters on a re-save during a compile error, and nothing but a play session would have noticed. Tests that touch `PlayerPrefs` run in a sandbox that restores the player's real settings.
 
 ### The course features you are implementing
 
@@ -249,6 +252,7 @@ graph TD
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
+| v1.8 | 2026-09-30 | Section 7: automated EditMode tests in `Assets/Tests/Editor` (kick arithmetic, Super, keyboard layouts, records, roster wrap, and guards on the shipped assets and build list). `KickMath` split out of `KickHitbox` and `CharacterRoster.Wrap` out of `CharacterSelect` so the arithmetic is testable without a scene. Section 5: an About screen on the main menu with the two creators, how the game was built and the original Head Soccer. Build menu: a Web (browser) build next to Android and Windows. The Android APK is built and attached to a GitHub pre-release; the 8.1 checkbox stays open until it has been installed and played on a device. |
 | v1.7 | 2026-09-30 | Section 6: the commentator, second pass after playing. No frame, only the cut-out figure with the LIVE tag above his head; he stands in the crowd above the goal that received the ball instead of the scorer's screen corner, placed in world units so he never leaves the stadium on a wide screen; the call is cut to its first six seconds, plays louder over a muted game mix, and stops at the kickoff whistle (`CommentatorCutIn` also listens to `StateChanged`, `AudioManager` ducks and restores the mix). |
 | v1.6 | 2026-09-30 | Section 6: the commentator. Three commentator drawings, one picked at random per match; on every goal his broadcast box pops up over the crowd on the scorer's side and he shouts the goal call (`CommentatorCutIn`, listening to `GameManager.GoalScored`; `AudioManager` gets a voice channel). Decided for liveness, so the player feels he is on the pitch and the goal mattered. Not in the original scope, recorded in 8.3. Section 6 also names the AI tools: the drawings were made with ChatGPT, the goal call with Gemini from an explicit prompt. Section 5: the mirror match dilemma, two players may pick the same character; we thought of blocking it and decided we will not dictate how people play. |
 | v1.5 | 2026-09-30 | Section 6: two women join the roster, Noa and Anna, with idle, kick and celebration drawings and two new celebration motions (cheer, knee slide); the paragraph explains why, the original game had none and we want ours for everyone who plays football. Their idle drawings were redrawn in side view facing the rival, like the four men, after a first pass had them facing the camera. Section 5: Character Select runs twice, so player two picks his own character and, against the computer, player one picks the CPU's; before, the right side was assigned automatically. Section 4: the keyboard layout is the player's choice, a P1 KEYS button swaps WASD and the arrows between the two players, inspired by FIFA's Classic and Alternate presets. Section 3: a kick that lands on the rival shoves him back a small, momentum-scaled step (`kickPushback`), which fixes two players locking up with the ball wedged between them. Ball radius raised from 0.28 to 0.34 world units; after many matches it read as too small and a bigger ball gives a miss more weight. The match music is a new 150 bpm loop and the goal sound a new fanfare, both closer to the pace of the game. Fix: Anna's knee slide grew past the portrait and ran under the arrows on the card; she now slides in from smaller to normal size and the arrows sit further out. |
