@@ -42,6 +42,9 @@ namespace HeadSoccer.EditorTools
         private const string IconPath = "Assets/Branding/icon.png";
         private const string CharactersFolder = SpriteFolder + "/Characters";
         private const string CommentatorsFolder = SpriteFolder + "/Commentators";
+        // Outside Assets/Art on purpose: the whole Art folder goes into the sprite
+        // atlas, and atlas compression visibly blurs the photographs on the About card.
+        private const string CreatorsFolder = "Assets/Creators";
         private const int CommentatorCount = 3;
         private const string MatchScenePath = SceneFolder + "/Match.unity";
         private const string MenuScenePath = SceneFolder + "/Menu.unity";
@@ -173,8 +176,8 @@ namespace HeadSoccer.EditorTools
             for (int i = 1; i <= CommentatorCount; i++)
                 files.Add(($"{CommentatorsFolder}/commentator_{i}.png", 512));
             // Creator photos for the About panel, already cropped to circles.
-            files.Add(($"{SpriteFolder}/Creators/tomer.png", 256));
-            files.Add(($"{SpriteFolder}/Creators/guy.png", 256));
+            files.Add(($"{CreatorsFolder}/tomer.png", 512));
+            files.Add(($"{CreatorsFolder}/guy.png", 512));
             foreach (CharacterArt character in Characters)
             {
                 files.Add(($"{CharactersFolder}/{character.file}.png", 1024));
@@ -197,6 +200,10 @@ namespace HeadSoccer.EditorTools
                 importer.mipmapEnabled = false;
                 importer.npotScale = TextureImporterNPOTScale.None;
                 importer.maxTextureSize = maxSize;
+
+                // Photographs survive compression far worse than drawn art does.
+                if (path.StartsWith(CreatorsFolder))
+                    importer.textureCompression = TextureImporterCompression.Uncompressed;
 
                 if (path.EndsWith("RoundedPanel.png"))
                 {
@@ -1275,30 +1282,30 @@ namespace HeadSoccer.EditorTools
             GameObject aboutPanel = CreateOverlay(parent, "AboutPanel");
 
             GameObject card = CreatePanel(aboutPanel.transform, "Card", PanelCard,
-                new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(860f, 640f), new Vector2(0.5f, 0.5f));
+                new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(940f, 690f), new Vector2(0.5f, 0.5f));
 
-            CreateText(card.transform, "Title", "ABOUT", 54,
-                new Vector2(0.5f, 1f), new Vector2(0f, -44f), new Vector2(400f, 70f), Accent).characterSpacing = 8f;
+            CreateText(card.transform, "Title", "ABOUT", 56,
+                new Vector2(0.5f, 1f), new Vector2(0f, -48f), new Vector2(400f, 70f), Accent).characterSpacing = 8f;
 
-            // The two creators, photos cropped to circles in Assets/Art/Creators.
-            CreateCreatorPortrait(card.transform, "Tomer", "TOMER YAD SHALOM", "tomer", new Vector2(-140f, -164f));
-            CreateCreatorPortrait(card.transform, "Guy", "GUY YAD SHALOM", "guy", new Vector2(140f, -164f));
+            // The two creators, photos cropped to circles in Assets/Creators.
+            CreateCreatorPortrait(card.transform, "Tomer", "TOMER YAD SHALOM", "tomer", new Vector2(-150f, -178f));
+            CreateCreatorPortrait(card.transform, "Guy", "GUY YAD SHALOM", "guy", new Vector2(150f, -178f));
 
             string accentHex = ColorUtility.ToHtmlStringRGB(Accent);
-            CreateAboutBlock(card.transform, "GameBlock", new Vector2(0f, -286f), new Vector2(780f, 112f), 19,
+            CreateAboutBlock(card.transform, "GameBlock", new Vector2(0f, -326f), new Vector2(860f, 122f), 22,
                 "Head Soccer is a 2D arcade football game developed by\n" +
                 $"<color=#{accentHex}>Tomer Yad Shalom</color> and <color=#{accentHex}>Guy Yad Shalom</color>.\n" +
-                "We built it out of our love for football and a desire to recreate\n" +
-                "the fun of the original Head Soccer, with our own twist.");
-            CreateAboutBlock(card.transform, "TechBlock", new Vector2(0f, -410f), new Vector2(780f, 64f), 19,
-                $"Built with <color=#{accentHex}>Unity 6</color> and <color=#{accentHex}>URP 2D</color> - arcade physics, super shots,\n" +
-                "six unique characters, keyboard, gamepad and touch.");
-            CreateAboutBlock(card.transform, "InspirationBlock", new Vector2(0f, -486f), new Vector2(780f, 60f), 19,
-                $"Inspired by the original <color=#{accentHex}>Head Soccer</color>,\n" +
-                "the game we played for years and wanted to bring back to life.");
+                "We built this game out of our love for football games and a desire to\n" +
+                "recreate the fun and chaos of the original Head Soccer, with our own twist.");
+            CreateAboutBlock(card.transform, "TechBlock", new Vector2(0f, -462f), new Vector2(860f, 74f), 22,
+                $"Built with <color=#{accentHex}>Unity 6</color> and <color=#{accentHex}>URP 2D</color> - arcade-style physics, powerful super shots,\n" +
+                "six unique characters, and support for keyboard, gamepad and touch.");
+            CreateAboutBlock(card.transform, "InspirationBlock", new Vector2(0f, -550f), new Vector2(860f, 74f), 22,
+                $"Inspired by the original <color=#{accentHex}>Head Soccer</color>, the classic game we played\n" +
+                "for years and wanted to bring back to life with our own vision.");
 
-            Button back = CreateButton(card.transform, "BackButton", "BACK", 26, Accent,
-                new Vector2(0.5f, 0f), new Vector2(0f, 44f), new Vector2(240f, 56f));
+            Button back = CreateButton(card.transform, "BackButton", "BACK", 28, Accent,
+                new Vector2(0.5f, 0f), new Vector2(0f, 32f), new Vector2(260f, 56f));
             back.GetComponentInChildren<TextMeshProUGUI>().color = new Color(0.08f, 0.09f, 0.12f);
             UnityEventTools.AddVoidPersistentListener(back.onClick, menu.CloseAbout);
 
@@ -1310,28 +1317,28 @@ namespace HeadSoccer.EditorTools
                                                   string file, Vector2 position)
         {
             Image ring = CreateUIImage(parent, name + "Ring", circleSprite,
-                new Vector2(0.5f, 1f), position, new Vector2(150f, 150f));
+                new Vector2(0.5f, 1f), position, new Vector2(182f, 182f));
             ring.color = Accent;
 
-            var photo = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/Creators/{file}.png");
+            var photo = AssetDatabase.LoadAssetAtPath<Sprite>($"{CreatorsFolder}/{file}.png");
             if (photo != null)
             {
-                CreateUIImage(parent, name + "Photo", photo, new Vector2(0.5f, 1f), position, new Vector2(140f, 140f));
+                CreateUIImage(parent, name + "Photo", photo, new Vector2(0.5f, 1f), position, new Vector2(170f, 170f));
             }
             else
             {
                 // No photo on disk: a dark disc with the first letter keeps the layout whole.
                 Image disc = CreateUIImage(parent, name + "Photo", circleSprite,
-                    new Vector2(0.5f, 1f), position, new Vector2(140f, 140f));
+                    new Vector2(0.5f, 1f), position, new Vector2(170f, 170f));
                 disc.color = ButtonNeutral;
-                CreateText(parent, name + "Initial", label.Substring(0, 1), 56,
-                    new Vector2(0.5f, 1f), position, new Vector2(140f, 140f), TextDim);
+                CreateText(parent, name + "Initial", label.Substring(0, 1), 64,
+                    new Vector2(0.5f, 1f), position, new Vector2(170f, 170f), TextDim);
             }
 
             GameObject plate = CreatePanel(parent, name + "NamePlate", PanelDark,
-                new Vector2(0.5f, 1f), position + new Vector2(0f, -94f), new Vector2(236f, 34f), new Vector2(0.5f, 0.5f));
-            CreateText(plate.transform, "Label", label, 18,
-                new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(236f, 34f), Color.white).characterSpacing = 2f;
+                new Vector2(0.5f, 1f), position + new Vector2(0f, -112f), new Vector2(280f, 38f), new Vector2(0.5f, 0.5f));
+            CreateText(plate.transform, "Label", label, 21,
+                new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(280f, 38f), Color.white).characterSpacing = 2f;
         }
 
         /// <summary>A rounded dark strip with a few centred lines of text, as on the About card.</summary>
