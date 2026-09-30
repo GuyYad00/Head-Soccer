@@ -34,6 +34,21 @@ namespace HeadSoccer.EditorTools
             Build(BuildTarget.StandaloneWindows64, "Builds/Windows/HeadSoccer.exe");
         }
 
+        /// <summary>
+        /// A browser build for itch.io or GitHub Pages. Needs the Web Build Support
+        /// module. Gzip with the decompression fallback means the page works on any
+        /// static host without server configuration; upload the whole Builds/Web folder.
+        /// </summary>
+        [MenuItem("Head Soccer/Build Web (browser)", priority = 42)]
+        public static void BuildWeb()
+        {
+            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Gzip;
+            PlayerSettings.WebGL.decompressionFallback = true;
+            PlayerSettings.defaultWebScreenWidth = 1280;
+            PlayerSettings.defaultWebScreenHeight = 720;
+            Build(BuildTarget.WebGL, "Builds/Web");
+        }
+
         private static void Build(BuildTarget target, string path)
         {
             Directory.CreateDirectory(Path.GetDirectoryName(path) ?? "Builds");
