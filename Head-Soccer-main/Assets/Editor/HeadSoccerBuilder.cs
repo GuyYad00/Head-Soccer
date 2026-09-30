@@ -613,7 +613,7 @@ namespace HeadSoccer.EditorTools
 
             var audioObject = new GameObject("AudioManager");
             audioObject.transform.SetParent(managers);
-            WireAudio(audioObject.AddComponent<AudioManager>());
+            WireAudio(audioObject.AddComponent<AudioManager>(), MatchCrowdClip);
 
             var effectsObject = new GameObject("EffectsPool");
             effectsObject.transform.SetParent(managers);
@@ -863,9 +863,14 @@ namespace HeadSoccer.EditorTools
             return player;
         }
 
-        private static void WireAudio(AudioManager audio)
+        // The two Freesound crowd recordings, cut into seamless loops (see Docs/design-decisions.md).
+        private const string MenuCrowdClip = "crowd_sing_loop";           // the stands singing, under the menu
+        private const string MatchCrowdClip = "stadium_ambience_loop";    // the stadium roar, under the match
+
+        private static void WireAudio(AudioManager audio, string crowdClipName)
         {
             // Clips live in Assets/Audio; every field stays optional.
+            TrySetClip(audio, "crowdLoop", crowdClipName);
             TrySetClip(audio, "kick", "kick");
             TrySetClip(audio, "bounce", "bounce");
             TrySetClip(audio, "jump", "jump");
@@ -876,7 +881,6 @@ namespace HeadSoccer.EditorTools
             TrySetClip(audio, "special", "special");
             TrySetClip(audio, "uiClick", "ui_click");
             TrySetClip(audio, "commentatorGoal", "commentator_goal");
-            TrySetClip(audio, "musicLoop", "music_loop");
         }
 
         private static void TrySetClip(AudioManager audio, string field, string clipName)
@@ -1106,7 +1110,7 @@ namespace HeadSoccer.EditorTools
             }
 
             var audioObject = new GameObject("AudioManager");
-            WireAudio(audioObject.AddComponent<AudioManager>());
+            WireAudio(audioObject.AddComponent<AudioManager>(), MenuCrowdClip);
 
             Canvas canvas = CreateCanvas(camera);
             var menu = canvas.gameObject.AddComponent<MainMenuController>();

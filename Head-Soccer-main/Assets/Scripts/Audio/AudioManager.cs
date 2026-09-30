@@ -4,8 +4,10 @@ using UnityEngine;
 namespace HeadSoccer
 {
     /// <summary>
-    /// One-shot SFX and looping music. Every clip field is optional, so the game runs
-    /// silently and without errors until the audio assets are dropped in.
+    /// One-shot SFX, the commentator's voice channel and the looping crowd. Each scene
+    /// carries its own AudioManager with its own crowd loop: the menu has the stands
+    /// singing, the match has the stadium roar. Every clip field is optional, so the game
+    /// runs silently and without errors until the audio assets are dropped in.
     /// </summary>
     public class AudioManager : MonoBehaviour
     {
@@ -30,9 +32,10 @@ namespace HeadSoccer
         [Tooltip("The call plays alone over a muted game mix, so it takes the whole headroom.")]
         [SerializeField, Range(0f, 1f)] private float voiceVolume = 1f;
 
-        [Header("Music")]
-        [SerializeField] private AudioClip musicLoop;
-        [SerializeField, Range(0f, 1f)] private float musicVolume = 0.4f;
+        [Header("Crowd")]
+        [Tooltip("This scene's crowd, looped without a break: the stands singing in the menu, the stadium roar in the match. Both are seamless loops, so the seam is never heard.")]
+        [SerializeField] private AudioClip crowdLoop;
+        [SerializeField, Range(0f, 1f)] private float crowdVolume = 0.5f;
         [SerializeField, Range(0f, 1f)] private float sfxVolume = 0.8f;
 
         // Seconds to cut the call at kickoff and to bring the game mix back afterwards.
@@ -41,7 +44,7 @@ namespace HeadSoccer
 
         private AudioSource sfxSource;
         private AudioSource voiceSource;
-        private AudioSource musicSource;
+        private AudioSource crowdSource;
         private Coroutine mixRoutine;
 
         public bool IsMuted { get; private set; }
@@ -61,10 +64,10 @@ namespace HeadSoccer
             voiceSource = gameObject.AddComponent<AudioSource>();
             voiceSource.playOnAwake = false;
 
-            musicSource = gameObject.AddComponent<AudioSource>();
-            musicSource.playOnAwake = false;
-            musicSource.loop = true;
-            musicSource.volume = musicVolume;
+            crowdSource = gameObject.AddComponent<AudioSource>();
+            crowdSource.playOnAwake = false;
+            crowdSource.loop = true;
+            crowdSource.volume = crowdVolume;
 
             IsMuted = PlayerPrefs.GetInt(MutedKey, 0) == 1;
             ApplyMute();
@@ -77,9 +80,9 @@ namespace HeadSoccer
 
         private void Start()
         {
-            if (musicLoop == null) return;
-            musicSource.clip = musicLoop;
-            musicSource.Play();
+            if (crowdLoop == null) return;
+            crowdSource.clip = crowdLoop;
+            crowdSource.Play();
         }
 
         public void PlayKick() => PlayOneShot(kick);
@@ -97,8 +100,8 @@ namespace HeadSoccer
         }
 
         /// <summary>
-        /// The commentator's call, alone in the mix: music and SFX are ducked to silence
-        /// while he shouts, the way a broadcast drops the stadium feed under the booth.
+        /// The commentator's call, alone in the mix: the crowd and the SFX are ducked to
+        /// silence while he shouts, the way a broadcast drops the stadium feed under the booth.
         /// Restarts if he is still shouting the last goal. The mix comes back when the
         /// call ends or when <see cref="StopCommentator"/> cuts it at kickoff.
         /// </summary>
@@ -112,7 +115,7 @@ namespace HeadSoccer
             voiceSource.volume = voiceVolume;
             voiceSource.Play();
 
-            musicSource.volume = 0f;
+            crowdSource.volume = 0f;
             sfxSource.volume = 0f;
             mixRoutine = StartCoroutine(RestoreMixWhenCallEnds());
         }
@@ -143,17 +146,17 @@ namespace HeadSoccer
             yield return RestoreMix();
         }
 
-        /// <summary>Ramps music and SFX back up. Unscaled time, since the Super slow motion plays with Time.timeScale.</summary>
+        /// <summary>Ramps the crowd and SFX back up. Unscaled time, since the Super slow motion plays with Time.timeScale.</summary>
         private IEnumerator RestoreMix()
         {
             for (float t = 0f; t < MixRestoreSeconds; t += Time.unscaledDeltaTime)
             {
                 float u = t / MixRestoreSeconds;
-                musicSource.volume = musicVolume * u;
+                crowdSource.volume = crowdVolume * u;
                 sfxSource.volume = u;
                 yield return null;
             }
-            musicSource.volume = musicVolume;
+            crowdSource.volume = crowdVolume;
             sfxSource.volume = 1f;
             mixRoutine = null;
         }
