@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9775b5fa5d9afe446aaf3dd895dd526a
+guid: 220347ef758105e4fbc8acef898fa922
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6946167370956763427
-    second: yossi_kick_0
+      213: -8838733784046698314
+    second: guy_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 1024
+    maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -98,7 +98,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Android
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: yossi_kick_0
+      name: guy_0
       rect:
         serializedVersion: 2
-        x: 7
-        y: 7
-        width: 782
-        height: 980
+        x: 0
+        y: 0
+        width: 160
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3217948eb6eb56060800000000000000
-      internalID: 6946167370956763427
+      spriteID: 6b007a9f372865580800000000000000
+      internalID: -8838733784046698314
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      yossi_kick_0: 6946167370956763427
+      guy_0: -8838733784046698314
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
