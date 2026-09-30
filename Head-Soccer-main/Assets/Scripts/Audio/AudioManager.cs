@@ -4,10 +4,10 @@ using UnityEngine;
 namespace HeadSoccer
 {
     /// <summary>
-    /// One-shot SFX, the commentator's voice channel and the looping crowd. Each scene
-    /// carries its own AudioManager with its own crowd loop: the menu has the stands
-    /// singing, the match has the stadium roar. Every clip field is optional, so the game
-    /// runs silently and without errors until the audio assets are dropped in.
+    /// One-shot SFX, the commentator's voice channel, the victory anthem and the looping
+    /// crowd. Each scene carries its own AudioManager with its own crowd loop: the menu
+    /// has the stands singing, the match has the stadium roar. Every clip field is
+    /// optional, so the game runs silently and without errors until the audio assets are dropped in.
     /// </summary>
     public class AudioManager : MonoBehaviour
     {
@@ -31,6 +31,11 @@ namespace HeadSoccer
         [SerializeField] private AudioClip commentatorGoal;
         [Tooltip("The call plays alone over a muted game mix, so it takes the whole headroom.")]
         [SerializeField, Range(0f, 1f)] private float voiceVolume = 1f;
+
+        [Header("Victory")]
+        [Tooltip("Plays only when the human beats the CPU, on the voice channel, with the crowd and the effects silenced under it.")]
+        [SerializeField] private AudioClip playerVictory;
+        [SerializeField, Range(0f, 1f)] private float victoryVolume = 1f;
 
         [Header("Crowd")]
         [Tooltip("This scene's crowd, looped without a break: the stands singing in the menu, the stadium roar in the match. Both are seamless loops, so the seam is never heard.")]
@@ -118,6 +123,30 @@ namespace HeadSoccer
             crowdSource.volume = 0f;
             sfxSource.volume = 0f;
             mixRoutine = StartCoroutine(RestoreMixWhenCallEnds());
+        }
+
+        /// <summary>
+        /// The anthem for beating the CPU, alone in the mix: the commentator is cut,
+        /// the crowd and the effects go silent, and only the song is heard until it ends.
+        /// Returns false when this result does not earn it, so the caller plays the whistle.
+        /// </summary>
+        public bool PlayHumanVictoryOverCpu(int winnerIndex)
+        {
+            if (playerVictory == null || voiceSource == null) return false;
+            if (!MatchSettings.HumanBeatTheCpu(MatchSettings.Mode, winnerIndex)) return false;
+
+            if (mixRoutine != null) StopCoroutine(mixRoutine);
+            voiceSource.Stop();
+            sfxSource.Stop();
+
+            voiceSource.clip = playerVictory;
+            voiceSource.volume = victoryVolume;
+            voiceSource.Play();
+
+            crowdSource.volume = 0f;
+            sfxSource.volume = 0f;
+            mixRoutine = StartCoroutine(RestoreMixWhenCallEnds());
+            return true;
         }
 
         /// <summary>Cuts the call with a short fade and brings the game mix back.</summary>

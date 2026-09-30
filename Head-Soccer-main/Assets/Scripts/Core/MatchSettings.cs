@@ -47,5 +47,12 @@ namespace HeadSoccer
 
         /// <summary>True on a real phone, or in the editor when a touch screen is simulated.</summary>
         public static bool UseTouchControls => Application.isMobilePlatform;
+
+        /// <summary>
+        /// The victory anthem is only for the human beating the CPU. Player one is always
+        /// the left side (winner 0). A two-player win, a loss to the CPU and a draw are not it.
+        /// </summary>
+        public static bool HumanBeatTheCpu(GameMode mode, int winnerIndex) =>
+            mode == GameMode.OnePlayerVsCPU && winnerIndex == 0;
     }
 }
