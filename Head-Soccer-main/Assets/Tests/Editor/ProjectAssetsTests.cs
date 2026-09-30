@@ -166,5 +166,14 @@ namespace HeadSoccer.Tests
             Assert.That(loop.length, Is.GreaterThan(minSeconds), $"{path} is too short to loop unnoticed");
             Assert.That(loop.channels, Is.InRange(1, 2), $"{path} should be mono or stereo");
         }
+
+        [Test]
+        public void Victory_AnthemShipsAtAboutTenSeconds()
+        {
+            // Long enough to feel like a reward, short enough that the result screen is not stuck under it.
+            AudioClip anthem = Load<AudioClip>("Assets/Audio/player_victory.ogg");
+            Assert.That(anthem.length, Is.InRange(9f, 11f));
+            Assert.That(anthem.channels, Is.EqualTo(2));
+        }
     }
 }
