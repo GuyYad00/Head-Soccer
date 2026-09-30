@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 2D |
 | **Orientation & reference resolution** | Landscape, 1280 x 720 reference |
 | **Expected session length** | 30 seconds to 3 minutes per match |
-| **Document version** | v1.8, 2026-09-30 |
+| **Document version** | v1.9, 2026-09-30 |
 
 ---
 
@@ -137,7 +137,8 @@ stateDiagram-v2
 | UI panel | 1 rounded rectangle, 9-sliced | Original (`Assets/UI/RoundedPanel.png`) | Scoreboard, cards, buttons |
 | Font | Oswald Bold | Google Fonts, SIL Open Font License 1.1 (`Assets/Fonts/Oswald-OFL.txt`) | All UI text |
 | SFX (kick, bounce, jump, whistle, goal, crowd cheer, beep, special, UI click) | 9 | Synthesised for this project with a small Python script, no samples | Feedback |
-| Music (match loop) | 1, 12.8 s loop at 150 bpm, 8 bars: four on the floor kick, claps, driving hi-hats, an octave bass and a chant-like lead hook, with a riser into the loop point | Synthesised for this project | Energy. Replaced a slower 128 bpm loop that did not carry the pace of a 90 second match |
+| Crowd (match) | 1, 42.7 s seamless loop, football supporters shouting in a stadium | "Football supporters in stadium" by devy32, Freesound, CC BY 4.0, credited in the README (`Assets/Audio/stadium_ambience_loop.ogg`) | Plays under the match and is ducked to silence under the commentator's call; replaced the synthesised 150 bpm music loop, because a beat is not a crowd (see `Docs/design-decisions.md`) |
+| Crowd (menu) | 1, 17.0 s seamless loop, a stadium crowd singing | "stadium crowd sing" by AxelTheCocker02, Freesound, CC0 (`Assets/Audio/crowd_sing_loop.ogg`) | Loops without a break under the main menu, About and Character Select, the stands warming up before kickoff |
 
 **Two women in the roster.** The original Head Soccer, as far as we remember it, shipped with no women; the launch roster was men, aliens and monsters. We played that game, and we want ours to be for everyone who plays football, not for men only, because we do not think this game has a gender. So Noa and Anna are in the roster on the same terms as the four men: their own drawings, their own celebrations, their own speed, jump and power. This is the same thought as the advertising boards: the game carries a message beyond the match, and we would rather set this one right than repeat it.
 
@@ -199,7 +200,7 @@ graph TD
 | `CelebrationLoop` | Coroutine that loops the chosen character's celebration on the Character Select portrait |
 | `AdBoard` | Scrolling, wrapping advertising board under the crowd, clipped by a SpriteMask |
 | `CommentatorCutIn` | Picks one commentator per match, subscribes to `GoalScored` and `StateChanged`, stands the figure in the crowd above the goal that received the ball (world units converted to the canvas), plays the call and cuts it at kickoff |
-| `AudioManager` | One-shot SFX, the commentator's voice channel that ducks music and SFX to silence while he shouts, looping music, mute saved in `PlayerPrefs` |
+| `AudioManager` | One-shot SFX, the commentator's voice channel that ducks the crowd and SFX to silence while he shouts, the scene's looping crowd (one clip per scene, wired by the builder), mute saved in `PlayerPrefs` |
 | `EffectsPool` | Object pool for goal confetti and kick sparks |
 | `CameraFitter`, `CameraShake`, `SafeAreaFitter` | Full pitch visible on any aspect ratio, screen shake, notch safe UI |
 
@@ -232,7 +233,7 @@ graph TD
 
 - [x] Character select with six characters that differ slightly in speed, jump, and power, chosen for both sides
 - [x] One special shot per character with slow motion and screen shake
-- [x] Crowd, confetti, SFX, music, and a whistle
+- [x] Crowd (drawn and heard), confetti, SFX, and a whistle
 - [x] Short intro before kickoff, a goal flash, and a best result kept in `PlayerPrefs`
 
 ### 8.3 Explicitly out of scope, we are **not** building these
@@ -252,6 +253,7 @@ graph TD
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
+| v1.9 | 2026-09-30 | Section 6: the synthesised music loop is replaced by two real crowd recordings from Freesound, cut into seamless loops: the stands singing under the main menu (AxelTheCocker02, CC0) and supporters roaring under the match (devy32, CC BY 4.0, credited in the README). The goal sound, the cheer and the commentator's call are unchanged. Section 7: `AudioManager` holds one crowd loop per scene; two asset tests guard the loops. |
 | v1.8 | 2026-09-30 | Section 7: automated EditMode tests in `Assets/Tests/Editor` (kick arithmetic, Super, keyboard layouts, records, roster wrap, and guards on the shipped assets and build list). `KickMath` split out of `KickHitbox` and `CharacterRoster.Wrap` out of `CharacterSelect` so the arithmetic is testable without a scene. Section 5: an About screen on the main menu with the two creators, how the game was built and the original Head Soccer. Build menu: a Web (browser) build next to Android and Windows. The Android APK is built and attached to a GitHub pre-release; the 8.1 checkbox stays open until it has been installed and played on a device. |
 | v1.7 | 2026-09-30 | Section 6: the commentator, second pass after playing. No frame, only the cut-out figure with the LIVE tag above his head; he stands in the crowd above the goal that received the ball instead of the scorer's screen corner, placed in world units so he never leaves the stadium on a wide screen; the call is cut to its first six seconds, plays louder over a muted game mix, and stops at the kickoff whistle (`CommentatorCutIn` also listens to `StateChanged`, `AudioManager` ducks and restores the mix). |
 | v1.6 | 2026-09-30 | Section 6: the commentator. Three commentator drawings, one picked at random per match; on every goal his broadcast box pops up over the crowd on the scorer's side and he shouts the goal call (`CommentatorCutIn`, listening to `GameManager.GoalScored`; `AudioManager` gets a voice channel). Decided for liveness, so the player feels he is on the pitch and the goal mattered. Not in the original scope, recorded in 8.3. Section 6 also names the AI tools: the drawings were made with ChatGPT, the goal call with Gemini from an explicit prompt. Section 5: the mirror match dilemma, two players may pick the same character; we thought of blocking it and decided we will not dictate how people play. |

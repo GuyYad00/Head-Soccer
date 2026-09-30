@@ -18,6 +18,10 @@ We chose Head Soccer because we love football. We like to play and watch footbal
 |---|---|
 | ![Character select](Docs/images/screen-character.png) | ![Match, Kim against Mikel](Docs/images/screen-match.png) |
 
+| Full time | |
+|---|---|
+| ![Full time: Mikel wins 5 to 3, best win and P1 wins under the score, REMATCH and MAIN MENU](Docs/images/screen-matchover.png) | The final whistle. The scoreline, the best win so far and the P1 wins counter from `PlayerPrefs`, the commentator still in the stands, and two ways out. |
+
 ## How to play
 
 - **Goal:** put the ball in the other net. First to 5 goals, or the higher score when the 90-second clock hits zero, wins.
@@ -95,7 +99,7 @@ Most of the game was settled at the desk, the match on one screen and the four p
 - **The crossbar.** We tried the goals at several heights. Too tall, and the ball sailed in over the players with no way to reach it. Too short, and the players stood taller than the goal. The crossbar now sits at one and a half times the height of their heads.
 - **The shove.** Two players kicking at each other with the ball wedged between them froze the match, both kick drawings stuck in place. A kick that lands on the other player now shoves them a small step back, further from a running kick, and the ball is free again.
 - **The ball.** After many matches it read as too small. It is about a fifth bigger now and a miss finally feels like a miss.
-- **The music.** The first loop was pleasant, and a 90 second sprint to five goals is not pleasant. The new loop runs at 150 bpm with a chant-like hook, and the goal sound became a fanfare.
+- **The sound.** The first loop was pleasant, and a 90 second sprint to five goals is not pleasant. We wrote a faster one at 150 bpm, and it was still a tune, and a tune is not a stadium. As football fans we know the crowd is what makes a ground a ground, so after many attempts, including AI-generated crowds that came out flat, we went to real recordings: on [Freesound](https://freesound.org) we listened to about eighty crowd clips and picked two. The stands sing under the main menu in an endless loop, and the supporters roar under the match. The goal keeps its own sound, the cheer and the commentator's call.
 
 The full log, and the decisions we add as we keep playing, is in [`Docs/design-decisions.md`](Docs/design-decisions.md).
 
@@ -129,7 +133,7 @@ A ready-to-install APK is attached to the [latest GitHub Release](../../releases
 | `KeyboardLayoutTests` | Player two always gets the layout player one did not pick, and the choice survives in `PlayerPrefs`. |
 | `MatchRecordsTests` | Biggest win and P1 win count: a smaller win keeps the bigger record, a draw records nothing. |
 | `CharacterRosterTests` | The select arrows wrap at both ends; a fresh install is never a mirror match. |
-| `ProjectAssetsTests` | The roster asset still has all six characters with all three drawings and sane stats (this exact asset once lost two of them on a re-save), the tuning asset can end a match, both scenes are in the build list, and the commentator has three cut-outs and a call cut to six seconds. |
+| `ProjectAssetsTests` | The roster asset still has all six characters with all three drawings and sane stats (this exact asset once lost two of them on a re-save), the tuning asset can end a match, both scenes are in the build list, the commentator has three cut-outs and a call cut to six seconds, and both crowd loops ship and are long enough to loop unnoticed. |
 
 Tests that touch `PlayerPrefs` run inside a sandbox that restores the player's real settings afterwards.
 
@@ -153,7 +157,7 @@ Tests that touch `PlayerPrefs` run inside a sandbox that restores the player's r
 ```
 Head-Soccer-main/Assets
 ├── Art/        stadium, goal, ball, ad board, Characters/ (six players, idle + kick + celebration), Commentators/
-├── Audio/      synthesised SFX, the match music loop and the commentator's goal call
+├── Audio/      synthesised SFX, the two crowd loops (menu, match) and the commentator's goal call
 ├── Data/       GameConfig, CharacterRoster, ball physics material
 ├── Editor/     HeadSoccerBuilder (rebuilds both scenes), HeadSoccerBuildPipeline (one-click builds)
 ├── Fonts/      Oswald Bold (SIL Open Font License)
@@ -177,4 +181,6 @@ Head-Soccer-main/Assets
 - Commentator goal call: generated with Gemini from an explicit prompt describing exactly the call we wanted.
 - We combined several AI tools and took from each one what it does best; the design, the code and every decision are ours.
 - Font: [Oswald](https://fonts.google.com/specimen/Oswald) by Vernon Adams, SIL Open Font License 1.1.
-- Sound effects and music were synthesised for this project; no third-party samples are used.
+- Sound effects and the goal fanfare were synthesised for this project.
+- Match crowd: ["Football supporters in stadium"](https://freesound.org/people/devy32/sounds/606958/) by **devy32**, from [Freesound](https://freesound.org), licensed under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). Cut into a seamless loop and loudness matched for the game; it plays under the match.
+- Menu crowd: ["stadium crowd sing"](https://freesound.org/people/axelthecocker02/sounds/733614/) by **AxelTheCocker02**, from Freesound, released under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) (no attribution required, credited anyway). Cut into a seamless loop; it plays under the main menu.

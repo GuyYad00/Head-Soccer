@@ -8,6 +8,16 @@ The numbers live in `GameConfig` (`Head-Soccer-main/Assets/Data/GameConfig.asset
 
 ## 30 September 2026
 
+### The crowd is the sound of the game
+
+As football fans we know that the crowd is not background. It is what makes a ground a ground. Watch a match with the stadium feed muted and it turns into a training session; turn it back up and every touch matters again. So the sound under our match could not be a tune. It had to be people.
+
+It took a long time to get there. We combed the internet back and forth, more attempts than we can count, and we tried to generate the audio with AI as well. The AI did not deliver: what came back sounded like a crowd described by someone who had never stood in one, flat, too clean, with no life in it. So we decided to go with real recordings, because a real crowd is more moving and puts you on the pitch in a way nothing synthetic did for us. Looking for those recordings we found Freesound, a library of recordings shared by the people who made them. We listened to roughly eighty crowd clips there, one after another, and chose two with care, the two we connected with most.
+
+The first is a stadium crowd singing, recorded by AxelTheCocker02. It runs under the main menu in an endless loop, so from the first screen you hear the stands warming up before kickoff, and it never stops until the match starts. The second is football supporters shouting in a stadium, recorded by devy32. It runs under the match itself and replaces the synthesised music loop we had until now; that loop was ours and we liked it, but a beat is not a crowd. The goal is untouched: the goal sound, the cheer and the commentator's call still play exactly as before, and the crowd is ducked to silence under the call and comes back at the whistle, so devy32's recording is heard during play and not over the goals.
+
+Both recordings were cut into seamless loops (the tail is crossfaded into the head, so the join is inaudible) and loudness matched, then saved as OGG. devy32's recording is under a Creative Commons Attribution licence and is credited in the README; AxelTheCocker02 released his as public domain (CC0) and asked for no credit, and we name him anyway. The synthesised SFX and the fanfare on a goal stay as they were.
+
 ### The player picks the keys
 
 Player one had WASD and Space, player two had the arrows and Right Ctrl, and that was that. Then we watched who sat where. Some people come from PC gaming and have WASD in their hands; others grew up on the arrows and reach for them without thinking. Handing someone the wrong set costs the first match, and the first match is the one that decides whether there is a second.
@@ -39,6 +49,8 @@ One correction along the way: the first drawings of Noa and Anna stood facing th
 After many matches we kept feeling the ball was too small. It was easy to lose against the pitch for a moment, and a miss did not feel like anything. The radius went from 0.28 to 0.34 world units, about a fifth bigger. The ball now has weight: a shot that goes wide looks like a shot that went wide, and a header is a header. The goal mouth trigger scales with the radius, so nothing else needed to change.
 
 ### New music and a new goal sound
+
+Superseded the same day by the crowd recordings above; the goal sound stays. Kept as a record of the path.
 
 The first loop was 128 bpm and pleasant, and pleasant was the problem. A 90 second match to five goals is not pleasant, it is a sprint, and the music was behind it. The new loop runs at 150 bpm over eight bars: a four on the floor kick, claps on two and four, driving hi-hats, an octave bass and a lead hook that sounds like a chant from the stands, with a riser into the loop point so the return to bar one lands on the beat. The goal sound changed with it, from a short sting to a three note fanfare with a horn under it. Both are still synthesised from scratch, no samples. We wanted the sound to pull the player into the match, not sit beside it.
 
