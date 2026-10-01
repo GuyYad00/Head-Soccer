@@ -69,8 +69,6 @@ Both sides are chosen before kickoff. Player 1 picks first. Then, in a 2 PLAYERS
 
 ![The three commentators](Docs/images/commentators.jpg)
 
-![Goal: the commentator pops up in the crowd above the goal, LIVE tag over his head, while GOAL! flashes](Docs/images/screen-commentator.png)
-
 ![Kickoff count: he is still in the crowd on the side of the goal, LIVE tag on, while the ball drops back in](Docs/images/exe-commentator.jpg)
 
 After the goal he stays up through the count, on the side that was just scored in, and he is gone the moment play resumes.
