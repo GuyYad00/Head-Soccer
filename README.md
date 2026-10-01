@@ -4,7 +4,9 @@ A 1v1 arcade Head Soccer game built in Unity 6 (URP, 2D). Two big-headed charact
 
 Final project for the Unity course. The approved design document is in [`Docs/GDD.md`](Docs/GDD.md). Decisions we made while planning and while playing each other are in [`Docs/design-decisions.md`](Docs/design-decisions.md). The Unity project is in [`Head-Soccer-main/`](Head-Soccer-main/).
 
-![Nine seconds of a match: David and Mikel chase the ball across the pitch under the crowd and the advertising board](Docs/images/gameplay.gif)
+![Mikel and Yossi at 4-4, the ball between them with seven seconds left](Docs/images/deciding-goal.gif)
+
+<p align="center"><sub>Captured in a real match. The score was 4-4, and this is the goal that decided it.</sub></p>
 
 ## Vision
 
