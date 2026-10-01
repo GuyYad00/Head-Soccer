@@ -999,8 +999,10 @@ namespace HeadSoccer.EditorTools
             GameObject overPanel = CreateOverlay(canvas.transform, "MatchOverPanel");
             GameObject overCard = CreatePanel(overPanel.transform, "Card", PanelCard,
                 new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(640f, 400f), new Vector2(0.5f, 0.5f));
-            CreateText(overCard.transform, "FullTime", "FULL TIME", 22,
-                new Vector2(0.5f, 1f), new Vector2(0f, -34f), new Vector2(400f, 30f), TextDim).characterSpacing = 8f;
+            TextMeshProUGUI fullTime = CreateText(overCard.transform, "FullTime", "FULL TIME", 22,
+                new Vector2(0.5f, 1f), new Vector2(0f, -34f), new Vector2(400f, 30f), TextDim);
+            fullTime.characterSpacing = 8f;
+            Set(uiManager, "resultLabel", fullTime);
             TextMeshProUGUI winner = CreateText(overCard.transform, "WinnerText", "PLAYER 1 WINS!", 60,
                 new Vector2(0.5f, 1f), new Vector2(0f, -96f), new Vector2(620f, 90f), Accent);
             TextMeshProUGUI finalScore = CreateText(overCard.transform, "FinalScoreText", "0  -  0", 72,

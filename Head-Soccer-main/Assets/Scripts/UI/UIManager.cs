@@ -37,6 +37,8 @@ namespace HeadSoccer
         [SerializeField] private GameObject pausePanel;
         [SerializeField] private GameObject matchOverPanel;
         [SerializeField] private TextMeshProUGUI winnerText;
+        [Tooltip("The small line above the banner. FULL TIME, or GAME OVER when the human loses to the CPU.")]
+        [SerializeField] private TextMeshProUGUI resultLabel;
         [SerializeField] private TextMeshProUGUI finalScoreText;
         [SerializeField] private TextMeshProUGUI recordText;
 
@@ -208,19 +210,44 @@ namespace HeadSoccer
             {
                 string left = leftNameText != null ? leftNameText.text : "PLAYER 1";
                 string right = rightNameText != null ? rightNameText.text : "PLAYER 2";
-                winnerText.text = winnerIndex switch
-                {
-                    0 => $"{left} WINS!",
-                    1 => $"{right} WINS!",
-                    _ => "DRAW"
-                };
+                winnerText.text = Banner(MatchSettings.Mode, winnerIndex, left, right);
             }
+
+            TextMeshProUGUI label = resultLabel != null ? resultLabel : FindResultLabel();
+            if (label != null)
+                label.text = Kicker(MatchSettings.Mode, winnerIndex);
 
             if (finalScoreText != null)
                 finalScoreText.text = $"{game.LeftScore}  -  {game.RightScore}";
 
             if (recordText != null)
                 recordText.text = MatchRecords.Summary().Replace("\n", "     ");
+        }
+
+        /// <summary>
+        /// The big line on the result card. A loss to the CPU says so. Every other
+        /// result names the winner, which is what a two-player match needs.
+        /// </summary>
+        public static string Banner(GameMode mode, int winnerIndex, string leftName, string rightName)
+        {
+            if (MatchSettings.HumanLostToTheCpu(mode, winnerIndex)) return "YOU LOST";
+            return winnerIndex switch
+            {
+                0 => $"{leftName} WINS!",
+                1 => $"{rightName} WINS!",
+                _ => "DRAW"
+            };
+        }
+
+        /// <summary>The small line above the banner.</summary>
+        public static string Kicker(GameMode mode, int winnerIndex) =>
+            MatchSettings.HumanLostToTheCpu(mode, winnerIndex) ? "GAME OVER" : "FULL TIME";
+
+        /// <summary>Used when a rebuilt scene has not wired <see cref="resultLabel"/> yet.</summary>
+        private TextMeshProUGUI FindResultLabel()
+        {
+            Transform found = transform.Find("MatchOverPanel/Card/FullTime");
+            return found != null ? found.GetComponent<TextMeshProUGUI>() : null;
         }
 
         // ---------------------------------------------------------------- juice

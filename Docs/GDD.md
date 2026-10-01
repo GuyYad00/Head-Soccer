@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 2D |
 | **Orientation & reference resolution** | Landscape, 1280 x 720 reference |
 | **Expected session length** | 30 seconds to 3 minutes per match |
-| **Document version** | v1.11, 2026-10-01 |
+| **Document version** | v1.12, 2026-10-01 |
 
 ---
 
@@ -113,7 +113,7 @@ stateDiagram-v2
 2. **Character Select** with a character portrait in the center, left and right arrows to change character, the character name, a short stat hint with speed, jump and power bars, and BACK. The screen runs twice before a match. First PLAYER 1: PICK YOUR PLAYER with a NEXT button. Then the right side: in a 2 PLAYERS match it reads PLAYER 2: PICK YOUR PLAYER and the second player chooses for himself; against the computer it reads PICK THE CPU'S PLAYER and player one decides who he wants to face. The second confirm is KICK OFF! and starts the match. BACK on the second step returns to the first, not to the menu. Both choices are remembered in `PlayerPrefs`. Before this the second character was assigned automatically, the next one in the list, which meant a friend never got to choose and a player could never pick a particular opponent.
    **A painful dilemma: the mirror match.** Both of us thought there was no reason to let two players pick the same character, Yossi against Yossi, and our first instinct was to block it. After talking it over we decided we cannot. Blocking it is simply annoying, and we are not going to tell our players how to play or what to do. It makes no sense to us, but somebody may want exactly that, so it is allowed. The two are told apart by facing and by the names on the scoreboard.
 3. **Gameplay HUD** with a scoreboard P1 and P2 at the top center, a countdown timer beside it, and a special charge meter for each player. On a goal, the commentator pops up in the crowd above the goal that received the ball, with a small LIVE tag over his head, for the celebration and the kickoff count, and is cut the moment the ball is back in play. He is placed in world units so he always stays inside the stadium. Deliberately absent: no minimap, no ads, no on-screen currency.
-4. **Match Over** with a WINNER banner, the final score, a REMATCH button, and a MENU button.
+4. **Match Over** with a result banner, the final score, a REMATCH button, and a MENU button. The banner names the winner, and the line above it reads FULL TIME. When the human loses to the CPU those two lines read GAME OVER and YOU LOST, because the winner's name on its own does not tell the player that he lost. A two-player match and a draw keep the winner banner.
 5. **Pause overlay** with RESUME, RESTART, and QUIT to menu.
 
 - **HUD during play:** score, timer, and the two special meters, and nothing else. Health bars, ads, and desktop control labels are deliberately absent so the pitch stays clear.
@@ -255,6 +255,7 @@ graph TD
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
+| v1.12 | 2026-10-01 | Section 5: on a loss to the CPU the match-over banner reads GAME OVER and YOU LOST. A win, a draw and a two-player match still name the winner under FULL TIME. |
 | v1.11 | 2026-10-01 | Section 6: a defeat theme, generated with Gemini from a precise prompt, plays only when the human loses to the CPU. The crowd and the effects go silent under it, the same as under the victory anthem. A two-player match and a draw keep the final whistle. `MatchSettings.HumanLostToTheCpu` is the rule, guarded by tests. |
 | v1.10 | 2026-09-30 | Section 6: a victory anthem, generated with Gemini, plays only when the human beats the CPU. The crowd and the effects go silent under it and return when it ends. A two-player win, a loss and a draw keep the final whistle. `MatchSettings.HumanBeatTheCpu` is the rule, guarded by tests. |
 | v1.9 | 2026-09-30 | Section 6: the synthesised music loop is replaced by two real crowd recordings from Freesound, cut into seamless loops: the stands singing under the main menu (AxelTheCocker02, CC0) and supporters roaring under the match (devy32, CC BY 4.0, credited in the README). The goal sound, the cheer and the commentator's call are unchanged. Section 7: `AudioManager` holds one crowd loop per scene; two asset tests guard the loops. |

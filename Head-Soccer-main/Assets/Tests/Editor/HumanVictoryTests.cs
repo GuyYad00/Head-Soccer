@@ -39,4 +39,23 @@ namespace HeadSoccer.Tests
             Assert.That(MatchSettings.HumanLostToTheCpu(mode, winnerIndex), Is.False);
         }
     }
+
+    public class ResultBannerTests
+    {
+        [Test]
+        public void Banner_TellsTheHumanHeLostToTheCpu()
+        {
+            Assert.That(UIManager.Banner(GameMode.OnePlayerVsCPU, 1, "YOSSI", "NOA"), Is.EqualTo("YOU LOST"));
+            Assert.That(UIManager.Kicker(GameMode.OnePlayerVsCPU, 1), Is.EqualTo("GAME OVER"));
+        }
+
+        [Test]
+        public void Banner_NamesTheWinnerEverywhereElse()
+        {
+            Assert.That(UIManager.Banner(GameMode.OnePlayerVsCPU, 0, "YOSSI", "NOA"), Is.EqualTo("YOSSI WINS!"));
+            Assert.That(UIManager.Banner(GameMode.TwoPlayers, 1, "YOSSI", "NOA"), Is.EqualTo("NOA WINS!"));
+            Assert.That(UIManager.Banner(GameMode.TwoPlayers, -1, "YOSSI", "NOA"), Is.EqualTo("DRAW"));
+            Assert.That(UIManager.Kicker(GameMode.TwoPlayers, 1), Is.EqualTo("FULL TIME"));
+        }
+    }
 }
