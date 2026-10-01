@@ -66,11 +66,16 @@ A ready-to-install APK is attached to the [latest GitHub Release](../../releases
 
 ## The players
 
-The roster was drawn for this project, with ChatGPT working from our descriptions, and inspired by the makers of the game we set out to build. We wanted the players to feel different from each other, so we picked six countries and built one character around each of them. Each one has an idle drawing, a kick drawing and their own goal celebration, and each one plays a little differently in speed, jump and power. Who they are, and the celebration that goes with them, is on the select screen below.
+![Choose your player: Yossi kisses the badge, David makes a heart, Kim bows, Mikel backflips, Noa cheers the stands, Anna knee slides](Docs/images/character-select.png)
 
-**Noa and Anna.** The original Head Soccer, as far as we remember it, shipped with no women; the launch roster was men, aliens and monsters. We played that game for years. Ours is for everyone who plays football, not for men only, because we do not think this game has a gender, so Noa and Anna are in on the same terms as the four men: their own drawings, their own celebrations, their own stats. We already said, about the advertising boards, that a game carries a message beyond the match. This is the same thought, and we would rather set this one right than repeat it.
-
-Both sides are chosen before kickoff. Player 1 picks first. Then, in a 2 PLAYERS match, Player 2 picks their own; against the computer, you pick who the CPU plays as. Two players may pick the same character. We thought about blocking that and decided not to tell anyone how to play.
+| | | | Celebration |
+|---|---|---|---|
+| **Yossi** | Israel | Tough and confident, never gives up | Kisses the badge |
+| **David** | England | Classy and precise, plays with style | Hands make a heart |
+| **Kim** | Japan | Fast and focused, samurai balance | Bows |
+| **Mikel** | Nigeria | Strong and full of energy | Backflip |
+| **Noa** | Israel | Fearless captain, lights up the pitch | Arms up, cheering the stands |
+| **Anna** | Ukraine | Ice cool, slides into every goal | Knee slide |
 
 ## The commentator
 
@@ -83,23 +88,6 @@ After the goal he stays up through the count, on the side that was just scored i
 There is no football without a commentator. At the start of every match one of these three is drawn at random and he is the voice of that match. On every goal he pops up in the crowd above the goal that just received the ball, a small red LIVE tag over his head, and shouts the call while the celebration freezes and the kickoff counts down. The game mix goes silent under him so the call is the only thing you hear, and the moment the whistle puts the ball back in play he is cut and gone until the next one.
 
 This was never in the plan. We fell in love with the idea while building, because a goal in silence is a number changing and a goal with a voice is a goal. It is there for one reason, to make the match feel alive.
-
-## Select character window
-
-![Choose your player: Yossi kisses the badge, David makes a heart, Kim bows, Mikel backflips, Noa cheers the stands, Anna knee slides](Docs/images/character-select.png)
-
-One picture does both jobs. You see the character, and you see what they do when they score.
-
-| | | | Celebration |
-|---|---|---|---|
-| **Yossi** | Israel | Tough and confident, never gives up | Kisses the badge |
-| **David** | England | Classy and precise, plays with style | Hands make a heart |
-| **Kim** | Japan | Fast and focused, samurai balance | Bows |
-| **Mikel** | Nigeria | Strong and full of energy | Backflip |
-| **Noa** | Israel | Fearless captain, lights up the pitch | Arms up, cheering the stands |
-| **Anna** | Ukraine | Ice cool, slides into every goal | Knee slide |
-
-On this screen the portrait is alive: the player stands for a moment, hops into that celebration, holds it, and drops back to idle. Arrows on the card change the character and the bars show speed, jump and power. The screen runs twice: **NEXT** after Player 1's choice, then the right side (Player 2, or the CPU's player when you play the computer), and **KICK OFF!** starts the match. The celebration plays here only. Once the match starts, the players go back to their idle and kick drawings.
 
 ## Automated tests
 
