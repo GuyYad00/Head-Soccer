@@ -22,6 +22,10 @@ We chose Head Soccer because we love football. We like to play and watch footbal
 |---|---|
 | ![Game over, from the Windows build: you lost, Noa 2, David 5, best win and P1 wins under the score, REMATCH and MAIN MENU](Docs/images/exe-gameover.png) | A loss to the CPU. GAME OVER and YOU LOST, the scoreline, the best win so far and the P1 wins counter from `PlayerPrefs`, and two ways out. |
 
+| Pause | |
+|---|---|
+| ![Paused, from the Windows build: RESUME, RESTART and MAIN MENU over the match](Docs/images/exe-pause.png) | Mid-match. RESUME continues from the same moment, RESTART reloads it, MAIN MENU leaves it. Esc, gamepad Start, or the II button. |
+
 ## Run it
 
 **Windows / editor**
