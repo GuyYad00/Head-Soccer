@@ -6,7 +6,9 @@ These are decisions we made while planning Head Soccer and while playing it agai
 
 The numbers live in `GameConfig` (`Head-Soccer-main/Assets/Data/GameConfig.asset`) unless a note says otherwise.
 
-We chose Head Soccer because it is the game we play and watch, not a theme picked to fill a project. The details matter to us because we are players, and a small thing decides whether a match feels real.
+## Inspiration
+
+We love football. That is one of the reasons we chose Head Soccer: it is a game we care about a great deal, as people who watch football and play it as amateurs. Ours is built on the original Head Soccer. We changed it where we thought a change would make the game better. Those changes are written up below. A lot of them were made while we were playing, and were not planned from the start.
 
 ## 1 October 2026
 
