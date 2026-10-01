@@ -6,6 +6,8 @@ These are decisions we made while planning Head Soccer and while playing it agai
 
 The numbers live in `GameConfig` (`Head-Soccer-main/Assets/Data/GameConfig.asset`) unless a note says otherwise.
 
+We chose Head Soccer because it is the game we play and watch, not a theme picked to fill a project. The details matter to us because we are players, and a small thing decides whether a match feels real.
+
 ## 1 October 2026
 
 ### The weather changes, the way a real ground does

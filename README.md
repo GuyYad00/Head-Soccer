@@ -8,10 +8,6 @@ Final project for the Unity course. The approved design document is in [`Docs/GD
 
 <p align="center"><sub>Captured in a real match. The score was 4-4, and this is the goal that decided it.</sub></p>
 
-## Vision
-
-We chose Head Soccer because we love football. We like to play and watch football, so this was not a theme we picked to fill a project. The passion was already there, and that is why getting the details right mattered so much to us. We know, from being players ourselves, how much a small thing decides whether a match feels real.
-
 ## Screenshots
 
 ![Main menu, from the Windows build: PLAY VS CPU, 2 PLAYERS, CPU MEDIUM, SOUND ON, P1 KEYS WASD, ABOUT](Docs/images/exe-menu.png)
