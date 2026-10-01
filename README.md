@@ -66,7 +66,7 @@ A ready-to-install APK is attached to the [latest GitHub Release](../../releases
 
 ## Characters & Commentators
 
-![Top: the six players on the select screen, each in their celebration. Bottom: the three commentators](Docs/images/characters-and-commentators.jpg)
+![The six players on the select screen, each in their celebration](Docs/images/character-select.png)
 
 | | | | Celebration |
 |---|---|---|---|
@@ -76,6 +76,8 @@ A ready-to-install APK is attached to the [latest GitHub Release](../../releases
 | **Mikel** | Nigeria | Strong and full of energy | Backflip |
 | **Noa** | Israel | Fearless captain, lights up the pitch | Arms up, cheering the stands |
 | **Anna** | Ukraine | Ice cool, slides into every goal | Knee slide |
+
+![The three commentators](Docs/images/commentators.jpg)
 
 <table>
 <tr>
