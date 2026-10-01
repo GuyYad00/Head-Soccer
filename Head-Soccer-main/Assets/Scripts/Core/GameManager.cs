@@ -251,9 +251,12 @@ namespace HeadSoccer
 
             MatchRecords.RecordMatch(LeftScore, RightScore, WinnerIndex);
 
-            // Beating the CPU earns the anthem, alone in the mix. Every other result keeps the whistle.
-            bool anthem = AudioManager.Instance != null && AudioManager.Instance.PlayHumanVictoryOverCpu(WinnerIndex);
-            if (!anthem)
+            // A CPU match ends on a song: the anthem for a win, the defeat theme for a loss.
+            // A draw and a two-player match keep the whistle.
+            bool song = AudioManager.Instance != null
+                && (AudioManager.Instance.PlayHumanVictoryOverCpu(WinnerIndex)
+                    || AudioManager.Instance.PlayHumanDefeatToCpu(WinnerIndex));
+            if (!song)
                 AudioManager.Instance?.PlayWhistle();
             MatchEnded?.Invoke(WinnerIndex);
             StartCoroutine(MatchOverInputLockout());

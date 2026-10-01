@@ -1426,6 +1426,8 @@ MonoBehaviour:
   voiceVolume: 1
   playerVictory: {fileID: 8300000, guid: 8c4e1a7b2d9f4e6a9b0c3d5e7f1a2b4c, type: 3}
   victoryVolume: 1
+  playerDefeat: {fileID: 8300000, guid: c3d8e1f04a2b4d6e8f0192ab34cd56ef, type: 3}
+  defeatVolume: 1
   crowdLoop: {fileID: 8300000, guid: b71f63e0e68d4d9fb2ee65b242e468f4, type: 3}
   crowdVolume: 0.5
   sfxVolume: 0.8

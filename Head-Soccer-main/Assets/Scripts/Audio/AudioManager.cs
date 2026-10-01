@@ -4,7 +4,7 @@ using UnityEngine;
 namespace HeadSoccer
 {
     /// <summary>
-    /// One-shot SFX, the commentator's voice channel, the victory anthem and the looping
+    /// One-shot SFX, the commentator's voice channel, the win and loss songs and the looping
     /// crowd. Each scene carries its own AudioManager with its own crowd loop: the menu
     /// has the stands singing, the match has the stadium roar. Every clip field is
     /// optional, so the game runs silently and without errors until the audio assets are dropped in.
@@ -32,10 +32,13 @@ namespace HeadSoccer
         [Tooltip("The call plays alone over a muted game mix, so it takes the whole headroom.")]
         [SerializeField, Range(0f, 1f)] private float voiceVolume = 1f;
 
-        [Header("Victory")]
+        [Header("Result")]
         [Tooltip("Plays only when the human beats the CPU, on the voice channel, with the crowd and the effects silenced under it.")]
         [SerializeField] private AudioClip playerVictory;
         [SerializeField, Range(0f, 1f)] private float victoryVolume = 1f;
+        [Tooltip("Plays only when the human loses to the CPU, on the same channel, with the crowd and the effects silenced under it.")]
+        [SerializeField] private AudioClip playerDefeat;
+        [SerializeField, Range(0f, 1f)] private float defeatVolume = 1f;
 
         [Header("Crowd")]
         [Tooltip("This scene's crowd, looped without a break: the stands singing in the menu, the stadium roar in the match. Both are seamless loops, so the seam is never heard.")]
@@ -126,21 +129,39 @@ namespace HeadSoccer
         }
 
         /// <summary>
-        /// The anthem for beating the CPU, alone in the mix: the commentator is cut,
-        /// the crowd and the effects go silent, and only the song is heard until it ends.
-        /// Returns false when this result does not earn it, so the caller plays the whistle.
+        /// The anthem for beating the CPU, alone in the mix. Returns false when this
+        /// result does not earn it, so the caller can try the defeat theme or the whistle.
         /// </summary>
         public bool PlayHumanVictoryOverCpu(int winnerIndex)
         {
-            if (playerVictory == null || voiceSource == null) return false;
             if (!MatchSettings.HumanBeatTheCpu(MatchSettings.Mode, winnerIndex)) return false;
+            return PlayAlone(playerVictory, victoryVolume);
+        }
+
+        /// <summary>
+        /// The theme for losing to the CPU, alone in the mix. Returns false when this
+        /// result does not earn it, so the caller plays the whistle.
+        /// </summary>
+        public bool PlayHumanDefeatToCpu(int winnerIndex)
+        {
+            if (!MatchSettings.HumanLostToTheCpu(MatchSettings.Mode, winnerIndex)) return false;
+            return PlayAlone(playerDefeat, defeatVolume);
+        }
+
+        /// <summary>
+        /// Cuts the commentator, silences the crowd and the effects, and plays one song
+        /// until it ends. Then the crowd comes back.
+        /// </summary>
+        private bool PlayAlone(AudioClip clip, float volume)
+        {
+            if (clip == null || voiceSource == null) return false;
 
             if (mixRoutine != null) StopCoroutine(mixRoutine);
             voiceSource.Stop();
             sfxSource.Stop();
 
-            voiceSource.clip = playerVictory;
-            voiceSource.volume = victoryVolume;
+            voiceSource.clip = clip;
+            voiceSource.volume = volume;
             voiceSource.Play();
 
             crowdSource.volume = 0f;

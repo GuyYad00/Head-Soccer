@@ -175,5 +175,13 @@ namespace HeadSoccer.Tests
             Assert.That(anthem.length, Is.InRange(9f, 11f));
             Assert.That(anthem.channels, Is.EqualTo(2));
         }
+
+        [Test]
+        public void Defeat_ThemeShipsAtAboutTenSeconds()
+        {
+            AudioClip theme = Load<AudioClip>("Assets/Audio/player_defeat.ogg");
+            Assert.That(theme.length, Is.InRange(9f, 11f));
+            Assert.That(theme.channels, Is.EqualTo(2));
+        }
     }
 }

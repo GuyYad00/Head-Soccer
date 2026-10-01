@@ -889,6 +889,7 @@ namespace HeadSoccer.EditorTools
             TrySetClip(audio, "uiClick", "ui_click");
             TrySetClip(audio, "commentatorGoal", "commentator_goal");
             TrySetClip(audio, "playerVictory", "player_victory");
+            TrySetClip(audio, "playerDefeat", "player_defeat");
         }
 
         private static void TrySetClip(AudioManager audio, string field, string clipName)

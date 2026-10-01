@@ -12,7 +12,9 @@ The numbers live in `GameConfig` (`Head-Soccer-main/Assets/Data/GameConfig.asset
 
 Beating a friend is its own reward, because the two of you are in the room. Beating the computer is different. Nobody is there to see it, so the game has to be the one that notices. We wanted the player to feel he had done something that mattered, not just that a counter had ticked over.
 
-The anthem was generated with Gemini for this moment. It plays only when the human player, always the left side, wins a match against the CPU. It does not play when the CPU wins, on a draw, or in a two-player match, where the final whistle is enough. While it plays the stadium crowd and the effects go silent, the same way they do under the commentator, so the song is the only thing you hear. When it ends, the crowd comes back under the result screen. Gemini delivered it as a short video; we kept the song and left the picture out, because the celebration on the pitch is already the picture.
+The anthem was generated with Gemini for this moment. It plays only when the human player, always the left side, wins a match against the CPU. A draw and a two-player match still end on the whistle. While it plays the stadium crowd and the effects go silent, the same way they do under the commentator, so the song is the only thing you hear. When it ends, the crowd comes back under the result screen. Gemini delivered it as a short video; we kept the song and left the picture out, because the celebration on the pitch is already the picture.
+
+Losing to the CPU gets its own song, for the same reason. A win and a loss are not the same moment with the sign flipped, and we wanted the game to answer the result the player actually got. The defeat theme was generated with Gemini from a precise prompt we wrote for that moment. It plays only when the human loses to the CPU. The crowd and the effects go silent under it, exactly as they do under the anthem, and they come back when it ends. A two-player loss keeps the whistle, because the other player is in the room.
 
 ### The crowd is the sound of the game
 

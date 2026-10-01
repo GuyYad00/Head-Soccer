@@ -54,5 +54,12 @@ namespace HeadSoccer
         /// </summary>
         public static bool HumanBeatTheCpu(GameMode mode, int winnerIndex) =>
             mode == GameMode.OnePlayerVsCPU && winnerIndex == 0;
+
+        /// <summary>
+        /// The defeat theme is only for the human losing to the CPU. The CPU is the right
+        /// side (winner 1). A win, a draw and a two-player match are not it.
+        /// </summary>
+        public static bool HumanLostToTheCpu(GameMode mode, int winnerIndex) =>
+            mode == GameMode.OnePlayerVsCPU && winnerIndex == 1;
     }
 }
