@@ -10,6 +10,14 @@ We love football, as people who watch it and play it as amateurs, and that is wh
 Ours is built on the original, changed only where we thought a change would make the game better.
 A lot of those changes were made while we were playing, and were not planned from the start.
 
+## 2 October 2026
+
+### The stands are split half and half
+
+Big tournaments seat each country's supporters on their own half of the ground, and we did the same.
+The left stands fill with the home crowd of the character on the left, the right stands with the one on the right.
+Flags and cheering kit go with them, so a player feels his own people behind him, and the confidence that comes with it.
+
 ## 1 October 2026
 
 ### The weather changes, the way a real ground does
