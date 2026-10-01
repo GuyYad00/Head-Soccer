@@ -562,12 +562,8 @@ namespace HeadSoccer.EditorTools
             // ----- pitch ------------------------------------------------------
             var pitch = new GameObject("Pitch").transform;
 
-            GameObject stadium = null;
             if (stadiumSprite != null)
-                stadium = CreateFittedSprite("Stadium", pitch, stadiumSprite, new Vector2(0f, 0.35f), 10.4f, "Background");
-
-            // Rain or snow for a quarter of the matches each; WeatherController rolls it.
-            BuildWeather(pitch, stadium);
+                CreateFittedSprite("Stadium", pitch, stadiumSprite, new Vector2(0f, 0.35f), 10.4f, "Background");
 
             // Scrolling advertising board along the front of the stands, as in a real ground.
             if (adBoardSprite != null)
@@ -637,106 +633,6 @@ namespace HeadSoccer.EditorTools
             BuildMatchUI(camera, leftPlayerObject, rightPlayerObject);
 
             EditorSceneManager.SaveScene(scene, MatchScenePath);
-        }
-
-        /// <summary>
-        /// Rebuilds only Match.unity, leaving the menu scene, prefabs and data assets
-        /// untouched. Use after changing the match layout or the weather.
-        /// </summary>
-        [MenuItem("Head Soccer/Rebuild Match Scene", priority = 24)]
-        public static void RebuildMatchScene()
-        {
-            if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
-                return;
-
-            ImportGameSprites();
-            BuildMatchScene();
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            EditorSceneManager.OpenScene(MatchScenePath);
-            Debug.Log("Head Soccer: match scene rebuilt.");
-        }
-
-        // ================================================================== weather
-
-        /// <summary>
-        /// Rain and snow over the pitch, as full-width curtains falling from above the
-        /// ceiling. Both systems are built stopped and silent; WeatherController rolls
-        /// the match weather on Start and plays one of them, or neither. Rain is thin
-        /// fast streaks with a slight slant, snow is round flakes drifting down.
-        /// </summary>
-        private static void BuildWeather(Transform parent, GameObject stadium)
-        {
-            var weatherObject = new GameObject("Weather");
-            weatherObject.transform.SetParent(parent);
-            var controller = weatherObject.AddComponent<WeatherController>();
-
-            // --- rain ----------------------------------------------------------
-            ParticleSystem rain = CreateWeatherSystem("Rain", weatherObject.transform, slantDegrees: 8f);
-            ParticleSystem.MainModule rainMain = rain.main;
-            rainMain.startLifetime = 0.9f;
-            rainMain.startSpeed = new ParticleSystem.MinMaxCurve(16f, 20f);
-            rainMain.startSize = new ParticleSystem.MinMaxCurve(0.04f, 0.07f);
-            rainMain.startColor = new Color(0.75f, 0.85f, 1f, 0.55f);
-            rainMain.maxParticles = 600;
-            ParticleSystem.EmissionModule rainEmission = rain.emission;
-            rainEmission.rateOverTime = 260f;
-            // Stretched along the velocity, so each drop reads as a streak, not a dot.
-            var rainRenderer = rain.GetComponent<ParticleSystemRenderer>();
-            rainRenderer.renderMode = ParticleSystemRenderMode.Stretch;
-            rainRenderer.lengthScale = 7f;
-
-            // --- snow ----------------------------------------------------------
-            ParticleSystem snow = CreateWeatherSystem("Snow", weatherObject.transform, slantDegrees: 0f);
-            ParticleSystem.MainModule snowMain = snow.main;
-            snowMain.startLifetime = 7f;
-            snowMain.startSpeed = new ParticleSystem.MinMaxCurve(1.4f, 2.4f);
-            snowMain.startSize = new ParticleSystem.MinMaxCurve(0.08f, 0.2f);
-            snowMain.startColor = new Color(1f, 1f, 1f, 0.9f);
-            snowMain.maxParticles = 500;
-            ParticleSystem.EmissionModule snowEmission = snow.emission;
-            snowEmission.rateOverTime = 55f;
-            // A little sideways drift, so the flakes wander instead of falling straight.
-            ParticleSystem.NoiseModule drift = snow.noise;
-            drift.enabled = true;
-            drift.strength = 0.5f;
-            drift.frequency = 0.25f;
-            drift.scrollSpeed = 0.3f;
-
-            Set(controller, "rain", rain);
-            Set(controller, "snow", snow);
-            if (stadium != null) Set(controller, "stadium", stadium.GetComponent<SpriteRenderer>());
-        }
-
-        /// <summary>
-        /// A particle system shaped as a horizontal bar above the ceiling, emitting
-        /// straight down (with an optional slant) across the whole pitch.
-        /// </summary>
-        private static ParticleSystem CreateWeatherSystem(string name, Transform parent, float slantDegrees)
-        {
-            var go = new GameObject(name);
-            go.transform.SetParent(parent);
-            go.transform.position = new Vector3(0f, CeilingY + 2f, 0f);
-            // Point the emitter down, then slant the fall by rotating around the world Z.
-            go.transform.rotation = Quaternion.Euler(0f, 0f, slantDegrees) * Quaternion.Euler(90f, 0f, 0f);
-
-            var particles = go.AddComponent<ParticleSystem>();
-
-            ParticleSystem.MainModule main = particles.main;
-            main.loop = true;
-            main.playOnAwake = false;
-            main.simulationSpace = ParticleSystemSimulationSpace.World;
-
-            ParticleSystem.ShapeModule shape = particles.shape;
-            shape.enabled = true;
-            shape.shapeType = ParticleSystemShapeType.Box;
-            // Wide enough to cover the pitch plus the slant on both sides.
-            shape.scale = new Vector3((WallInnerX + 2f) * 2f, 0.5f, 1f);
-
-            var renderer = go.GetComponent<ParticleSystemRenderer>();
-            renderer.material = CreateParticleMaterial();
-            renderer.sortingLayerName = "FX";
-            return particles;
         }
 
         // ------------------------------------------------------------------
