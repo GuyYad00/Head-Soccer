@@ -939,22 +939,10 @@ namespace HeadSoccer.EditorTools
                     Vector2.one * 1.1f, Color.white, "Players");
             }
 
-            // A small "!" above the head, shown only while the Super is ready.
-            var mark = new GameObject("SuperMark");
-            mark.transform.SetParent(root.transform);
-            mark.transform.localPosition = new Vector3(0f, 1.45f, 0f);
-            var markText = mark.AddComponent<TextMeshPro>();
-            markText.text = "!";
-            markText.fontSize = 7f;
-            markText.color = Accent;
-            markText.alignment = TextAlignmentOptions.Center;
-            markText.rectTransform.sizeDelta = new Vector2(1f, 1f);
-            if (font != null) markText.font = font;
-            markText.GetComponent<MeshRenderer>().sortingLayerName = "FX";
+            // The Super-ready aura around the character builds itself at runtime
+            // (see SuperReadySign); the component only needs to know its player.
             var readySign = root.AddComponent<SuperReadySign>();
             Set(readySign, "player", controller);
-            Set(readySign, "mark", mark.transform);
-            mark.SetActive(false);
 
             SavePrefab(root, "Player");
         }
