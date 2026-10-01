@@ -12,15 +12,15 @@ We chose Head Soccer because we love football. We like to play and watch footbal
 
 ## Screenshots
 
-![Main menu](Docs/images/screen-menu.png)
+![Main menu, from the Windows build: PLAY VS CPU, 2 PLAYERS, CPU MEDIUM, SOUND ON, P1 KEYS WASD, ABOUT](Docs/images/exe-menu.png)
 
 | Character select | Match |
 |---|---|
-| ![Player 1 picks Anna. The portrait is mid knee slide, with speed, jump and power, and NEXT](Docs/images/screen-character.png) | ![Match, Yossi 4 against Kim 3, nine seconds left](Docs/images/screen-match.png) |
+| ![Player 1 picks Anna, from the Windows build. The portrait is mid knee slide, with speed, jump and power, and NEXT](Docs/images/exe-character.png) | ![Match, from the Windows build: Yossi 4 against Kim 3, nine seconds left](Docs/images/exe-match.png) |
 
 | Game over | |
 |---|---|
-| ![Game over: you lost, Noa 2, David 5, best win and P1 wins under the score, REMATCH and MAIN MENU](Docs/images/screen-matchover.png) | A loss to the CPU. GAME OVER and YOU LOST, the scoreline, the best win so far and the P1 wins counter from `PlayerPrefs`, and two ways out. |
+| ![Game over, from the Windows build: you lost, Noa 2, David 5, best win and P1 wins under the score, REMATCH and MAIN MENU](Docs/images/exe-gameover.png) | A loss to the CPU. GAME OVER and YOU LOST, the scoreline, the best win so far and the P1 wins counter from `PlayerPrefs`, and two ways out. |
 
 ## Run it
 
