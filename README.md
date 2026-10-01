@@ -42,10 +42,6 @@ A ready-to-install APK is attached to the [latest GitHub Release](../../releases
 2. In Unity: **Head Soccer → Build Android APK**. The APK is written to `Head-Soccer-main/Builds/Android/HeadSoccer.apk` (IL2CPP, ARM64, Android 7.1 and up).
 3. Without an Android phone, the touch layout can be checked in the editor: switch the Game view to **Simulator**, pick any Android device, and the on-screen buttons appear; the mouse acts as a finger.
 
-**Browser**
-
-**Head Soccer → Build Web (browser)** writes a WebGL build to `Head-Soccer-main/Builds/Web` (needs the Web Build Support module). The folder is a static site: upload it as-is to itch.io or GitHub Pages.
-
 ## How to play
 
 - **Goal:** put the ball in the other net. First to 5 goals, or the higher score when the 90-second clock hits zero, wins.
