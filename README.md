@@ -44,10 +44,9 @@ A ready-to-install APK is attached to the [latest GitHub Release](../../releases
 
 ## How to play
 
-- **Goal:** put the ball in the other net. First to 5 goals, or the higher score when the 90-second clock hits zero, wins.
-- **Kick:** no two kicks are the same. The ball leaves the foot at a random angle, a flat drive one time and a lob the next, and a kick on the run hits harder than a kick standing still.
-- **Super:** staying on the ball fills your Super meter (under your score). When it reads SUPER READY, your next kick is a boosted shot with slow motion. One per match.
-- **Contact:** a kick that lands on the other player shoves them a step back, a little further if you arrived at a run. It keeps two players from locking up with the ball stuck between them.
+- **Goal:** first to 5, or the higher score when the 90-second clock hits zero.
+- **Kick:** each kick leaves at a random angle, a flat drive or a lob, and a kick on the run hits harder.
+- **Super:** stay on the ball until the meter reads SUPER READY. The next kick is a boosted shot in slow motion. One per match.
 
 | Action | WASD layout (P1 default) | ARROWS layout (P2 default) | Gamepad | Touch |
 |---|---|---|---|---|
@@ -56,7 +55,7 @@ A ready-to-install APK is attached to the [latest GitHub Release](../../releases
 | Kick / Super | Space | Right Ctrl | West or East | KICK |
 | Pause | Esc | Esc | Start | II button |
 
-**Pick your keys.** Some of us have WASD in our hands from PC games, some reach for the arrows. The **P1 KEYS** button on the main menu swaps the two layouts between the players, the way FIFA lets you pick Classic or Alternate, and the game remembers it. The first gamepad drives Player 1, the second drives Player 2.
+Against the CPU, **P1 KEYS** on the main menu chooses WASD or the arrows, and the game remembers it. The first gamepad is Player 1, the second is Player 2.
 
 ## Characters & Commentators
 
