@@ -86,6 +86,14 @@ We talked it over and decided we cannot. Blocking it is simply annoying, and we 
 
 Anna's celebration grew as she slid toward the viewer, and at full size she ran under the arrows on either side of the portrait. She now starts the slide a little smaller and grows back to her normal size, never past it, and the arrows sit further out from the portrait so a wide celebration frame has room.
 
+## 28 September 2026
+
+### At the desk
+
+![The match on one screen, the players on the other](images/creation-time.png)
+
+Most of the game was settled at the desk, the match on one screen and the players on the other, and then by playing each other. The decisions in this log are the things that only showed up once we were actually building and playing.
+
 ## 27 September 2026
 
 ### The kick angle is random

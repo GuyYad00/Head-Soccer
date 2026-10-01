@@ -92,25 +92,6 @@ One picture does both jobs. You see the character, and you see what they do when
 
 On this screen the portrait is alive: the player stands for a moment, hops into that celebration, holds it, and drops back to idle. Arrows on the card change the character and the bars show speed, jump and power. The screen runs twice: **NEXT** after Player 1's choice, then the right side (Player 2, or the CPU's player when you play the computer), and **KICK OFF!** starts the match. The celebration plays here only. Once the match starts, the players go back to their idle and kick drawings.
 
-## The stadium
-
-Below the crowd runs an advertising board, the way every real ground has one. Football has always carried messages beyond the game itself, and we wanted the pitch to reflect that world rather than a sterile one. So the board shows real things: the shawarma place, the academic college this project was made for, the food app, the card company and the game everyone is waiting for.
-
-## Creation time
-
-![The match on one screen, the players on the other](Docs/images/creation-time.png)
-
-Most of the game was settled at the desk, the match on one screen and the players on the other, and then by playing each other. A few things only showed up once we were actually building and playing:
-
-- **The kick angle.** Every kick left the foot the same way, so rallies went flat and you could see the next ball coming. The angle is now random, from 0 to 45 degrees: a flat drive one time, a lob the next.
-- **A running kick.** In real football a shot from a standing foot and a shot on the run are not the same thing, and in our first build they were. A player at full speed toward the goal now hits up to 50% harder. Standing still stays at the base power.
-- **The crossbar.** We tried the goals at several heights. Too tall, and the ball sailed in over the players with no way to reach it. Too short, and the players stood taller than the goal. The crossbar now sits at one and a half times the height of their heads.
-- **The shove.** Two players kicking at each other with the ball wedged between them froze the match, both kick drawings stuck in place. A kick that lands on the other player now shoves them a small step back, further from a running kick, and the ball is free again.
-- **The ball.** After many matches it read as too small. It is about a fifth bigger now and a miss finally feels like a miss.
-- **The sound.** The first loop was pleasant, and a 90 second sprint to five goals is not pleasant. We wrote a faster one at 150 bpm, and it was still a tune, and a tune is not a stadium. As football fans we know the crowd is what makes a ground a ground, so after many attempts, including AI-generated crowds that came out flat, we went to real recordings: on [Freesound](https://freesound.org) we listened to about eighty crowd clips and picked two. The stands sing under the main menu in an endless loop, and the supporters roar under the match. The moment the match is decided, in every mode, that roar stops and the menu loop takes over. A win over the CPU plays the victory anthem first and a loss plays the defeat theme, with the loop silent under the song until it ends. A draw and a two-player match hear the menu loop straight away. The goal keeps its own sound, the cheer and the commentator's call.
-
-The full log, and the decisions we add as we keep playing, is in [`Docs/design-decisions.md`](Docs/design-decisions.md).
-
 ## Automated tests
 
 `Head-Soccer-main/Assets/Tests/Editor` holds EditMode tests that run in the Unity Test Runner (**Window → General → Test Runner → EditMode → Run All**) without opening a scene. They cover the pure logic and, more usefully, the shipped assets:
