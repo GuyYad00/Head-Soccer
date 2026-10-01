@@ -146,6 +146,11 @@ namespace HeadSoccer
             if (scorer == Side.Left) LeftScore++;
             else RightScore++;
 
+            // The deciding goal is the end, not the freeze that follows it. The song and
+            // the menu loop start before anyone else can play over them.
+            if (TargetReached())
+                BeginResultAudio();
+
             ScoreChanged?.Invoke(LeftScore, RightScore);
             GoalScored?.Invoke(scorer);
             StartCoroutine(GoalRoutine(scorer));
@@ -245,19 +250,8 @@ namespace HeadSoccer
             ball.Freeze();
             CountdownChanged?.Invoke(string.Empty);
 
-            if (LeftScore > RightScore) WinnerIndex = 0;
-            else if (RightScore > LeftScore) WinnerIndex = 1;
-            else WinnerIndex = -1;
-
+            BeginResultAudio();
             MatchRecords.RecordMatch(LeftScore, RightScore, WinnerIndex);
-
-            // A CPU match ends on a song: the anthem for a win, the defeat theme for a loss.
-            // A draw and a two-player match keep the whistle.
-            bool song = AudioManager.Instance != null
-                && (AudioManager.Instance.PlayHumanVictoryOverCpu(WinnerIndex)
-                    || AudioManager.Instance.PlayHumanDefeatToCpu(WinnerIndex));
-            if (!song)
-                AudioManager.Instance?.PlayWhistle();
             MatchEnded?.Invoke(WinnerIndex);
             StartCoroutine(MatchOverInputLockout());
         }
@@ -271,6 +265,28 @@ namespace HeadSoccer
 
         /// <summary>The REMATCH and MENU buttons check this so the last kick cannot skip the result.</summary>
         public bool CanUseMatchOverButtons => State == MatchState.MatchOver && acceptsMatchOverInput;
+
+        /// <summary>True once the deciding moment has started the result audio. The final goal must not talk over it.</summary>
+        public bool ResultAudioStarted { get; private set; }
+
+        private bool TargetReached() =>
+            config != null && config.goalTarget > 0 && (LeftScore >= config.goalTarget || RightScore >= config.goalTarget);
+
+        /// <summary>
+        /// Once, on the frame the match is decided. A later call from the freeze is a no-op,
+        /// so the song is not delayed by the goal celebration.
+        /// </summary>
+        private void BeginResultAudio()
+        {
+            if (ResultAudioStarted) return;
+            ResultAudioStarted = true;
+
+            if (LeftScore > RightScore) WinnerIndex = 0;
+            else if (RightScore > LeftScore) WinnerIndex = 1;
+            else WinnerIndex = -1;
+
+            AudioManager.Instance?.BeginResult(WinnerIndex);
+        }
 
         // ---------------------------------------------------------------- pause
 

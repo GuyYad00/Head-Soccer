@@ -43,6 +43,8 @@ namespace HeadSoccer
         [Header("Crowd")]
         [Tooltip("This scene's crowd, looped without a break: the stands singing in the menu, the stadium roar in the match. Both are seamless loops, so the seam is never heard.")]
         [SerializeField] private AudioClip crowdLoop;
+        [Tooltip("The main menu loop. The moment a match is decided, in every mode, it replaces the match crowd.")]
+        [SerializeField] private AudioClip menuLoop;
         [SerializeField, Range(0f, 1f)] private float crowdVolume = 0.5f;
         [SerializeField, Range(0f, 1f)] private float sfxVolume = 0.8f;
 
@@ -126,6 +128,38 @@ namespace HeadSoccer
             crowdSource.volume = 0f;
             sfxSource.volume = 0f;
             mixRoutine = StartCoroutine(RestoreMixWhenCallEnds());
+        }
+
+        /// <summary>
+        /// The match is decided, this frame. The stadium crowd stops and the menu loop
+        /// takes the bed. A win or a loss to the CPU plays its song at once, with the
+        /// loop silent underneath until the song ends. Every other result hears the
+        /// loop immediately, plus the final whistle.
+        /// </summary>
+        public void BeginResult(int winnerIndex)
+        {
+            bool song = PlayHumanVictoryOverCpu(winnerIndex) || PlayHumanDefeatToCpu(winnerIndex);
+            UseMenuBed(audible: !song);
+            if (!song)
+                PlayWhistle();
+        }
+
+        /// <summary>Swaps the looping bed to the menu song. Silent when a result song is about to own the mix.</summary>
+        private void UseMenuBed(bool audible)
+        {
+            if (crowdSource == null) return;
+            if (menuLoop == null)
+            {
+                crowdSource.Stop();
+                crowdSource.clip = null;
+                crowdSource.volume = 0f;
+                return;
+            }
+
+            crowdSource.clip = menuLoop;
+            crowdSource.loop = true;
+            crowdSource.volume = audible ? crowdVolume : 0f;
+            crowdSource.Play();
         }
 
         /// <summary>

@@ -620,7 +620,7 @@ namespace HeadSoccer.EditorTools
 
             var audioObject = new GameObject("AudioManager");
             audioObject.transform.SetParent(managers);
-            WireAudio(audioObject.AddComponent<AudioManager>(), MatchCrowdClip);
+            WireAudio(audioObject.AddComponent<AudioManager>(), MatchCrowdClip, MenuCrowdClip);
 
             var effectsObject = new GameObject("EffectsPool");
             effectsObject.transform.SetParent(managers);
@@ -874,10 +874,12 @@ namespace HeadSoccer.EditorTools
         private const string MenuCrowdClip = "crowd_sing_loop";           // the stands singing, under the menu
         private const string MatchCrowdClip = "stadium_ambience_loop";    // the stadium roar, under the match
 
-        private static void WireAudio(AudioManager audio, string crowdClipName)
+        private static void WireAudio(AudioManager audio, string crowdClipName, string menuCrowdClipName = null)
         {
             // Clips live in Assets/Audio; every field stays optional.
             TrySetClip(audio, "crowdLoop", crowdClipName);
+            if (!string.IsNullOrEmpty(menuCrowdClipName))
+                TrySetClip(audio, "menuLoop", menuCrowdClipName);
             TrySetClip(audio, "kick", "kick");
             TrySetClip(audio, "bounce", "bounce");
             TrySetClip(audio, "jump", "jump");

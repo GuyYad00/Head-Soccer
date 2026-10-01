@@ -77,6 +77,14 @@ namespace HeadSoccer
         {
             if (figure == null) return;
 
+            // The deciding goal belongs to the result song. Pop the current call away
+            // and do not start another one over it.
+            if (game != null && game.ResultAudioStarted)
+            {
+                playResumed = true;
+                return;
+            }
+
             // The ball went into the other side's goal, so the commentator stands above it.
             sideSign = scorer == Side.Left ? 1f : -1f;
             playResumed = false;

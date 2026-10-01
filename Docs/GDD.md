@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 2D |
 | **Orientation & reference resolution** | Landscape, 1280 x 720 reference |
 | **Expected session length** | 30 seconds to 3 minutes per match |
-| **Document version** | v1.12, 2026-10-01 |
+| **Document version** | v1.13, 2026-10-01 |
 
 ---
 
@@ -135,7 +135,7 @@ stateDiagram-v2
 | Commentators | 3 cut-out drawings, one commentator each, shouting into a headset; one is drawn at random per match | Drawn for this project with ChatGPT (`Assets/Art/Commentators/commentator_1..3.png`) | The cut-in above the goal on every goal |
 | Commentator goal call | 1 clip, 6 s | Generated for this project with Gemini from an explicit prompt describing the call we wanted, cut to its first six seconds (`Assets/Audio/commentator_goal.wav`) | Shouted on every goal, alone in the mix |
 | Victory anthem | 1 clip, 10 s | Generated for this project with Gemini (`Assets/Audio/player_victory.ogg`) | Plays only when the human beats the CPU, alone in the mix, so the win feels like it mattered |
-| Defeat theme | 1 clip, 10 s | Generated for this project with Gemini from a precise prompt (`Assets/Audio/player_defeat.ogg`) | Plays only when the human loses to the CPU, alone in the mix, so a loss is its own moment. A two-player match and a draw keep the final whistle |
+| Defeat theme | 1 clip, 10 s | Generated for this project with Gemini from a precise prompt (`Assets/Audio/player_defeat.ogg`) | Plays only when the human loses to the CPU, on the frame the match is decided, alone in the mix. The match crowd stops at that frame in every mode and the menu loop takes over, silent under a result song and audible at once otherwise |
 | UI panel | 1 rounded rectangle, 9-sliced | Original (`Assets/UI/RoundedPanel.png`) | Scoreboard, cards, buttons |
 | Font | Oswald Bold | Google Fonts, SIL Open Font License 1.1 (`Assets/Fonts/Oswald-OFL.txt`) | All UI text |
 | SFX (kick, bounce, jump, whistle, goal, crowd cheer, beep, special, UI click) | 9 | Synthesised for this project with a small Python script, no samples | Feedback |
@@ -255,6 +255,7 @@ graph TD
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
+| v1.13 | 2026-10-01 | The frame a match is decided, against the CPU or in two-player, the stadium crowd stops and the menu loop takes over. A loss to the CPU starts the defeat theme on that frame, not after the goal freeze. A win does the same with the anthem. A draw and a two-player match hear the menu loop at once. |
 | v1.12 | 2026-10-01 | Section 5: on a loss to the CPU the match-over banner reads GAME OVER and YOU LOST. A win, a draw and a two-player match still name the winner under FULL TIME. |
 | v1.11 | 2026-10-01 | Section 6: a defeat theme, generated with Gemini from a precise prompt, plays only when the human loses to the CPU. The crowd and the effects go silent under it, the same as under the victory anthem. A two-player match and a draw keep the final whistle. `MatchSettings.HumanLostToTheCpu` is the rule, guarded by tests. |
 | v1.10 | 2026-09-30 | Section 6: a victory anthem, generated with Gemini, plays only when the human beats the CPU. The crowd and the effects go silent under it and return when it ends. A two-player win, a loss and a draw keep the final whistle. `MatchSettings.HumanBeatTheCpu` is the rule, guarded by tests. |
