@@ -6,16 +6,6 @@ These are decisions we made while planning Head Soccer and while playing it agai
 
 The numbers live in `GameConfig` (`Head-Soccer-main/Assets/Data/GameConfig.asset`) unless a note says otherwise.
 
-## 1 October 2026
-
-### The weather changes, the way a real ground does
-
-A real match is not played on the same afternoon twice. Some nights the floodlights cut through rain, some afternoons the pitch is pale with snow, and most of the time the sky is simply clear. We kept coming back to that. The game already tries to feel like football rather than a toy of it: the crowd, the boards, the commentator, the shove. Weather was the piece still missing, and we wanted to give it real weight in the work instead of treating the sky as decoration that never changes.
-
-So a match now has three states. Clear is the game as it was. Rain is thin streaks falling on a slant across the whole pitch, and the stadium cools and darkens under it. Snow is round flakes in mixed sizes, drifting on the way down, and the ground goes brighter and colder. None of it touches the ball or the players. A wet pitch and a frozen one would have changed the match itself, and that was not the point. The point is the world around the match, so the football stays the same and the afternoon does not.
-
-The roll happens once, at kickoff, and it is weighted the way weather actually is. Clear takes half the matches, 50 percent, because that is the ordinary day and it should stay the one you see most. Rain takes a quarter and snow takes a quarter, 25 percent each, often enough that you notice when it arrives and rare enough that it still feels like a change in the day. `WeatherController` draws the number when the match scene loads. Play ten games and about five will be clear, two or three will be wet, and two or three will come down as snow.
-
 ## 30 September 2026
 
 ### Beating the CPU gets an anthem
