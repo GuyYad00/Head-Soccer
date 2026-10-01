@@ -64,9 +64,9 @@ A ready-to-install APK is attached to the [latest GitHub Release](../../releases
 
 **Pick your keys.** Some of us have WASD in our hands from PC games, some reach for the arrows. The **P1 KEYS** button on the main menu swaps the two layouts between the players, the way FIFA lets you pick Classic or Alternate, and the game remembers it. The first gamepad drives Player 1, the second drives Player 2.
 
-## The players
+## Characters & Commentators
 
-![Choose your player: Yossi kisses the badge, David makes a heart, Kim bows, Mikel backflips, Noa cheers the stands, Anna knee slides](Docs/images/character-select.png)
+![Top: the six players on the select screen, each in their celebration. Bottom: the three commentators](Docs/images/characters-and-commentators.jpg)
 
 | | | | Celebration |
 |---|---|---|---|
@@ -77,17 +77,12 @@ A ready-to-install APK is attached to the [latest GitHub Release](../../releases
 | **Noa** | Israel | Fearless captain, lights up the pitch | Arms up, cheering the stands |
 | **Anna** | Ukraine | Ice cool, slides into every goal | Knee slide |
 
-## The commentator
-
-![The three commentators](Docs/images/commentators.jpg)
-
-![Kickoff count: he is still in the crowd on the side of the goal, LIVE tag on, while the ball drops back in](Docs/images/exe-commentator.jpg)
-
-After the goal he stays up through the count, on the side that was just scored in, and he is gone the moment play resumes.
-
-There is no football without a commentator. At the start of every match one of these three is drawn at random and he is the voice of that match. On every goal he pops up in the crowd above the goal that just received the ball, a small red LIVE tag over his head, and shouts the call while the celebration freezes and the kickoff counts down. The game mix goes silent under him so the call is the only thing you hear, and the moment the whistle puts the ball back in play he is cut and gone until the next one.
-
-This was never in the plan. We fell in love with the idea while building, because a goal in silence is a number changing and a goal with a voice is a goal. It is there for one reason, to make the match feel alive.
+<table>
+<tr>
+<td width="140" align="center"><img src="Docs/images/commentator-cutin.png" alt="The commentator in the crowd above the goal, LIVE tag over his head" width="120"></td>
+<td>One of the three commentators is drawn at random for each match. On every goal he pops up in the crowd above the goal that was just scored in, a red LIVE tag over his head, and shouts a call we generated with Gemini while the rest of the sound goes quiet under him (detailed in the credits below).</td>
+</tr>
+</table>
 
 ## Automated tests
 
@@ -146,7 +141,7 @@ Head-Soccer-main/Assets
 
 - Design, code and art direction: Guy Yad Shalom and Tomer Yad Shalom.
 - Character and commentator drawings: made with ChatGPT from our descriptions, for this project.
-- Commentator goal call: generated with Gemini from an explicit prompt describing exactly the call we wanted.
+- Commentator goal call: generated with Gemini from an explicit prompt describing exactly the call we wanted, then cut to six seconds and loudness matched. It plays over every goal while the crowd and the effects duck under it, and it is cut the moment the whistle puts the ball back in play. The three commentator drawings share one call; the one who speaks is the one drawn for that match.
 - Victory anthem, heard only when the player beats the CPU: generated with Gemini for this project, so the win feels like it mattered. The crowd and the effects go silent under it.
 - Defeat theme, heard only when the player loses to the CPU: generated with Gemini from a precise prompt we wrote for that moment, so a loss is its own moment and not the anthem played sadly. The crowd and the effects go silent under it too. A two-player match and a draw keep the final whistle.
 - We combined several AI tools and took from each one what it does best; the design, the code and every decision are ours.
