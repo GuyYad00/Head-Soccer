@@ -71,6 +71,10 @@ Both sides are chosen before kickoff. Player 1 picks first. Then, in a 2 PLAYERS
 
 ![Goal: the commentator pops up in the crowd above the goal, LIVE tag over his head, while GOAL! flashes](Docs/images/screen-commentator.png)
 
+![Kickoff count: he is still in the crowd on the side of the goal, LIVE tag on, while the ball drops back in](Docs/images/exe-commentator.jpg)
+
+After the goal he stays up through the count, on the side that was just scored in, and he is gone the moment play resumes.
+
 There is no football without a commentator. At the start of every match one of these three is drawn at random and he is the voice of that match. On every goal he pops up in the crowd above the goal that just received the ball, a small red LIVE tag over his head, and shouts the call while the celebration freezes and the kickoff counts down. The game mix goes silent under him so the call is the only thing you hear, and the moment the whistle puts the ball back in play he is cut and gone until the next one.
 
 This was never in the plan. We fell in love with the idea while building, because a goal in silence is a number changing and a goal with a voice is a goal. It is there for one reason, to make the match feel alive.
