@@ -30,7 +30,7 @@ Final project for the Unity course. The approved design document is in [`Docs/GD
 <p align="center">
 <img src="Docs/images/exe-weather.png" alt="A rainy match: Anna with the Ukrainian crowd on the left, David with the English crowd on the right" width="720">
 <br>
-<sub>תמיכה במזג אוויר שונה בדומה למציאות, לפי ההסתברויות שחישבנו, כולל קהלים מותאמים</sub>
+<sub>Different weather, like a real match, from the probabilities we calculated, with a crowd matched to each side.</sub>
 </p>
 
 ## Run it
