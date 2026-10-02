@@ -27,6 +27,12 @@ Final project for the Unity course. The approved design document is in [`Docs/GD
 </tr>
 </table>
 
+<p align="center">
+<img src="Docs/images/exe-weather.png" alt="A rainy match: Anna with the Ukrainian crowd on the left, David with the English crowd on the right" width="720">
+<br>
+<sub>תמיכה במזג אוויר שונה בדומה למציאות, לפי ההסתברויות שחישבנו, כולל קהלים מותאמים</sub>
+</p>
+
 ## Run it
 
 **Windows / editor**
