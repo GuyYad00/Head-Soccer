@@ -184,11 +184,12 @@ Head-Soccer-main/Assets
 
 ## Credits
 
-- Design, code and art direction: Guy Yad Shalom and Tomer Yad Shalom. AI models drafted the code from precise instructions we wrote. We reviewed the lines and checked the output, and only what survived that review stayed in the project.
-- Character and commentator drawings: made with ChatGPT from our descriptions, for this project.
-- Commentator goal call: generated with Gemini from an explicit prompt describing exactly the call we wanted, then cut to six seconds and loudness matched. It plays over every goal while the crowd and the effects duck under it, and it is cut the moment the whistle puts the ball back in play. The three commentator drawings share one call; the one who speaks is the one drawn for that match.
+- Design, code and art direction: Guy Yad Shalom and Tomer Yad Shalom. AI models assisted the code, the drawings and the voices. We reviewed the result and kept only what belonged in the game.
+- Character and commentator drawings: made with ChatGPT for this project.
+- Commentator goal call: generated with Gemini for this project, then cut to six seconds and loudness matched. It plays over every goal while the crowd and the effects duck under it, and it is cut the moment the whistle puts the ball back in play. The three commentator drawings share one call; the one who speaks is the one drawn for that match.
 - Victory anthem, heard only when the player beats the CPU: generated with Gemini for this project, so the win feels like it mattered. The crowd and the effects go silent under it.
-- Defeat theme, heard only when the player loses to the CPU: generated with Gemini from a precise prompt we wrote for that moment, so a loss is its own moment and not the anthem played sadly. The crowd and the effects go silent under it too. A two-player match and a draw keep the final whistle.
+- Defeat theme, heard only when the player loses to the CPU: generated with Gemini for this project, so a loss is its own moment and not the anthem played sadly. The crowd and the effects go silent under it too. A two-player match and a draw keep the final whistle.
+- Advertising board: Mastercard, 10bis and Grand Theft Auto appear on the board, with other marks, as stadium dressing, the way a real ground does. This is academic coursework, not a game for sale. The marks belong to their owners, and the game is not affiliated with them.
 - Font: [Oswald](https://fonts.google.com/specimen/Oswald) by Vernon Adams, SIL Open Font License 1.1.
 - Sound effects and the goal fanfare were synthesised for this project.
 - Match crowd: ["Football supporters in stadium"](https://freesound.org/people/devy32/sounds/606958/) by **devy32**, from [Freesound](https://freesound.org), licensed under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). Cut into a seamless loop and loudness matched for the game; it plays under the match.
