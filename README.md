@@ -7,14 +7,14 @@ Final project for the Unity course. The approved design document is in [`Docs/GD
 <table>
 <tr>
 <td width="50%" align="center">
-<img src="Docs/images/mikel-breaks-5-4.gif" alt="Mikel and Yossi at 4-4. Mikel scores the goal that makes it 5-4" width="100%">
+<img src="Docs/images/mikel-loses-last-seconds.gif" alt="Mikel and Yossi. Yossi scores in the last seconds" width="100%">
 <br>
-<sub>Mikel and Yossi, 4-4. The goal that breaks it.</sub>
+<sub>Mikel and Yossi. Yossi scores in the last seconds.</sub>
 </td>
 <td width="50%" align="center">
-<img src="Docs/images/noa-goal-in-the-rain.gif" alt="Noa scores in the rain against Anna" width="100%">
+<img src="Docs/images/anna-super-in-the-rain.gif" alt="Anna beats Noa in the rain. Anna's Super is on, the aura around her" width="100%">
 <br>
-<sub>Noa scores in the rain against Anna.</sub>
+<sub>Anna beats Noa in the rain. Super aura.</sub>
 </td>
 </tr>
 </table>
@@ -38,15 +38,7 @@ All from the Windows build.
 </tr>
 <tr>
 <td width="50%"><img src="Docs/images/exe-match-kim-3-yossi-2.jpg" alt="Kim 3 against Yossi 2, the ball between them, Japanese crowd on the left and Israeli crowd on the right, the advertising board along the pitch" width="100%"></td>
-<td width="50%"><img src="Docs/images/exe-rain-anna-david.jpg" alt="Rain: Anna 3 against David 1, Ukrainian crowd on the left and English crowd on the right, both Supers used" width="100%"></td>
-</tr>
-<tr>
-<th width="50%">Game over</th>
-<th width="50%">Pause</th>
-</tr>
-<tr>
-<td width="50%" align="center"><img src="Docs/images/exe-gameover-noa-2-david-3.jpg" alt="Full time: Noa lost 2-3 to David, Israeli crowd on the left and English crowd on the right" height="236"></td>
-<td width="50%" align="center"><img src="Docs/images/exe-pause.png" alt="Paused" height="236"></td>
+<td width="50%"><img src="Docs/images/exe-rain-anna-david-ads.jpg" alt="Rain: Anna 0 against David 0, both Supers used, Ukrainian crowd on the left and English crowd on the right, the advertising board along the pitch" width="100%"></td>
 </tr>
 </table>
 
