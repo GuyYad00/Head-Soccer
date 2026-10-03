@@ -8,21 +8,27 @@ namespace HeadSoccer
     /// crowd of the character playing on that side, read from the choices saved by
     /// Character Select. Yossi and Noa bring the Israeli crowd, David the English,
     /// Kim the Japanese, Mikel the Nigerian and Anna the Ukrainian one.
-    /// The controller installs itself when the match scene loads and lays one
-    /// drawing over each half of the stands, so the scene needs nothing wired.
-    /// The drawings stop under the stadium's own floodlights, and the crowd
-    /// follows the stadium's weather tint so a rainy ground gets a rainy crowd.
+    /// The controller installs itself when the match scene loads and fills each
+    /// half of the stands with that side's drawing, two tiers high up to the top
+    /// of the screen, so the scene needs nothing wired. The crowd follows the
+    /// stadium's weather tint so a rainy ground gets a rainy crowd.
     /// </summary>
     public class CrowdController : MonoBehaviour
     {
         private const string MatchSceneName = "Match";
 
-        // The stands band of the stadium painting, in world units. The bottom edge
-        // tucks behind the advertising board. The top stops short of the painted
-        // floodlights, so those lamps are the only lights and nothing covers them.
+        // The stands band, in world units. The bottom edge tucks behind the
+        // advertising board. The top sits just above the camera's top edge (the
+        // orthographic size is 5), so the crowd runs to the edge of the screen and
+        // the floodlights painted on the stadium are hidden behind it.
         private const float HalfWidth = 9.25f;
         private const float BottomY = -1.0f;
-        private const float TopY = 3.70f;
+        private const float TopY = 5.1f;
+
+        // The stands are two tiers of supporters, one drawing per tier, each with
+        // its flag banner along the front, so the banner of the upper tier reads
+        // as the rail between them.
+        private const int Tiers = 2;
 
         // Roster order is fixed by the builder: Yossi, David, Kim, Mikel, Noa, Anna.
         private static readonly string[] CountryByIndex =
@@ -73,13 +79,17 @@ namespace HeadSoccer
             renderer.sortingLayerName = "Background";
             renderer.sortingOrder = 1;   // over the stadium painting, behind everything else
 
-            // One drawing fills the half. It is scaled to the band, so the same
-            // picture is never repeated and there is no seam down the middle.
+            // One drawing spans the whole width of the half, so there is no seam
+            // down the middle, and it repeats once upward for the second tier.
+            // The stack is then scaled to the band.
             Vector2 tile = crowd.bounds.size;
             if (tile.x <= 0.001f || tile.y <= 0.001f) return renderer;
 
             float bandHeight = TopY - BottomY;
-            half.transform.localScale = new Vector3(HalfWidth / tile.x, bandHeight / tile.y, 1f);
+            renderer.drawMode = SpriteDrawMode.Tiled;
+            renderer.tileMode = SpriteTileMode.Continuous;
+            renderer.size = new Vector2(tile.x, tile.y * Tiers);
+            half.transform.localScale = new Vector3(HalfWidth / renderer.size.x, bandHeight / renderer.size.y, 1f);
             return renderer;
         }
 
