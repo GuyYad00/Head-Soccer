@@ -10,6 +10,14 @@ We love football, as people who watch it and play it as amateurs, and that is wh
 Ours is built on the original, changed only where we thought a change would make the game better.
 A lot of those changes were made while we were playing, and were not planned from the start.
 
+## 3 October 2026
+
+### Two boards of businesses that do not exist
+
+The first board carried real brands, and real brands are not ours to put on a pitch.
+It is now two boards of made-up local businesses, a pizza place, a car wash, a barber, a bakery, a flower shop, a dairy, a gym, a pet shop, a travel agency and a bouncy castle rental, with names and drawings made with ChatGPT for this project.
+Each match tosses a coin and shows one of the two, so the ground is not dressed the same way twice in a row and the town around it feels bigger than one strip.
+
 ## 2 October 2026
 
 ### The stands are split half and half
@@ -105,7 +113,7 @@ Standing still stays at the base power, and running away from the ball never wea
 
 There is no football without advertising, and a pitch with no boards looks like a practice field.
 A scrolling board runs in front of the first row of the crowd, the way a real ground hides the spectators' legs.
-The brands on it are both real from our own lives and fictional: the shawarma place (fictional place we created), the college, the food app, the card company, the game everyone waits for (GTA).
+The first board mixed real brands with a made-up shawarma place. On 3 October it became two boards of made-up businesses, see above.
 
 ### Celebrations on the character select screen
 
