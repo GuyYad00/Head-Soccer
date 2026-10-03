@@ -4,13 +4,20 @@ A 1v1 arcade Head Soccer game built in Unity 6 (URP, 2D). Two big-headed charact
 
 Final project for the Unity course. The approved design document is in [`Docs/GDD.md`](Docs/GDD.md). Decisions we made while planning and while playing each other are in [`Docs/design-decisions.md`](Docs/design-decisions.md). The Unity project is in [`Head-Soccer-main/`](Head-Soccer-main/).
 
-![Mikel and Yossi at 4-4. Mikel scores the goal that makes it 5-4](Docs/images/mikel-breaks-5-4.gif)
-
-<p align="center"><sub>Mikel and Yossi, 4-4. The goal that breaks it.</sub></p>
-
-![Noa scores in the rain against Anna](Docs/images/noa-goal-in-the-rain.gif)
-
-<p align="center"><sub>Noa scores in the rain against Anna.</sub></p>
+<table>
+<tr>
+<td width="50%" align="center">
+<img src="Docs/images/mikel-breaks-5-4.gif" alt="Mikel and Yossi at 4-4. Mikel scores the goal that makes it 5-4" width="100%">
+<br>
+<sub>Mikel and Yossi, 4-4. The goal that breaks it.</sub>
+</td>
+<td width="50%" align="center">
+<img src="Docs/images/noa-goal-in-the-rain.gif" alt="Noa scores in the rain against Anna" width="100%">
+<br>
+<sub>Noa scores in the rain against Anna.</sub>
+</td>
+</tr>
+</table>
 
 ## Screenshots
 
