@@ -4,7 +4,7 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: 3246970017463962581
-    second: adboard_2_0
+    second: adboard_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: adboard_2_0
+      name: adboard_0
       rect:
         serializedVersion: 2
         x: 0
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      adboard_2_0: 3246970017463962581
+      adboard_0: 3246970017463962581
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
