@@ -8,8 +8,9 @@ namespace HeadSoccer
     /// crowd of the character playing on that side, read from the choices saved by
     /// Character Select. Yossi and Noa bring the Israeli crowd, David the English,
     /// Kim the Japanese, Mikel the Nigerian and Anna the Ukrainian one.
-    /// The controller installs itself when the match scene loads and lays the
-    /// drawings over the stadium's stands, so the scene needs nothing wired, and it
+    /// The controller installs itself when the match scene loads and lays one
+    /// drawing over each half of the stands, so the scene needs nothing wired.
+    /// The drawings stop under the stadium's own floodlights, and the crowd
     /// follows the stadium's weather tint so a rainy ground gets a rainy crowd.
     /// </summary>
     public class CrowdController : MonoBehaviour
@@ -17,16 +18,11 @@ namespace HeadSoccer
         private const string MatchSceneName = "Match";
 
         // The stands band of the stadium painting, in world units. The bottom edge
-        // hides behind the advertising board, the top blends into the floodlights.
+        // tucks behind the advertising board. The top stops short of the painted
+        // floodlights, so those lamps are the only lights and nothing covers them.
         private const float HalfWidth = 9.25f;
         private const float BottomY = -1.0f;
-        private const float TopY = 4.0f;
-
-        // Each crowd drawing is one tier of supporters with its flag banner along
-        // the front. One drawing spans the whole half, so there is no seam where a
-        // copy would meet the next, and the stands are two tiers high, so the
-        // banner of the upper tier reads as the rail between them.
-        private const int Tiers = 2;
+        private const float TopY = 3.70f;
 
         // Roster order is fixed by the builder: Yossi, David, Kim, Mikel, Noa, Anna.
         private static readonly string[] CountryByIndex =
@@ -77,17 +73,13 @@ namespace HeadSoccer
             renderer.sortingLayerName = "Background";
             renderer.sortingOrder = 1;   // over the stadium painting, behind everything else
 
-            // One drawing across the half, stacked two tiers high. The drawings are
-            // painted close to the half's proportions, so fitting the stack to the
-            // band only nudges them by a few percent.
+            // One drawing fills the half. It is scaled to the band, so the same
+            // picture is never repeated and there is no seam down the middle.
             Vector2 tile = crowd.bounds.size;
             if (tile.x <= 0.001f || tile.y <= 0.001f) return renderer;
 
             float bandHeight = TopY - BottomY;
-            renderer.drawMode = SpriteDrawMode.Tiled;
-            renderer.tileMode = SpriteTileMode.Continuous;
-            renderer.size = new Vector2(tile.x, tile.y * Tiers);
-            half.transform.localScale = new Vector3(HalfWidth / renderer.size.x, bandHeight / renderer.size.y, 1f);
+            half.transform.localScale = new Vector3(HalfWidth / tile.x, bandHeight / tile.y, 1f);
             return renderer;
         }
 
