@@ -162,7 +162,7 @@ Head-Soccer-main/Assets
 - Commentator goal call: generated with Gemini from an explicit prompt describing exactly the call we wanted, then cut to six seconds and loudness matched. It plays over every goal while the crowd and the effects duck under it, and it is cut the moment the whistle puts the ball back in play. The three commentator drawings share one call; the one who speaks is the one drawn for that match.
 - Victory anthem, heard only when the player beats the CPU: generated with Gemini for this project, so the win feels like it mattered. The crowd and the effects go silent under it.
 - Defeat theme, heard only when the player loses to the CPU: generated with Gemini from a precise prompt we wrote for that moment, so a loss is its own moment and not the anthem played sadly. The crowd and the effects go silent under it too. A two-player match and a draw keep the final whistle.
-- We combined several AI tools and took from each one what it does best; the design, the code and every decision are ours.
+- The code was drafted with AI models. We reviewed it before it stayed: what belonged in the game remained, and what did not was changed. The design and the decisions are ours.
 - Font: [Oswald](https://fonts.google.com/specimen/Oswald) by Vernon Adams, SIL Open Font License 1.1.
 - Sound effects and the goal fanfare were synthesised for this project.
 - Match crowd: ["Football supporters in stadium"](https://freesound.org/people/devy32/sounds/606958/) by **devy32**, from [Freesound](https://freesound.org), licensed under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). Cut into a seamless loop and loudness matched for the game; it plays under the match.
