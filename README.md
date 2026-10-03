@@ -37,7 +37,7 @@ All from the Windows build.
 <th width="50%">Rain</th>
 </tr>
 <tr>
-<td width="50%"><img src="Docs/images/exe-match-kim-yossi.jpg" alt="Kim 1 against Yossi 0, Super ready, Japanese crowd on the left and Israeli crowd on the right" width="100%"></td>
+<td width="50%"><img src="Docs/images/exe-match-kim-yossi-goal.jpg" alt="Kim 3 against Yossi 4, GOAL, Super ready, Japanese crowd on the left and Israeli crowd on the right, the advertising board along the pitch" width="100%"></td>
 <td width="50%"><img src="Docs/images/exe-rain-anna-david.jpg" alt="Rain: Anna 3 against David 1, Ukrainian crowd on the left and English crowd on the right, both Supers used" width="100%"></td>
 </tr>
 <tr>
