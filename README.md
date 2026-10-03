@@ -41,22 +41,31 @@ All from the Windows build.
 
 <p align="center"><sub>Clear, rain or snow is rolled at kickoff. Each half of the stands fills with that side's crowd. A glow around a player means that Super is ready.</sub></p>
 
-## Run it
+## Supported platforms
 
-**Windows / editor**
+Windows and Android. Both were built and played.
+
+### Windows
+
+`HeadSoccer.exe`, or Play inside the editor.
 
 1. Unity Hub → **Add** → `Head-Soccer-main` (Unity **6000.3.20f1**).
 2. Open `Assets/Scenes/Menu.unity` and press **Play**.
+3. For the standalone build: **Head Soccer → Build Windows (x64)**. The exe is written to `Head-Soccer-main/Builds/Windows/HeadSoccer.exe`.
 
-**Android**
+### Android
 
-A ready-to-install APK is attached to the [latest GitHub Release](../../releases/latest). Copy it to a phone, allow the install from that source, and open it; the game locks to landscape and shows on-screen buttons. It has been installed and played on an Android phone.
+The match on a phone. Move on the left, JUMP and KICK on the right, pause and sound in the corner. Landscape only.
 
 <p align="center">
 <img src="Docs/images/android-match.jpg" alt="The match on an Android phone: move buttons on the left, JUMP and KICK on the right, the commentator up after a goal" width="720">
-<br>
-<sub>On the phone. Move on the left, JUMP and KICK on the right, pause and sound in the corner.</sub>
 </p>
+
+A ready-to-install APK is attached to the [latest GitHub Release](../../releases/latest). It has been installed and played on an Android phone.
+
+1. Copy `HeadSoccer.apk` to the phone and open it.
+2. Allow install from that source when Android asks. The warning that it is not from the Play Store is expected.
+3. Open Head Soccer. The game locks to landscape and shows the on-screen buttons.
 
 To build it yourself:
 
