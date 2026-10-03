@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 2D |
 | **Orientation & reference resolution** | Landscape, 1280 x 720 reference |
 | **Expected session length** | 30 seconds to 3 minutes per match |
-| **Document version** | v1.14, 2026-10-03 |
+| **Document version** | v1.15, 2026-10-03 |
 
 ---
 
@@ -132,7 +132,7 @@ stateDiagram-v2
 | Pitch and stadium background | 1 | Original (`Assets/Art/stadium.png`) | Static background |
 | Goal net | 1 side view, mouth open to the right; placed as drawn on the left, mirrored on the right. The crossbar sits at one and a half times the players' head height | Original (`Assets/Art/goal.png`) | The two goals |
 | Advertising board | 1 banner strip, 1024 x 65, scrolled and wrapped by `AdBoard` in front of the first row of the crowd, large enough to read | Original (`Assets/Art/adboard.png`); real brands, as on a real pitch | Stadium dressing |
-| Country crowds | 5 drawings of one tier of supporters each with its flag banner along the front (Israel, England, Japan, Nigeria, Ukraine), laid two tiers high over each half of the stands by `CrowdController` | Drawn for this project with ChatGPT (`Assets/Resources/Crowds/<country>.png`) | Each half of the stands fills with the home crowd of the character playing on that side |
+| Country crowds | 5 drawings of one stand of supporters each with its flag banner along the front and no lights of their own (Israel, England, Japan, Nigeria, Ukraine), one drawing filling each half of the stands by `CrowdController` | Drawn for this project with ChatGPT (`Assets/Resources/Crowds/<country>.png`) | Each half of the stands fills with the home crowd of the character playing on that side, under the stadium's own floodlights |
 | Weather | Rain and snow particle curtains built in code, plus a tint on the stadium painting; one of clear, rain or snow is rolled at kickoff | `WeatherController`, no texture assets | The ground is not the same afternoon twice; the ball and the players are unchanged |
 | Commentators | 3 cut-out drawings, one commentator each, shouting into a headset; one is drawn at random per match | Drawn for this project with ChatGPT (`Assets/Art/Commentators/commentator_1..3.png`) | The cut-in above the goal on every goal |
 | Commentator goal call | 1 clip, 6 s | Generated for this project with Gemini from an explicit prompt describing the call we wanted, cut to its first six seconds (`Assets/Audio/commentator_goal.wav`) | Shouted on every goal, alone in the mix |
@@ -203,7 +203,7 @@ graph TD
 | `MainMenuController`, `CharacterSelect` | Menu flow, the keyboard layout swap, choosing both characters in two steps and saving the choices |
 | `CelebrationLoop` | Coroutine that loops the chosen character's celebration on the Character Select portrait |
 | `AdBoard` | Scrolling, wrapping advertising board under the crowd, clipped by a SpriteMask |
-| `CrowdController` | Installs itself when the match scene loads; lays each side's country crowd over its half of the stands, one drawing wide and two tiers high, and follows the weather tint |
+| `CrowdController` | Installs itself when the match scene loads; lays one country-crowd drawing over each half of the stands, stopping under the stadium's floodlights, and follows the weather tint |
 | `WeatherController` | Installs itself when the match scene loads; rolls clear, rain or snow (50 / 25 / 25) and draws the particles and the stadium tint, visual only |
 | `CommentatorCutIn` | Picks one commentator per match, subscribes to `GoalScored` and `StateChanged`, stands the figure in the crowd above the goal that received the ball (world units converted to the canvas), plays the call and cuts it at kickoff |
 | `AudioManager` | One-shot SFX, the commentator's voice channel that ducks the crowd and SFX to silence while he shouts, the victory anthem and the defeat theme on that same channel when the human beats or loses to the CPU, the scene's looping crowd (one clip per scene, wired by the builder), mute saved in `PlayerPrefs` |
@@ -259,6 +259,7 @@ graph TD
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
+| v1.15 | 2026-10-03 | Country crowds redrawn without floodlights or rails. One drawing fills each half of the stands, and the stadium painting's own floodlights stay above it. |
 | v1.14 | 2026-10-03 | Section 8.1: the Android APK from the GitHub release was installed and played on an Android phone with the on-screen buttons, so the last MVP box is ticked. Section 6: two things that went in while playing and were missing from this document until now. Country crowds: each half of the stands fills with the home crowd of the character on that side, five drawings laid two tiers high by `CrowdController` (a first version had its own floodlights painted in, so the ground showed two rows of lights, and a second repeated the drawing across the half, which left a visible seam; the drawings were redone with a flag banner along the front and one drawing now spans each half). Weather: clear, rain or snow is rolled at kickoff by `WeatherController`, visual only. Both are recorded in `Docs/design-decisions.md`. Section 7: the input interface is named for what it is, a Strategy (one interface, interchangeable sources), not a Command. |
 | v1.13 | 2026-10-01 | The frame a match is decided, against the CPU or in two-player, the stadium crowd stops and the menu loop takes over. A loss to the CPU starts the defeat theme on that frame, not after the goal freeze. A win does the same with the anthem. A draw and a two-player match hear the menu loop at once. |
 | v1.12 | 2026-10-01 | Section 5: on a loss to the CPU the match-over banner reads GAME OVER and YOU LOST. A win, a draw and a two-player match still name the winner under FULL TIME. |
