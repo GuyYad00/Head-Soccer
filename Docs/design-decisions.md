@@ -12,6 +12,12 @@ A lot of those changes were made while we were playing, and were not planned fro
 
 ## 3 October 2026
 
+### Twelve ads, a new order every match
+
+One strip of five businesses, the same every match, stopped feeling like a real board once you had seen it.
+Twelve made-up local businesses now share the board. Each match shuffles them, every ad with the same chance of every place, and five different ones are on screen at a time.
+The scroll is the same as before. The same advert is never on the board twice at once, because each one is painted once in the cycle.
+
 ### One board, the barber's strip
 
 The first board carried real brands, and real brands are not ours to put on a pitch.
@@ -113,7 +119,7 @@ Standing still stays at the base power, and running away from the ball never wea
 
 There is no football without advertising, and a pitch with no boards looks like a practice field.
 A scrolling board runs in front of the first row of the crowd, the way a real ground hides the spectators' legs.
-The first board mixed real brands with a made-up shawarma place. On 3 October it became one strip of made-up businesses, see above.
+The first board mixed real brands with a made-up shawarma place. On 3 October it became made-up businesses only, first one strip and then twelve of them shuffled every match, see above.
 
 ### Celebrations on the character select screen
 

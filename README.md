@@ -169,7 +169,7 @@ Head-Soccer-main/Assets
 ├── Editor/     HeadSoccerBuilder (rebuilds both scenes), HeadSoccerBuildPipeline (one-click builds)
 ├── Fonts/      Oswald Bold (SIL Open Font License)
 ├── Prefabs/    Player, Ball, Goal, and the pooled particle effects
-├── Resources/  Crowds/ (five country crowd drawings, loaded by CrowdController)
+├── Resources/  Crowds/ (five country crowd drawings, loaded by CrowdController), Ads/ (twelve advertising drawings, loaded by AdBoard)
 ├── Scenes/     Menu.unity, Match.unity
 ├── Scripts/
 │   ├── Core/       GameManager, GameConfig, MatchState, MatchSettings, MatchRecords, CharacterRoster, CameraFitter
@@ -189,7 +189,7 @@ Head-Soccer-main/Assets
 - Commentator goal call: generated with Gemini for this project, then cut to six seconds and loudness matched. It plays over every goal while the crowd and the effects duck under it, and it is cut the moment the whistle puts the ball back in play. The three commentator drawings share one call; the one who speaks is the one drawn for that match.
 - Victory anthem, heard only when the player beats the CPU: generated with Gemini for this project, so the win feels like it mattered. The crowd and the effects go silent under it.
 - Defeat theme, heard only when the player loses to the CPU: generated with Gemini for this project, so a loss is its own moment and not the anthem played sadly. The crowd and the effects go silent under it too. A two-player match and a draw keep the final whistle.
-- Advertising board: one strip of local businesses that do not exist, Gal's barber, Itay's pizza, Or's car wash, a bakery and a bouncy castle rental. The businesses, their names and the drawing were made with ChatGPT for this project. The same strip shows every match.
+- Advertising board: twelve drawings of local businesses that do not exist (Shimon Tours, Uri's off-road trips, Yoni's kitchens, Gilboa's tennis, Or's car wash, Gal's barber, Shahar bakery, Guy's bouncy castles, Shula's kiosk, Rami's football club, Dan's gym, Itay's pizza). The businesses, their names and the drawings were made with ChatGPT for this project. Each match shuffles all twelve, five different ones show at a time, and the same advert is never on screen twice.
 - Font: [Oswald](https://fonts.google.com/specimen/Oswald) by Vernon Adams, SIL Open Font License 1.1.
 - Sound effects and the goal fanfare were synthesised for this project.
 - Match crowd: ["Football supporters in stadium"](https://freesound.org/people/devy32/sounds/606958/) by **devy32**, from [Freesound](https://freesound.org), licensed under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). Cut into a seamless loop and loudness matched for the game; it plays under the match.
