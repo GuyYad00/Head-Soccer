@@ -68,6 +68,7 @@ To build it yourself:
 
 - **Goal:** first to 5, or the higher score when the 90-second clock hits zero.
 - **Kick:** each kick leaves at a random angle, a flat drive or a lob, and a kick on the run hits harder.
+- **Kickoff:** at the whistle, and again after every goal, the ball drops in the centre, bounces, and rolls to a stop.
 - **Super:** stay on the ball until the meter reads SUPER READY. The next kick is a boosted shot in slow motion. One per match.
 
 | Action | WASD layout (P1 default) | ARROWS layout (P2 default) | Gamepad | Touch |

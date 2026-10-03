@@ -17,6 +17,11 @@ namespace HeadSoccer
         private Vector3 defaultSpawn;
         private float lastBounceSoundTime;
 
+        // The minimum speed keeps a rally from dying. It must not run on the kickoff
+        // drop, and it must not boost a ball that is still going up: both of those
+        // turn a small bounce into a climb that gravity cannot cancel.
+        private bool kickedSinceKickoff;
+
         public Vector2 Velocity => rb != null ? rb.linearVelocity : Vector2.zero;
 
         private void Awake()
@@ -39,7 +44,7 @@ namespace HeadSoccer
 
             if (speed > config.ballMaxSpeed)
                 rb.linearVelocity = velocity.normalized * config.ballMaxSpeed;
-            else if (speed > 0.05f && speed < config.ballMinSpeed)
+            else if (kickedSinceKickoff && velocity.y <= 0f && speed > 0.05f && speed < config.ballMinSpeed)
                 rb.linearVelocity = velocity.normalized * config.ballMinSpeed;
         }
 
@@ -55,11 +60,15 @@ namespace HeadSoccer
 
         public void ResetToCenter()
         {
-            transform.position = defaultSpawn;
-            transform.rotation = Quaternion.identity;
+            kickedSinceKickoff = false;
+            rb.position = defaultSpawn;
+            rb.rotation = 0f;
             rb.linearVelocity = Vector2.zero;
             rb.angularVelocity = 0f;
         }
+
+        /// <summary>A connected kick. The rally floor applies from here, not from the drop.</summary>
+        public void MarkKicked() => kickedSinceKickoff = true;
 
         /// <summary>Used for the kickoff countdown and the goal celebration freeze.</summary>
         public void Freeze()
@@ -71,6 +80,8 @@ namespace HeadSoccer
 
         public void Unfreeze()
         {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
             rb.bodyType = RigidbodyType2D.Dynamic;
         }
     }

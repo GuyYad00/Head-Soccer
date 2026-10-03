@@ -43,6 +43,7 @@ namespace HeadSoccer
             float boost = special ? config.specialImpulseMultiplier : 1f;
             Vector2 impulse = KickDirection() * config.kickImpulse * MomentumFactor() * powerMultiplier * boost;
             ballBody.AddForce(impulse, ForceMode2D.Impulse);
+            ballBody.GetComponent<BallController>()?.MarkKicked();
 
             AudioManager.Instance?.PlayKick();
             EffectsPool.Instance?.SpawnKickSpark(hit.transform.position);
