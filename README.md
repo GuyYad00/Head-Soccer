@@ -37,7 +37,7 @@ All from the Windows build.
 <th width="50%">Rain</th>
 </tr>
 <tr>
-<td width="50%"><img src="Docs/images/exe-match-kim-yossi-goal.jpg" alt="Kim 3 against Yossi 4, GOAL, Super ready, Japanese crowd on the left and Israeli crowd on the right, the advertising board along the pitch" width="100%"></td>
+<td width="50%"><img src="Docs/images/exe-match-kim-3-yossi-2.jpg" alt="Kim 3 against Yossi 2, the ball between them, Japanese crowd on the left and Israeli crowd on the right, the advertising board along the pitch" width="100%"></td>
 <td width="50%"><img src="Docs/images/exe-rain-anna-david.jpg" alt="Rain: Anna 3 against David 1, Ukrainian crowd on the left and English crowd on the right, both Supers used" width="100%"></td>
 </tr>
 <tr>
@@ -45,7 +45,7 @@ All from the Windows build.
 <th width="50%">Pause</th>
 </tr>
 <tr>
-<td width="50%" align="center"><img src="Docs/images/exe-gameover-noa-david.jpg" alt="Full time: Noa wins 5-2 against David, Israeli crowd on the left and English crowd on the right" height="236"></td>
+<td width="50%" align="center"><img src="Docs/images/exe-gameover-noa-2-david-3.jpg" alt="Full time: Noa lost 2-3 to David, Israeli crowd on the left and English crowd on the right" height="236"></td>
 <td width="50%" align="center"><img src="Docs/images/exe-pause.png" alt="Paused" height="236"></td>
 </tr>
 </table>
