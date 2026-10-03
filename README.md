@@ -43,35 +43,40 @@ All from the Windows build.
 
 ## Supported platforms
 
-Windows and Android. Both were built and played.
+Windows and Android. Both were built and played. Keys on Windows, buttons on the phone.
 
-### Windows
+<table>
+<tr>
+<th width="50%">Windows</th>
+<th width="50%">Android</th>
+</tr>
+<tr>
+<td width="50%"><img src="Docs/images/exe-windows-match.jpg" alt="Windows match: Mikel and Kim in the rain, keyboard play, the commentator in the crowd" width="100%"></td>
+<td width="50%"><img src="Docs/images/android-match.jpg" alt="Android match: on-screen move, JUMP and KICK, pause and sound in the corner" width="100%"></td>
+</tr>
+<tr>
+<td width="50%">
 
-`HeadSoccer.exe`, or Play inside the editor.
+**How to run it**
 
 1. Unity Hub → **Add** → `Head-Soccer-main` (Unity **6000.3.20f1**).
-2. Open `Assets/Scenes/Menu.unity` and press **Play**.
-3. For the standalone build: **Head Soccer → Build Windows (x64)**. The exe is written to `Head-Soccer-main/Builds/Windows/HeadSoccer.exe`.
+2. Open `Assets/Scenes/Menu.unity` and press **Play**. Keys: WASD or arrows, from **P1 KEYS** on the menu.
+3. Standalone: **Head Soccer → Build Windows (x64)**. Open `Head-Soccer-main/Builds/Windows/HeadSoccer.exe`.
 
-### Android
+</td>
+<td width="50%">
 
-The match on a phone. Move on the left, JUMP and KICK on the right, pause and sound in the corner. Landscape only.
+**How to run it**
 
-<p align="center">
-<img src="Docs/images/android-match.jpg" alt="The match on an Android phone: move buttons on the left, JUMP and KICK on the right, the commentator up after a goal" width="720">
-</p>
+1. Download `HeadSoccer.apk` from the [latest release](../../releases/latest). It has been installed and played on an Android phone.
+2. Copy it to the phone and open it. Allow install from that source. The warning that it is not from the Play Store is expected.
+3. The game locks to landscape. Move, JUMP and KICK are on the screen.
+4. To build it: install *Android Build Support* (SDK, NDK, OpenJDK) for the same Unity version, then **Head Soccer → Build Android APK**. The file is `Head-Soccer-main/Builds/Android/HeadSoccer.apk` (IL2CPP, ARM64, Android 7.1 and up). In the editor, Game view → **Simulator** shows the same buttons; the mouse acts as a finger.
 
-A ready-to-install APK is attached to the [latest GitHub Release](../../releases/latest). It has been installed and played on an Android phone.
+</td>
+</tr>
+</table>
 
-1. Copy `HeadSoccer.apk` to the phone and open it.
-2. Allow install from that source when Android asks. The warning that it is not from the Play Store is expected.
-3. Open Head Soccer. The game locks to landscape and shows the on-screen buttons.
-
-To build it yourself:
-
-1. Install *Android Build Support* (with SDK, NDK and OpenJDK) for the same Unity version from Unity Hub.
-2. In Unity: **Head Soccer → Build Android APK**. The APK is written to `Head-Soccer-main/Builds/Android/HeadSoccer.apk` (IL2CPP, ARM64, Android 7.1 and up).
-3. Without an Android phone, the touch layout can be checked in the editor: switch the Game view to **Simulator**, pick any Android device, and the on-screen buttons appear; the mouse acts as a finger.
 
 ## How to play
 
