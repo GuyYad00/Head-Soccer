@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 2D |
 | **Orientation & reference resolution** | Landscape, 1280 x 720 reference |
 | **Expected session length** | 30 seconds to 3 minutes per match |
-| **Document version** | v1.19, 2026-10-03 |
+| **Document version** | v1.20, 2026-10-03 |
 
 ---
 
@@ -148,7 +148,7 @@ stateDiagram-v2
 
 **The commentator.** There is no football without a commentator. We wanted the player to feel the grass, and a goal in silence is not a goal. So three commentators were drawn, and at the start of every match one of them is picked at random and stays for that match. On every goal he pops up in the crowd above the goal that received the ball, a small LIVE tag over his head, and shouts the call while the celebration freezes and the kickoff counts down; the music and the effects go silent under him so the call is all you hear, and the kickoff whistle cuts him off. The first version was a framed box in a corner of the screen; it read as a foreign UI element and on a wide screen it floated outside the stadium, so the frame went and the figure is now placed in world units above the goal (see `Docs/design-decisions.md`). The decision came from one word, liveness. The match should feel alive, the player should feel he is on the pitch and that the goal mattered, and the shout is what gives it that excitement. This was not in the original scope (see 8.3). We fell in love with the idea while building, because it brought the game to life, and went with it. The drawings were made with ChatGPT and the call was generated with Gemini.
 
-**AI tools.** Every drawing in the game, the six characters, their kick and celebration poses, the three commentators, and the twelve advertising drawings, was made with ChatGPT. The commentator's goal call, the anthem that plays only when the player beats the CPU, and the theme that plays only when the player loses to the CPU, were generated with Gemini. AI models assisted the code, the drawings and the voices. We reviewed the result and kept only what belonged in the game. The design and the decisions in this document are ours.
+**AI tools.** Every drawing in the game, the six characters, their kick and celebration poses and the three commentators, was made with ChatGPT. The twelve advertising drawings were made with a prompt that asked ChatGPT to invent businesses of the kinds we asked for, and to draw them. Those businesses do not exist. The commentator's goal call, the anthem that plays only when the player beats the CPU, and the theme that plays only when the player loses to the CPU, were generated with Gemini. AI models assisted the code, the drawings and the voices. We reviewed the result and kept only what belonged in the game. The design and the decisions in this document are ours.
 
 **Licence note:** the sprites and sounds made for this project are ours, and the businesses on the advertising board do not exist. The Oswald font ships under the SIL Open Font License, whose licence file sits next to the font. The two crowd recordings are from Freesound and credited in the README.
 
@@ -259,6 +259,7 @@ graph TD
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
+| v1.20 | 2026-10-03 | AI tools: the twelve advertising drawings came from a prompt that asked ChatGPT to invent businesses of the kinds we asked for. Those businesses do not exist. |
 | v1.19 | 2026-10-03 | Section 6: the advertising board is twelve made-up local businesses. Each match shuffles all of them, five different ones are on screen, and the same advert is never shown twice at once. The scroll is unchanged. Recorded in `Docs/design-decisions.md`. |
 | v1.18 | 2026-10-03 | Section 6: one advertising strip, the one with the barber, shown every match. The second strip and the coin toss are gone. Recorded in `Docs/design-decisions.md`. |
 | v1.17 | 2026-10-03 | Section 6: the advertising board no longer carries real brands. Two strips of made-up local businesses, drawn with ChatGPT, and `AdBoard` tosses a coin at each match to pick one. Recorded in `Docs/design-decisions.md`. |
