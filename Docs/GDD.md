@@ -9,7 +9,7 @@
 | **Engine / Unity version** | Unity 6 (6000.3.20f1), URP, 2D |
 | **Orientation & reference resolution** | Landscape, 1280 x 720 reference |
 | **Expected session length** | 30 seconds to 3 minutes per match |
-| **Document version** | v1.17, 2026-10-03 |
+| **Document version** | v1.18, 2026-10-03 |
 
 ---
 
@@ -131,7 +131,7 @@ stateDiagram-v2
 | App icon | 1, 1024 x 1024 | Original (`Assets/Branding/icon.png`) | Android launcher and Windows icon |
 | Pitch and stadium background | 1 | Original (`Assets/Art/stadium.png`) | Static background |
 | Goal net | 1 side view, mouth open to the right; placed as drawn on the left, mirrored on the right. The crossbar sits at one and a half times the players' head height | Original (`Assets/Art/goal.png`) | The two goals |
-| Advertising board | 2 banner strips, 1024 x 77 each, of made-up local businesses; `AdBoard` draws one per match with equal odds and scrolls it, wrapping, in front of the first row of the crowd | Businesses, names and drawings made with ChatGPT for this project (`Assets/Art/adboard_1.png`, `adboard_2.png`) | Stadium dressing |
+| Advertising board | 1 banner strip, 1024 x 77, of made-up local businesses; `AdBoard` shows it every match and scrolls it, wrapping, in front of the first row of the crowd | Businesses, names and the drawing made with ChatGPT for this project (`Assets/Art/adboard.png`) | Stadium dressing |
 | Country crowds | 5 drawings of one stand of supporters each with its flag banner along the front and no lights of their own (Israel, England, Japan, Nigeria, Ukraine), laid two tiers high to the top of the screen over each half of the stands by `CrowdController` | Drawn for this project with ChatGPT (`Assets/Resources/Crowds/<country>.png`) | Each half of the stands fills with the home crowd of the character playing on that side |
 | Weather | Rain and snow particle curtains built in code, plus a tint on the stadium painting; one of clear, rain or snow is rolled at kickoff | `WeatherController`, no texture assets | The ground is not the same afternoon twice; the ball and the players are unchanged |
 | Commentators | 3 cut-out drawings, one commentator each, shouting into a headset; one is drawn at random per match | Drawn for this project with ChatGPT (`Assets/Art/Commentators/commentator_1..3.png`) | The cut-in above the goal on every goal |
@@ -150,7 +150,7 @@ stateDiagram-v2
 
 **AI tools.** Every drawing in the game, the six characters, their kick and celebration poses, and the three commentators, was made with ChatGPT. The commentator's goal call, the anthem that plays only when the player beats the CPU, and the theme that plays only when the player loses to the CPU, were generated with Gemini. AI models assisted the code, the drawings and the voices. We reviewed the result and kept only what belonged in the game. The design and the decisions in this document are ours.
 
-**Licence note:** the sprites and sounds made for this project are ours, and the businesses on the advertising boards do not exist. The Oswald font ships under the SIL Open Font License, whose licence file sits next to the font. The two crowd recordings are from Freesound and credited in the README.
+**Licence note:** the sprites and sounds made for this project are ours, and the businesses on the advertising board do not exist. The Oswald font ships under the SIL Open Font License, whose licence file sits next to the font. The two crowd recordings are from Freesound and credited in the README.
 
 **Technical art rules:** vector cartoon sprites import with Bilinear filtering, PPU 100, a per-sprite max texture size (the ball ships at 256 px, the stadium at 2048 px), a single SpriteAtlas (`Assets/Art/HeadSoccer.spriteatlasv2`) holding every game and UI sprite to keep draw calls low, and sorting layers back to front: background, pitch, goals, ball, players, fx, UI.
 
@@ -202,7 +202,7 @@ graph TD
 | `UIManager` | HUD, pause, match over, goal flash and score bump |
 | `MainMenuController`, `CharacterSelect` | Menu flow, the keyboard layout swap, choosing both characters in two steps and saving the choices |
 | `CelebrationLoop` | Coroutine that loops the chosen character's celebration on the Character Select portrait |
-| `AdBoard` | Draws one of the two banner strips per match with equal odds; scrolling, wrapping board under the crowd, clipped by a SpriteMask |
+| `AdBoard` | Scrolling, wrapping advertising board under the crowd, clipped by a SpriteMask. The same banner strip every match |
 | `CrowdController` | Installs itself when the match scene loads; fills each half of the stands with that side's country crowd, one drawing wide and two tiers high up to the top of the screen, and follows the weather tint |
 | `WeatherController` | Installs itself when the match scene loads; rolls clear, rain or snow (50 / 25 / 25) and draws the particles and the stadium tint, visual only |
 | `CommentatorCutIn` | Picks one commentator per match, subscribes to `GoalScored` and `StateChanged`, stands the figure in the crowd above the goal that received the ball (world units converted to the canvas), plays the call and cuts it at kickoff |
@@ -259,6 +259,7 @@ graph TD
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-09-10 | First version, approved by the lecturer before implementation. |
+| v1.18 | 2026-10-03 | Section 6: one advertising strip, the one with the barber, shown every match. The second strip and the coin toss are gone. Recorded in `Docs/design-decisions.md`. |
 | v1.17 | 2026-10-03 | Section 6: the advertising board no longer carries real brands. Two strips of made-up local businesses, drawn with ChatGPT, and `AdBoard` tosses a coin at each match to pick one. Recorded in `Docs/design-decisions.md`. |
 | v1.16 | 2026-10-03 | AI tools: the code, drawings and voices were made with AI assistance and reviewed by us. |
 | v1.15 | 2026-10-03 | Country crowds redrawn without floodlights or rails. Each half of the stands is two tiers of that side's crowd, one drawing wide, running to the top of the screen so no floodlights show behind the supporters. |

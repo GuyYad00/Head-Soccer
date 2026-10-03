@@ -12,11 +12,11 @@ A lot of those changes were made while we were playing, and were not planned fro
 
 ## 3 October 2026
 
-### Two boards of businesses that do not exist
+### One board, the barber's strip
 
 The first board carried real brands, and real brands are not ours to put on a pitch.
-It is now two boards of made-up local businesses, a pizza place, a car wash, a barber, a bakery, a flower shop, a dairy, a gym, a pet shop, a travel agency and a bouncy castle rental, with names and drawings made with ChatGPT for this project.
-Each match tosses a coin and shows one of the two, so the ground is not dressed the same way twice in a row and the town around it feels bigger than one strip.
+We drew two strips of made-up local businesses with ChatGPT, and for a short while each match tossed a coin between them.
+The strip that stays is the one with Gal's barber, Itay's pizza, Or's car wash, a bakery and Guy's bouncy castles. The same board shows every match.
 
 ## 2 October 2026
 
@@ -113,7 +113,7 @@ Standing still stays at the base power, and running away from the ball never wea
 
 There is no football without advertising, and a pitch with no boards looks like a practice field.
 A scrolling board runs in front of the first row of the crowd, the way a real ground hides the spectators' legs.
-The first board mixed real brands with a made-up shawarma place. On 3 October it became two boards of made-up businesses, see above.
+The first board mixed real brands with a made-up shawarma place. On 3 October it became one strip of made-up businesses, see above.
 
 ### Celebrations on the character select screen
 

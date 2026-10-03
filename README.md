@@ -135,13 +135,12 @@ Against the CPU, **P1 KEYS** on the main menu chooses WASD or the arrows, and th
 |---|---|
 | `KickMathTests` | The running kick bonus: exactly 1 when standing, capped at 1 + bonus at full speed, never below 1 when running away; every kick angle in the configured range travels forward and never into the grass. |
 | `BallEscapeTests` | A ball that sits still inside a goal for two seconds is pushed back onto the pitch. The right goal pushes left and the left goal pushes right, one rule mirrored by the ball's own x. A ball still on the pitch, still moving, or stuck for less than two seconds is left alone. |
-| `AdBoardTests` | The coin toss between the two advertising boards: the lower half of the roll is the first strip, the upper half the second, a roll of exactly one still lands on a strip, and no strips means no board. |
 | `SpecialShotTests` | The Super fills only from contact, never overfills, fires exactly once per match, cannot recharge after firing, and a rematch resets it. |
 | `KeyboardLayoutTests` | Player two always gets the layout player one did not pick, and the choice survives in `PlayerPrefs`. |
 | `MatchRecordsTests` | Biggest win and P1 win count: a smaller win keeps the bigger record, a draw records nothing. |
 | `CharacterRosterTests` | The select arrows wrap at both ends; a fresh install is never a mirror match. |
 | `HumanVictoryTests` | The victory anthem is earned only by beating the CPU, and the defeat theme only by losing to the CPU. A draw and any two-player result stay on the whistle. A loss to the CPU reads YOU LOST under GAME OVER; every other result still names the winner. |
-| `ProjectAssetsTests` | The roster asset still has all six characters with all three drawings and sane stats (this exact asset once lost two of them on a re-save), the tuning asset can end a match, both scenes are in the build list, the commentator has three cut-outs and a call cut to six seconds, both advertising boards ship at one size, both crowd loops ship and are long enough to loop unnoticed, and the victory anthem and the defeat theme are each about ten seconds. |
+| `ProjectAssetsTests` | The roster asset still has all six characters with all three drawings and sane stats (this exact asset once lost two of them on a re-save), the tuning asset can end a match, both scenes are in the build list, the commentator has three cut-outs and a call cut to six seconds, the advertising board ships as one wide strip, both crowd loops ship and are long enough to loop unnoticed, and the victory anthem and the defeat theme are each about ten seconds. |
 
 Tests that touch `PlayerPrefs` run inside a sandbox that restores the player's real settings afterwards.
 
@@ -164,7 +163,7 @@ Tests that touch `PlayerPrefs` run inside a sandbox that restores the player's r
 
 ```
 Head-Soccer-main/Assets
-├── Art/        stadium, goal, ball, two ad boards, Characters/ (six players, idle + kick + celebration), Commentators/
+├── Art/        stadium, goal, ball, ad board, Characters/ (six players, idle + kick + celebration), Commentators/
 ├── Audio/      synthesised SFX, the two crowd loops (menu, match), the commentator's goal call, and the win and loss songs
 ├── Data/       GameConfig, CharacterRoster, ball physics material
 ├── Editor/     HeadSoccerBuilder (rebuilds both scenes), HeadSoccerBuildPipeline (one-click builds)
@@ -190,7 +189,7 @@ Head-Soccer-main/Assets
 - Commentator goal call: generated with Gemini for this project, then cut to six seconds and loudness matched. It plays over every goal while the crowd and the effects duck under it, and it is cut the moment the whistle puts the ball back in play. The three commentator drawings share one call; the one who speaks is the one drawn for that match.
 - Victory anthem, heard only when the player beats the CPU: generated with Gemini for this project, so the win feels like it mattered. The crowd and the effects go silent under it.
 - Defeat theme, heard only when the player loses to the CPU: generated with Gemini for this project, so a loss is its own moment and not the anthem played sadly. The crowd and the effects go silent under it too. A two-player match and a draw keep the final whistle.
-- Advertising boards: two strips of local businesses that do not exist, a pizza place, a car wash, a barber, a bakery and the rest. The businesses, their names and the drawings were made with ChatGPT for this project. Each match shows one of the two strips, chosen by a coin toss.
+- Advertising board: one strip of local businesses that do not exist, Gal's barber, Itay's pizza, Or's car wash, a bakery and a bouncy castle rental. The businesses, their names and the drawing were made with ChatGPT for this project. The same strip shows every match.
 - Font: [Oswald](https://fonts.google.com/specimen/Oswald) by Vernon Adams, SIL Open Font License 1.1.
 - Sound effects and the goal fanfare were synthesised for this project.
 - Match crowd: ["Football supporters in stadium"](https://freesound.org/people/devy32/sounds/606958/) by **devy32**, from [Freesound](https://freesound.org), licensed under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). Cut into a seamless loop and loudness matched for the game; it plays under the match.
