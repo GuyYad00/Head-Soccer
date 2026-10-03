@@ -89,7 +89,6 @@ namespace HeadSoccer.EditorTools
         private static Sprite ballSprite;
         private static Sprite goalSprite;
         private static Sprite stadiumSprite;
-        private static Sprite adBoardSprite;
         private static Sprite[] commentatorSprites = Array.Empty<Sprite>();
         private static TMP_FontAsset font;
 
@@ -148,7 +147,6 @@ namespace HeadSoccer.EditorTools
             ballSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/ball.png");
             goalSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/goal.png");
             stadiumSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/stadium.png");
-            adBoardSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/adboard.png");
             font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontAssetPath);
 
             var commentators = new List<Sprite>();
@@ -172,7 +170,6 @@ namespace HeadSoccer.EditorTools
                 ($"{SpriteFolder}/ball.png", 256), ($"{SpriteFolder}/goal.png", 1024),
                 ($"{SpriteFolder}/stadium.png", 2048), ($"{UIFolder}/RoundedPanel.png", 128)
             };
-            files.Add(($"{SpriteFolder}/adboard.png", 1024));
             for (int i = 1; i <= CommentatorCount; i++)
                 files.Add(($"{CommentatorsFolder}/commentator_{i}.png", 512));
             // Creator photos for the About panel, already cropped to circles.
@@ -570,19 +567,16 @@ namespace HeadSoccer.EditorTools
             BuildWeather(pitch, stadium);
 
             // Scrolling advertising board along the front of the stands, as in a real
-            // ground. AdBoard deals the drawings in Resources/Ads on its own.
-            if (adBoardSprite != null)
-            {
-                var board = new GameObject("AdBoard");
-                board.transform.SetParent(pitch);
-                board.transform.position = new Vector3(0f, AdBoardY, 0f);
-                var ads = board.AddComponent<AdBoard>();
-                Set(ads, "boardWidth", 18.5f);
-                Set(ads, "boardHeight", AdBoardHeight);
-                Set(ads, "scrollSpeed", -0.6f);
-                Set(ads, "sortingLayer", "Pitch");
-                Set(ads, "sortingOrder", 5);
-            }
+            // ground. AdBoard loads the twelve drawings from Resources/Ads itself.
+            var board = new GameObject("AdBoard");
+            board.transform.SetParent(pitch);
+            board.transform.position = new Vector3(0f, AdBoardY, 0f);
+            var ads = board.AddComponent<AdBoard>();
+            Set(ads, "boardWidth", 18.5f);
+            Set(ads, "boardHeight", AdBoardHeight);
+            Set(ads, "scrollSpeed", -0.6f);
+            Set(ads, "sortingLayer", "Pitch");
+            Set(ads, "sortingOrder", 5);
 
             // Invisible colliders: the stadium painting already shows the ground and walls.
             HideRenderer(CreateSolid("Ground", pitch, new Vector2(0f, GroundTopY - 4f), new Vector2(60f, 8f),

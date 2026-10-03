@@ -3200,7 +3200,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16bc16ba8ade4a95b291fbb18062a2a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeadSoccer.AdBoard
-  banner: {fileID: 21300000, guid: 229b25d3190d54d69d8e0d6a6619f881, type: 3}
   boardWidth: 18.5
   boardHeight: 1.15
   scrollSpeed: -0.6
