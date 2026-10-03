@@ -10,28 +10,36 @@ Final project for the Unity course. The approved design document is in [`Docs/GD
 
 ## Screenshots
 
-![Main menu, from the Windows build: PLAY VS CPU, 2 PLAYERS, CPU MEDIUM, SOUND ON, P1 KEYS WASD, ABOUT](Docs/images/exe-menu.png)
-
-| Character select | Match |
-|---|---|
-| ![Player 1 picks Anna, from the Windows build. The portrait is mid knee slide, with speed, jump and power, and NEXT](Docs/images/exe-character.png) | ![Match, from the Windows build: Yossi 4 against Kim 3, nine seconds left](Docs/images/exe-match.png) |
+All from the Windows build.
 
 <table>
+<tr>
+<th width="50%">Main menu</th>
+<th width="50%">Character select</th>
+</tr>
+<tr>
+<td width="50%"><img src="Docs/images/exe-menu.png" alt="Main menu: PLAY VS CPU, 2 PLAYERS, CPU MEDIUM, SOUND ON, P1 KEYS WASD, ABOUT" width="100%"></td>
+<td width="50%"><img src="Docs/images/exe-character.png" alt="Player 1 picks Anna. The portrait is mid knee slide, with speed, jump and power, and NEXT" width="100%"></td>
+</tr>
+<tr>
+<th width="50%">Match</th>
+<th width="50%">Rain, and each side's own crowd</th>
+</tr>
+<tr>
+<td width="50%"><img src="Docs/images/exe-match.png" alt="Match: Yossi 4 against Kim 3, nine seconds left" width="100%"></td>
+<td width="50%"><img src="Docs/images/exe-weather.png" alt="A rainy match: Anna with the Ukrainian crowd on the left, David with the English crowd on the right" width="100%"></td>
+</tr>
 <tr>
 <th width="50%">Game over</th>
 <th width="50%">Pause</th>
 </tr>
 <tr>
-<td width="50%" align="center"><img src="Docs/images/exe-gameover.png" alt="Game over" height="243"></td>
-<td width="50%" align="center"><img src="Docs/images/exe-pause.png" alt="Paused" height="243"></td>
+<td width="50%" align="center"><img src="Docs/images/exe-gameover.png" alt="Game over" height="236"></td>
+<td width="50%" align="center"><img src="Docs/images/exe-pause.png" alt="Paused" height="236"></td>
 </tr>
 </table>
 
-<p align="center">
-<img src="Docs/images/exe-weather.png" alt="A rainy match: Anna with the Ukrainian crowd on the left, David with the English crowd on the right" width="720">
-<br>
-<sub>Different weather, like a real match, from the probabilities we calculated, with a crowd matched to each side.</sub>
-</p>
+<p align="center"><sub>Clear, rain or snow is rolled at kickoff. The left stands fill with the home crowd of the character on the left, the right stands with the one on the right.</sub></p>
 
 ## Run it
 
@@ -42,7 +50,15 @@ Final project for the Unity course. The approved design document is in [`Docs/GD
 
 **Android**
 
-A ready-to-install APK is attached to the [latest GitHub Release](../../releases/latest). Copy it to a phone and install; the game locks to landscape and shows on-screen buttons. To build it yourself:
+A ready-to-install APK is attached to the [latest GitHub Release](../../releases/latest). Copy it to a phone, allow the install from that source, and open it; the game locks to landscape and shows on-screen buttons. It has been installed and played on an Android phone.
+
+<p align="center">
+<img src="Docs/images/android-match.jpg" alt="The match on an Android phone: move buttons on the left, JUMP and KICK on the right, the commentator up after a goal" width="720">
+<br>
+<sub>On the phone. Move on the left, JUMP and KICK on the right, pause and sound in the corner.</sub>
+</p>
+
+To build it yourself:
 
 1. Install *Android Build Support* (with SDK, NDK and OpenJDK) for the same Unity version from Unity Hub.
 2. In Unity: **Head Soccer → Build Android APK**. The APK is written to `Head-Soccer-main/Builds/Android/HeadSoccer.apk` (IL2CPP, ARM64, Android 7.1 and up).
@@ -112,7 +128,7 @@ Tests that touch `PlayerPrefs` run inside a sandbox that restores the player's r
 | **Compile to mobile** | Android APK, touch controls, `SafeAreaFitter` for notches, `CameraFitter` keeps the whole pitch visible on any aspect ratio. |
 | **ScriptableObjects** | `GameConfig` (all tuning numbers) and `CharacterRoster` (the selectable characters). |
 | **Input System** | Keyboard, gamepad and touch behind one `IInputSource` interface, merged per player by `CompositeInputSource`. |
-| **Command pattern** | `PlayerController` never knows who is driving it. A human (`KeyboardInputSource`, `GamepadInputSource`, `TouchInputSource`) and the computer (`AIController`) all implement the same `IInputSource`, so swapping a player for an AI is one line. |
+| **Strategy pattern** | `PlayerController` never knows who is driving it. A human (`KeyboardInputSource`, `GamepadInputSource`, `TouchInputSource`) and the computer (`AIController`) all implement the same `IInputSource`, so swapping a player for an AI is one line. |
 | **Pub/Sub events** | `GameManager` raises `ScoreChanged`, `GoalScored`, `StateChanged`, `CountdownChanged` and `MatchEnded`. `UIManager` subscribes and updates the HUD, pause and match-over panels from those events, and `CommentatorCutIn` subscribes to `GoalScored` and `StateChanged` for the commentator; the manager never holds a reference to either. |
 | **PlayerPrefs** | Both chosen characters, keyboard layout, mute setting, best win and P1 win count. |
 
@@ -126,6 +142,7 @@ Head-Soccer-main/Assets
 ├── Editor/     HeadSoccerBuilder (rebuilds both scenes), HeadSoccerBuildPipeline (one-click builds)
 ├── Fonts/      Oswald Bold (SIL Open Font License)
 ├── Prefabs/    Player, Ball, Goal, and the pooled particle effects
+├── Resources/  Crowds/ (five country crowd drawings, loaded by CrowdController)
 ├── Scenes/     Menu.unity, Match.unity
 ├── Scripts/
 │   ├── Core/       GameManager, GameConfig, MatchState, MatchSettings, MatchRecords, CharacterRoster, CameraFitter
@@ -133,7 +150,7 @@ Head-Soccer-main/Assets
 │   ├── Input/      IInputSource, Keyboard/Gamepad/Touch/Composite sources, HoldButton
 │   ├── UI/         UIManager, MainMenuController, CharacterSelect, CelebrationLoop, CommentatorCutIn, SafeAreaFitter
 │   ├── Audio/      AudioManager
-│   └── Effects/    EffectsPool, CameraShake, SuperReadySign, AdBoard
+│   └── Effects/    EffectsPool, CameraShake, SuperReadySign, AdBoard, WeatherController, CrowdController
 ├── Tests/Editor/   EditMode tests (see Automated tests)
 └── UI/         RoundedPanel (9-sliced panel sprite)
 ```
