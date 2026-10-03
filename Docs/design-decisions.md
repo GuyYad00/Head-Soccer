@@ -52,12 +52,6 @@ Two players kicking into each other froze the match, both kick drawings stuck an
 A kick that lands on the rival now shoves him back, a small step standing and further at a run, so the ball is free.
 It is deliberately small, so it opens the play without becoming a way to fight instead of play.
 
-### Both sides get to choose
-
-Player one used to pick alone and the right side got the next character in the list, so a friend never chose.
-Character Select now runs twice: player one, then player two, or the CPU's player when you play the computer.
-Both choices are saved for the rematch, and a mirror match is allowed if both want the same character.
-
 ### Women in the roster
 
 The original Head Soccer shipped with no women, and we do not think this game has a gender.
@@ -70,29 +64,18 @@ After many matches the ball was too easy to lose against the pitch, and a miss d
 The radius went from 0.28 to 0.34, about a fifth bigger, so a wide shot reads as a wide shot.
 The goal mouth trigger scales with it, and nothing else needed to change.
 
-### New music and a new goal sound
-
-Superseded the same day by the crowd recordings above; kept as a record of the path, and the goal sound stays.
-The first loop was a pleasant 128 bpm and a sprint to five goals is not pleasant, so it became 150 bpm with a chant hook.
-The goal sting became a three-note fanfare. Both were synthesised from scratch, with no samples.
-
 ### The commentator
 
 A goal in silence is a number changing, so one of three commentators is drawn per match and shouts every goal.
 He stands in the crowd above the goal the ball went in, LIVE tag over his head, and the kickoff whistle cuts him off.
-The first version was a framed box in the corner; the cut-out figure inside the stadium is what made it feel alive.
+The first version was a framed box in the corner; the cut-out figure inside the stadium is what made it feel alive. 
+The audio of the commentator made with precise prompt we wrote to Gemini describing exactly the type of goal sound.
 
 ### The mirror match, a painful dilemma
 
 Both of us wanted to block two players from picking the same character, because Yossi against Yossi looked pointless.
 We decided we cannot: blocking it tells people how to play, and somebody may want exactly that.
 The two are told apart by facing and by the names on the scoreboard. It hurt to leave in, and it was the right call.
-
-### Fix: Anna's knee slide left the card
-
-Anna's celebration grew as she slid and at full size she ran under the arrows beside the portrait.
-She now starts the slide smaller and grows back to her normal size, never past it.
-The arrows sit further out, so a wide celebration frame has room.
 
 ## 28 September 2026
 
@@ -122,7 +105,7 @@ Standing still stays at the base power, and running away from the ball never wea
 
 There is no football without advertising, and a pitch with no boards looks like a practice field.
 A scrolling board runs in front of the first row of the crowd, the way a real ground hides the spectators' legs.
-The brands on it are real ones from our own lives: the shawarma place, the college, the food app, the card company, the game everyone waits for.
+The brands on it are both real from our own lives and fictional: the shawarma place (fictional place we created), the college, the food app, the card company, the game everyone waits for (GTA).
 
 ### Celebrations on the character select screen
 
