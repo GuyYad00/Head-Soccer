@@ -570,14 +570,13 @@ namespace HeadSoccer.EditorTools
             BuildWeather(pitch, stadium);
 
             // Scrolling advertising board along the front of the stands, as in a real
-            // ground. The same banner strip shows every match.
+            // ground. AdBoard deals the drawings in Resources/Ads on its own.
             if (adBoardSprite != null)
             {
                 var board = new GameObject("AdBoard");
                 board.transform.SetParent(pitch);
                 board.transform.position = new Vector3(0f, AdBoardY, 0f);
                 var ads = board.AddComponent<AdBoard>();
-                Set(ads, "banner", adBoardSprite);
                 Set(ads, "boardWidth", 18.5f);
                 Set(ads, "boardHeight", AdBoardHeight);
                 Set(ads, "scrollSpeed", -0.6f);
