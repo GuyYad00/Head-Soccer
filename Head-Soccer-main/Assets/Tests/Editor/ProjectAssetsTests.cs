@@ -147,14 +147,12 @@ namespace HeadSoccer.Tests
         }
 
         [Test]
-        public void AdBoard_HasTwoBannerStripsOfTheSameShape()
+        public void AdBoard_ShipsTheOneBannerStrip()
         {
-            // AdBoard draws one per match with equal odds. Both must exist, and both
-            // must be the same long strip, or one match gets a board of a different height.
-            Sprite first = Load<Sprite>("Assets/Art/adboard_1.png");
-            Sprite second = Load<Sprite>("Assets/Art/adboard_2.png");
-            Assert.That(first.rect.width, Is.GreaterThan(first.rect.height * 8f), "a banner strip is much wider than tall");
-            Assert.That(second.rect.size, Is.EqualTo(first.rect.size), "both strips share one size");
+            Sprite banner = Load<Sprite>("Assets/Art/adboard.png");
+            Assert.That(banner.rect.width, Is.GreaterThan(banner.rect.height * 8f), "a banner strip is much wider than tall");
+            Assert.That(AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/adboard_1.png"), Is.Null);
+            Assert.That(AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/adboard_2.png"), Is.Null);
         }
 
         [Test]
