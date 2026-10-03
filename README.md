@@ -34,7 +34,7 @@ All from the Windows build.
 <th width="50%">Pause</th>
 </tr>
 <tr>
-<td width="50%" align="center"><img src="Docs/images/exe-gameover.png" alt="Full time: Noa wins 5-2 against David, Israeli crowd on the left and English crowd on the right" height="236"></td>
+<td width="50%" align="center"><img src="Docs/images/exe-gameover-noa.png" alt="Full time: Noa wins 5-2 against David, Israeli crowd on the left and English crowd on the right" height="236"></td>
 <td width="50%" align="center"><img src="Docs/images/exe-pause.png" alt="Paused" height="236"></td>
 </tr>
 </table>
