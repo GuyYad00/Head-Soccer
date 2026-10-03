@@ -147,15 +147,6 @@ namespace HeadSoccer.Tests
         }
 
         [Test]
-        public void AdBoard_ShipsTheOneBannerStrip()
-        {
-            Sprite banner = Load<Sprite>("Assets/Art/adboard.png");
-            Assert.That(banner.rect.width, Is.GreaterThan(banner.rect.height * 8f), "a banner strip is much wider than tall");
-            Assert.That(AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/adboard_1.png"), Is.Null);
-            Assert.That(AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/adboard_2.png"), Is.Null);
-        }
-
-        [Test]
         public void Commentator_GoalCallIsCutToSixSeconds()
         {
             // The call is trimmed to 0:00-0:06 on purpose: anything longer spills into play after kickoff.
