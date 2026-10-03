@@ -55,7 +55,7 @@ Windows and Android. Both were built and played. Keys on Windows, buttons on the
 </tr>
 <tr>
 <td width="50%"><img src="Docs/images/exe-windows-match.jpg" alt="Windows match: Mikel and Kim in the rain, keyboard play, the commentator in the crowd" width="100%"></td>
-<td width="50%"><img src="Docs/images/android-match.jpg" alt="Android match: Yossi and David, Israeli crowd on the left and English crowd on the right, the advertising board, on-screen move, JUMP and KICK" width="100%"></td>
+<td width="50%"><img src="Docs/images/android-yossi-david.jpg" alt="Android match: Yossi and David, Israeli crowd on the left and English crowd on the right, the advertising board, on-screen move, JUMP and KICK" width="100%"></td>
 </tr>
 <tr>
 <td width="50%">
