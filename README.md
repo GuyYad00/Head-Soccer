@@ -123,6 +123,7 @@ Against the CPU, **P1 KEYS** on the main menu chooses WASD or the arrows, and th
 | Suite | What it guards |
 |---|---|
 | `KickMathTests` | The running kick bonus: exactly 1 when standing, capped at 1 + bonus at full speed, never below 1 when running away; every kick angle in the configured range travels forward and never into the grass. |
+| `BallEscapeTests` | A ball that sits still inside a goal for two seconds is pushed back onto the pitch. The right goal pushes left and the left goal pushes right, one rule mirrored by the ball's own x. A ball still on the pitch, still moving, or stuck for less than two seconds is left alone. |
 | `SpecialShotTests` | The Super fills only from contact, never overfills, fires exactly once per match, cannot recharge after firing, and a rematch resets it. |
 | `KeyboardLayoutTests` | Player two always gets the layout player one did not pick, and the choice survives in `PlayerPrefs`. |
 | `MatchRecordsTests` | Biggest win and P1 win count: a smaller win keeps the bigger record, a draw records nothing. |
