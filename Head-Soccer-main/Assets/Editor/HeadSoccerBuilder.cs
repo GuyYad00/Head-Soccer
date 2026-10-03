@@ -46,6 +46,7 @@ namespace HeadSoccer.EditorTools
         // atlas, and atlas compression visibly blurs the photographs on the About card.
         private const string CreatorsFolder = "Assets/Creators";
         private const int CommentatorCount = 3;
+        private const int AdBoardCount = 2;      // banner strips in Assets/Art, one drawn per match
         private const string MatchScenePath = SceneFolder + "/Match.unity";
         private const string MenuScenePath = SceneFolder + "/Menu.unity";
 
@@ -89,7 +90,7 @@ namespace HeadSoccer.EditorTools
         private static Sprite ballSprite;
         private static Sprite goalSprite;
         private static Sprite stadiumSprite;
-        private static Sprite adBoardSprite;
+        private static Sprite[] adBoardSprites = new Sprite[0];
         private static Sprite[] commentatorSprites = Array.Empty<Sprite>();
         private static TMP_FontAsset font;
 
@@ -148,7 +149,13 @@ namespace HeadSoccer.EditorTools
             ballSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/ball.png");
             goalSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/goal.png");
             stadiumSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/stadium.png");
-            adBoardSprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/adboard.png");
+            var boards = new List<Sprite>();
+            for (int i = 1; i <= AdBoardCount; i++)
+            {
+                var sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{SpriteFolder}/adboard_{i}.png");
+                if (sprite != null) boards.Add(sprite);
+            }
+            adBoardSprites = boards.ToArray();
             font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontAssetPath);
 
             var commentators = new List<Sprite>();
@@ -172,7 +179,8 @@ namespace HeadSoccer.EditorTools
                 ($"{SpriteFolder}/ball.png", 256), ($"{SpriteFolder}/goal.png", 1024),
                 ($"{SpriteFolder}/stadium.png", 2048), ($"{UIFolder}/RoundedPanel.png", 128)
             };
-            files.Add(($"{SpriteFolder}/adboard.png", 1024));
+            for (int i = 1; i <= AdBoardCount; i++)
+                files.Add(($"{SpriteFolder}/adboard_{i}.png", 1024));
             for (int i = 1; i <= CommentatorCount; i++)
                 files.Add(($"{CommentatorsFolder}/commentator_{i}.png", 512));
             // Creator photos for the About panel, already cropped to circles.
@@ -569,14 +577,15 @@ namespace HeadSoccer.EditorTools
             // Rain or snow for a quarter of the matches each; WeatherController rolls it.
             BuildWeather(pitch, stadium);
 
-            // Scrolling advertising board along the front of the stands, as in a real ground.
-            if (adBoardSprite != null)
+            // Scrolling advertising board along the front of the stands, as in a real
+            // ground. One of the banner strips is drawn per match by AdBoard.
+            if (adBoardSprites.Length > 0)
             {
                 var board = new GameObject("AdBoard");
                 board.transform.SetParent(pitch);
                 board.transform.position = new Vector3(0f, AdBoardY, 0f);
                 var ads = board.AddComponent<AdBoard>();
-                Set(ads, "banner", adBoardSprite);
+                Set(ads, "banners", adBoardSprites);
                 Set(ads, "boardWidth", 18.5f);
                 Set(ads, "boardHeight", AdBoardHeight);
                 Set(ads, "scrollSpeed", -0.6f);
