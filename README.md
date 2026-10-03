@@ -4,9 +4,13 @@ A 1v1 arcade Head Soccer game built in Unity 6 (URP, 2D). Two big-headed charact
 
 Final project for the Unity course. The approved design document is in [`Docs/GDD.md`](Docs/GDD.md). Decisions we made while planning and while playing each other are in [`Docs/design-decisions.md`](Docs/design-decisions.md). The Unity project is in [`Head-Soccer-main/`](Head-Soccer-main/).
 
-![Mikel and Yossi at 4-4, the ball between them with seven seconds left](Docs/images/deciding-goal-clean.gif)
+![Mikel and Yossi at 4-4. Mikel scores the goal that makes it 5-4](Docs/images/mikel-breaks-5-4.gif)
 
-<p align="center"><sub>Captured in a real match. The score was 4-4, and this is the goal that decided it.</sub></p>
+<p align="center"><sub>Mikel and Yossi, 4-4. The goal that breaks it.</sub></p>
+
+![Noa scores in the rain against Anna](Docs/images/noa-goal-in-the-rain.gif)
+
+<p align="center"><sub>Noa scores in the rain against Anna.</sub></p>
 
 ## Screenshots
 
@@ -23,18 +27,18 @@ All from the Windows build.
 </tr>
 <tr>
 <th width="50%">Match</th>
-<th width="50%">Rain, and a Super ready</th>
+<th width="50%">Rain</th>
 </tr>
 <tr>
-<td width="50%"><img src="Docs/images/exe-match.png" alt="Yossi 3 against Kim 4, Israeli crowd on the left and Japanese crowd on the right" width="100%"></td>
-<td width="50%"><img src="Docs/images/exe-weather.png" alt="Rain: Anna glowing because her Super is ready, Ukrainian crowd behind her, David with the English crowd" width="100%"></td>
+<td width="50%"><img src="Docs/images/exe-match-kim-yossi.jpg" alt="Kim 1 against Yossi 0, Super ready, Japanese crowd on the left and Israeli crowd on the right" width="100%"></td>
+<td width="50%"><img src="Docs/images/exe-rain-anna-david.jpg" alt="Rain: Anna 3 against David 1, Ukrainian crowd on the left and English crowd on the right, both Supers used" width="100%"></td>
 </tr>
 <tr>
 <th width="50%">Game over</th>
 <th width="50%">Pause</th>
 </tr>
 <tr>
-<td width="50%" align="center"><img src="Docs/images/exe-gameover-noa.png" alt="Full time: Noa wins 5-2 against David, Israeli crowd on the left and English crowd on the right" height="236"></td>
+<td width="50%" align="center"><img src="Docs/images/exe-gameover-noa-david.jpg" alt="Full time: Noa wins 5-2 against David, Israeli crowd on the left and English crowd on the right" height="236"></td>
 <td width="50%" align="center"><img src="Docs/images/exe-pause.png" alt="Paused" height="236"></td>
 </tr>
 </table>
