@@ -23,11 +23,11 @@ All from the Windows build.
 </tr>
 <tr>
 <th width="50%">Match</th>
-<th width="50%">Rain, and each side's own crowd</th>
+<th width="50%">Rain, and a Super ready</th>
 </tr>
 <tr>
-<td width="50%"><img src="Docs/images/exe-match.png" alt="Match: Yossi 4 against Kim 3, nine seconds left" width="100%"></td>
-<td width="50%"><img src="Docs/images/exe-weather.png" alt="A rainy match: Anna with the Ukrainian crowd on the left, David with the English crowd on the right" width="100%"></td>
+<td width="50%"><img src="Docs/images/exe-match.png" alt="Yossi 3 against Kim 4, Israeli crowd on the left and Japanese crowd on the right" width="100%"></td>
+<td width="50%"><img src="Docs/images/exe-weather.png" alt="Rain: Anna glowing because her Super is ready, Ukrainian crowd behind her, David with the English crowd" width="100%"></td>
 </tr>
 <tr>
 <th width="50%">Game over</th>
@@ -39,7 +39,7 @@ All from the Windows build.
 </tr>
 </table>
 
-<p align="center"><sub>Clear, rain or snow is rolled at kickoff. The left stands fill with the home crowd of the character on the left, the right stands with the one on the right.</sub></p>
+<p align="center"><sub>Clear, rain or snow is rolled at kickoff. Each half of the stands fills with that side's crowd. A glow around a player means that Super is ready.</sub></p>
 
 ## Run it
 
