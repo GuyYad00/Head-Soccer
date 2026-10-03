@@ -58,7 +58,7 @@ Windows and Android. Both were built and played. Keys on Windows, buttons on the
 <td width="50%"><img src="Docs/images/android-yossi-david.jpg" alt="Android match: Yossi and David, Israeli crowd on the left and English crowd on the right, the advertising board, on-screen move, JUMP and KICK" width="100%"></td>
 </tr>
 <tr>
-<td width="50%">
+<td width="50%" valign="top">
 
 **How to run it**
 
@@ -67,7 +67,7 @@ Windows and Android. Both were built and played. Keys on Windows, buttons on the
 3. Standalone: **Head Soccer → Build Windows (x64)**. Open `Head-Soccer-main/Builds/Windows/HeadSoccer.exe`.
 
 </td>
-<td width="50%">
+<td width="50%" valign="top">
 
 **How to run it**
 
