@@ -8,7 +8,7 @@ namespace HeadSoccer
     /// crowd of the character playing on that side, read from the choices saved by
     /// Character Select. Yossi and Noa bring the Israeli crowd, David the English,
     /// Kim the Japanese, Mikel the Nigerian and Anna the Ukrainian one.
-    /// The controller installs itself when the match scene loads and tiles the
+    /// The controller installs itself when the match scene loads and lays the
     /// drawings over the stadium's stands, so the scene needs nothing wired, and it
     /// follows the stadium's weather tint so a rainy ground gets a rainy crowd.
     /// </summary>
@@ -22,10 +22,10 @@ namespace HeadSoccer
         private const float BottomY = -1.0f;
         private const float TopY = 4.0f;
 
-        // Each crowd drawing is one tier of supporters. The stands are two tiers
-        // high, and the drawing repeats across the half at close to its own pixel
-        // size, so the people stay sharp and in proportion to the stadium instead
-        // of one drawing being blown up over the whole half.
+        // Each crowd drawing is one tier of supporters with its flag banner along
+        // the front. One drawing spans the whole half, so there is no seam where a
+        // copy would meet the next, and the stands are two tiers high, so the
+        // banner of the upper tier reads as the rail between them.
         private const int Tiers = 2;
 
         // Roster order is fixed by the builder: Yossi, David, Kim, Mikel, Noa, Anna.
@@ -77,21 +77,16 @@ namespace HeadSoccer
             renderer.sortingLayerName = "Background";
             renderer.sortingOrder = 1;   // over the stadium painting, behind everything else
 
-            // Tile the drawing: two tiers high, and as many copies across as fit the
-            // half at that tier height. The whole tiled sheet is then nudged by a few
-            // percent so it closes the half exactly, which is far less distortion
-            // than stretching one drawing over the whole band.
+            // One drawing across the half, stacked two tiers high. The drawings are
+            // painted close to the half's proportions, so fitting the stack to the
+            // band only nudges them by a few percent.
             Vector2 tile = crowd.bounds.size;
             if (tile.x <= 0.001f || tile.y <= 0.001f) return renderer;
 
             float bandHeight = TopY - BottomY;
-            float tierHeight = bandHeight / Tiers;
-            float tileWidthAtTier = tile.x * (tierHeight / tile.y);
-            int across = Mathf.Max(1, Mathf.RoundToInt(HalfWidth / tileWidthAtTier));
-
             renderer.drawMode = SpriteDrawMode.Tiled;
             renderer.tileMode = SpriteTileMode.Continuous;
-            renderer.size = new Vector2(tile.x * across, tile.y * Tiers);
+            renderer.size = new Vector2(tile.x, tile.y * Tiers);
             half.transform.localScale = new Vector3(HalfWidth / renderer.size.x, bandHeight / renderer.size.y, 1f);
             return renderer;
         }
