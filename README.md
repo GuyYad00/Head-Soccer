@@ -7,12 +7,12 @@ Final project for the Unity course. The approved design document is in [`Docs/GD
 <table>
 <tr>
 <td width="50%" align="center">
-<img src="Docs/images/mikel-loses-last-seconds.gif" alt="Mikel and Yossi. Yossi scores in the last seconds" width="100%">
+<img src="Docs/images/mikel-last-minute.gif" alt="Mikel and Yossi. Yossi scores in the last seconds" width="100%">
 <br>
 <sub>Mikel and Yossi. Yossi scores in the last seconds.</sub>
 </td>
 <td width="50%" align="center">
-<img src="Docs/images/anna-super-in-the-rain.gif" alt="Anna beats Noa in the rain. Anna's Super is on, the aura around her" width="100%">
+<img src="Docs/images/anna-rain-win.gif" alt="Anna beats Noa in the rain. Anna's Super is on, the aura around her" width="100%">
 <br>
 <sub>Anna beats Noa in the rain. Super aura.</sub>
 </td>
