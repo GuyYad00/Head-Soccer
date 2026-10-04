@@ -19,6 +19,16 @@ Final project for the Unity course. The approved design document is in [`Docs/GD
 </tr>
 </table>
 
+## Features
+
+- Each player has one Super per match. It charges by staying on the ball. The next kick is a boosted shot in slow motion, and a glow means it is ready.
+- Clear, rain or snow is chosen at kickoff.
+- Each half of the stands fills with that side's crowd: Israel, England, Japan, Nigeria or Ukraine.
+- The board along the pitch shows five adverts at a time, drawn from twelve, in a new order every match.
+- On a goal, one of three commentators appears above the goal and calls it.
+- Beating the CPU plays a victory anthem. Losing to the CPU plays a defeat theme. A two-player match and a draw end on the whistle.
+- Kicks leave at a random angle, as a drive or a lob. A kick on the run hits harder.
+
 ## Screenshots
 
 All from the Windows build.
