@@ -54,7 +54,7 @@ Windows and Android. Both were built and played. Keys on Windows, buttons on the
 <th width="50%">Android</th>
 </tr>
 <tr>
-<td width="50%"><img src="Docs/images/windows-kim-mikel-rain.jpg" alt="Windows match: Kim 3 against Mikel 1 in the rain, Japanese crowd on the left and Nigerian crowd on the right, the advertising board" width="100%"></td>
+<td width="50%"><img src="Docs/images/windows-kim-0-mikel-5.jpg" alt="Windows match: Kim 0 against Mikel 5, GOAL in the rain, both Supers used, Japanese crowd on the left and Nigerian crowd on the right, the advertising board" width="100%"></td>
 <td width="50%"><img src="Docs/images/android-yossi-david.jpg" alt="Android match: Yossi and David, Israeli crowd on the left and English crowd on the right, the advertising board, on-screen move, JUMP and KICK" width="100%"></td>
 </tr>
 <tr>
