@@ -18,12 +18,6 @@ One strip of five businesses, the same every match, stopped feeling like a real 
 Twelve made-up local businesses now share the board. Each match shuffles them, every ad with the same chance of every place, and five different ones are on screen at a time.
 The scroll is the same as before. The same advert is never on the board twice at once, because each one is painted once in the cycle.
 
-### One board, the barber's strip
-
-The first board carried real brands, and real brands are not ours to put on a pitch.
-We drew two strips of made-up local businesses with ChatGPT, and for a short while each match tossed a coin between them.
-The strip that stays is the one with Gal's barber, Itay's pizza, Or's car wash, a bakery and Guy's bouncy castles. The same board shows every match.
-
 ## 2 October 2026
 
 ### The stands are split half and half
